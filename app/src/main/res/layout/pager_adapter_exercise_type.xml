@@ -10,7 +10,7 @@
     android:background="@android:color/transparent">
 
     <!-- Use a FAB as an alternative to a circular image view -->
-<!--    <FrameLayout
+    <FrameLayout
         android:id="@+id/frame_exerciseTypeIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -32,9 +32,9 @@
             android:foregroundGravity="center"
             android:clickable="false"
             app:elevation="0dp" />
-    </FrameLayout>-->
+    </FrameLayout>
 
-    <FrameLayout
+<!--    <FrameLayout
         android:id="@+id/frame_exerciseTypeIcon"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -57,7 +57,7 @@
             android:clickable="false"
             app:elevation="0dp" />
 
-    </FrameLayout>
+    </FrameLayout>-->
 
     <TextView
         android:id="@+id/tv_exerciseTypeName"

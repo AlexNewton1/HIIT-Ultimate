@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
@@ -19,18 +18,16 @@ public class RoundedImageView extends AppCompatImageView
 
     public RoundedImageView(Context ctx, AttributeSet attrs) {
         super(ctx, attrs);
-        paint.setXfermode(PorterDuff.Mode.SRC_IN);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(false);
     }
-
-
 
     @Override
     public void setBackgroundColor(int color) {
        paint.setColor(color);
         invalidate();
     }
-
-
 
     @Override
     protected void onDraw(Canvas canvas)
@@ -53,8 +50,8 @@ public class RoundedImageView extends AppCompatImageView
 
         Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, w);
 
-        canvas.drawCircle(w /2, h/2, roundBitmap.getWidth()/2, paint);
-        canvas.drawBitmap(roundBitmap, 0, 0, paint);
+        canvas.drawCircle(w /2, h/2, w/2, paint);
+        //canvas.drawBitmap(roundBitmap, 0, 0, paint);
     }
 
     private Bitmap getRoundedCroppedBitmap(Bitmap bitmap, int radius)
@@ -69,17 +66,16 @@ public class RoundedImageView extends AppCompatImageView
                 finalBitmap.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
-        final Rect rect = new Rect(0, 0, finalBitmap.getWidth(),
-                finalBitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        paint.setFilterBitmap(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
-                finalBitmap.getHeight() / 2 + 0.7f,
-                finalBitmap.getWidth() / 2 + 0.1f, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(finalBitmap, rect, rect, paint);
+//        final Rect rect = new Rect(0, 0, finalBitmap.getWidth(),
+//                finalBitmap.getHeight());
+//
+//
+//        canvas.drawARGB(0, 0, 0, 0);
+//        canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
+//                finalBitmap.getHeight() / 2 + 0.7f,
+//                finalBitmap.getWidth() / 2 + 0.1f, paint);
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(finalBitmap, rect, rect, paint);
 
         return output;
     }

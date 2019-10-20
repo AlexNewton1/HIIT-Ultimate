@@ -1,16 +1,19 @@
 package com.softwareoverflow.hiitultimate.workout.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softwareoverflow.hiitultimate.R;
-import com.softwareoverflow.hiitultimate.RoundedImageView;
 import com.softwareoverflow.hiitultimate.database.entity.ExerciseTypeEntity;
 
 import java.util.List;
@@ -39,7 +42,7 @@ public class ExerciseTypeViewPagerAdapter extends PagerAdapter {
                 R.layout.pager_adapter_exercise_type, container, false);
         ExerciseTypeEntity exerciseType = exerciseTypes.get(position);
 
-        /*FloatingActionButton exerciseTypeFab = layout.findViewById(R.id.fab_exerciseTypeIcon);
+        FloatingActionButton exerciseTypeFab = layout.findViewById(R.id.fab_exerciseTypeIcon);
         int fabSize = (int) (Math.min(height, width) * 0.75);
         exerciseTypeFab.setCustomSize(fabSize);
         exerciseTypeFab.setScaleType(ImageView.ScaleType.CENTER);
@@ -47,13 +50,13 @@ public class ExerciseTypeViewPagerAdapter extends PagerAdapter {
 
         // Set the relevant values
 
-        exerciseTypeFab.setBackgroundTintList(ColorStateList.valueOf(exerciseType.getColorIndex()));
+        exerciseTypeFab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(exerciseType.getColorHex())));
         exerciseTypeFab.setImageResource(exerciseType.getIconId());
-        nameTextView.setText(exerciseType.getName());*/
+        nameTextView.setText(exerciseType.getName());
 
-        RoundedImageView imageView = layout.findViewById(R.id.fab_exerciseTypeIcon);
-        imageView.setBackgroundColor(Color.parseColor(exerciseType.getColorHex()));
-        imageView.setImageResource(exerciseType.getIconId());
+//        RoundedImageView imageView = layout.findViewById(R.id.fab_exerciseTypeIcon);
+//        imageView.setBackgroundColor(Color.parseColor(exerciseType.getColorHex()));
+//        imageView.setImageResource(exerciseType.getIconId());
 
         container.addView(layout);
         return layout;
