@@ -1,4 +1,5 @@
-package com.softwareoverflow.hiitultimate.ui;
+/*
+package com.softwareoverflow.hiitultimate.workout.ui;
 
 import android.graphics.Matrix;
 import android.graphics.Path;
@@ -98,3 +99,4 @@ public class Hexagon {
         return path;
     }
 }
+*/

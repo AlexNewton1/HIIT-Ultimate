@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_create_workout"
+    app:startDestination="@id/fragmentWorkoutCreatorHome">
+
+    <fragment
+        android:id="@+id/setCreatorFragment"
+        android:name="com.softwareoverflow.hiitultimate.FragmentCreateWorkoutSet"
+        android:label="fragment_set_creator"
+        tools:layout="@layout/fragment_create_workout_set" >
+        <action
+            android:id="@+id/action_createExerciseType"
+            app:destination="@id/exerciseTypeCreatorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exerciseTypeCreatorFragment"
+        android:name="com.softwareoverflow.hiitultimate.ExerciseTypeCreatorFragment"
+        android:label="fragment_exercise_type_creator"
+        tools:layout="@layout/fragment_exercise_type_creator" />
+    <fragment
+        android:id="@+id/fragmentWorkoutCreatorHome"
+        android:name="com.softwareoverflow.hiitultimate.FragmentWorkoutCreatorHome"
+        android:label="fragment_workout_creator_home_fragment"
+        tools:layout="@layout/fragment_workout_creator_home" >
+        <action
+            android:id="@+id/action_createWorkoutSet"
+            app:destination="@id/setCreatorFragment" />
+        <action
+            android:id="@+id/action_saveWorkout"
+            app:destination="@id/fragmentSaveWorkout" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSaveWorkout"
+        android:name="com.softwareoverflow.hiitultimate.FragmentSaveWorkout"
+        android:label="fragment_fragment_save_workout"
+        tools:layout="@layout/fragment_save_workout" />
+</navigation>

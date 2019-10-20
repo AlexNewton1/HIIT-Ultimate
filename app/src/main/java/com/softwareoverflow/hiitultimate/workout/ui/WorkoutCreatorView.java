@@ -1,10 +1,10 @@
-package com.softwareoverflow.hiitultimate.ui;
+/*
+package com.softwareoverflow.hiitultimate.workout.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -50,17 +50,17 @@ public class WorkoutCreatorView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        fillPaint.setColor(getResources().getColor(R.color.colorAccent));
+        fillPaint.setColorIndex(getResources().getColorIndex(R.color.colorAccent));
         fillPaint.setStrokeWidth(1);
         fillPaint.setAntiAlias(true);
         fillPaint.setStyle(Paint.Style.FILL);
 
-        outlinePaint.setColor(getResources().getColor(R.color.colorPrimary));
+        outlinePaint.setColorIndex(getResources().getColorIndex(R.color.colorPrimary));
         outlinePaint.setStrokeWidth(2);
         outlinePaint.setAntiAlias(true);
         outlinePaint.setStyle(Paint.Style.STROKE);
 
-        textPaint.setColor(getResources().getColor(R.color.design_default_color_primary));
+        textPaint.setColorIndex(getResources().getColorIndex(R.color.design_default_color_primary));
         textPaint.setStrokeWidth(1);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(16);
@@ -81,7 +81,7 @@ public class WorkoutCreatorView extends View {
         hexagon.setSelectedSegmentOffset(selectedSegmentOffset);
         hexagon.setViewSize(viewSize);
         hexagon.setCentre(getPaddingLeft() + viewSize / 2, getPaddingTop() + viewSize / 2);
-        hexagon.recalculatePaths();
+//        hexagon.recalculatePaths();
 
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -90,14 +90,17 @@ public class WorkoutCreatorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for(Path p : hexagon.getTriangularSegments()){
+        */
+/*for(Path p : hexagon.getTriangularSegments()){
             canvas.drawPath(p, fillPaint);
             canvas.drawPath(p, outlinePaint);
-        }
+        }*//*
 
-        for(RectF bounds : hexagon.getTextBounds()){
-            canvas.drawText("6", (bounds.left + bounds.right) / 2,
-                    (bounds.top + bounds.bottom) / 2, textPaint);
-        }
+
+//        for(RectF bounds : hexagon.getTextBounds()){
+//            canvas.drawText("6", (bounds.left + bounds.right) / 2,
+//                    (bounds.top + bounds.bottom) / 2, textPaint);
+//        }
     }
 }
+*/

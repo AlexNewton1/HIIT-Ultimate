@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- An array of colors which are available to the users to create ExerciseType objects -->
+    <string-array name="exercise_type_colors">
+        <item>#008577</item>
+        <item>#D81B60</item>
+        <item>#366fd1</item>
+        <item>#366fd1</item>
+        <item>#498542</item>
+    </string-array>
+
+    <integer-array name="exercise_type_drawables">
+        <item>@drawable/ic_launcher_foreground</item>
+        <item>@drawable/ic_tbd2</item>
+        <item>@drawable/ic_tbd10</item>
+        <item>@drawable/tbd1</item>
+        <item>@drawable/ic_tbd12</item>
+    </integer-array>
+</resources>
