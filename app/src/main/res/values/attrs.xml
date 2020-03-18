@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <declare-styleable name="CreateWorkout_NumberPickerView">
-        <attr name="numberPicker_label" format="string" />
-        <attr name="numberPicker_defaultValue" format="integer" />
+    <declare-styleable name="labelled_number_picker">
+        <attr name="lnp_label" format="string" />
     </declare-styleable>
-
 </resources>

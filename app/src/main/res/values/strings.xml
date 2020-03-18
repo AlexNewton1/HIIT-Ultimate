@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">HIIT Ultimate</string>
+    <string name="app_name">HIIT-Trainer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="min_sec_time_format">%1$02d:%2$2d</string> <!-- e.g. 02:25 -->
+
+    <string name="create_new_exercise_type">Create New Exercise Type</string>
 </resources>

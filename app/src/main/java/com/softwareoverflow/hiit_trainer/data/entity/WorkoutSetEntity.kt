@@ -8,31 +8,27 @@ import androidx.room.PrimaryKey
     tableName = "WorkoutSet",
     foreignKeys = [
         ForeignKey(
-            entity = Workout::class,
+            entity = WorkoutEntity::class,
             parentColumns = ["id"],
             childColumns = ["workoutId"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = ExerciseType::class,
+            entity = ExerciseTypeEntity::class,
             parentColumns = ["id"],
             childColumns = ["exerciseTypeId"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE
+            onUpdate = ForeignKey.CASCADE // TODO see todo below and work out FK constraints....
         )
     ]
 )
-class WorkoutSet {
-
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null
-
-    var workoutId: Int? = null
-
-    var exerciseTypeId: Int? = null
-
-    var workTime: Int = 0
-    var restTime: Int = 0
-    var numReps: Int = 0
-}
+class WorkoutSetEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    var workoutId: Long? = null,
+    var exerciseTypeId: Long? = null, // TODO work out if it's worth linking this to Exercise Type table, or just simply repeat the values? Seems dirty but makes handling exercise types completely separate
+    var workTime: Int,
+    var restTime: Int,
+    var numReps: Int,
+    var recoverTime: Int
+)

@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExerciseTypeCreatorFragment">
+    tools:context=".ui.workout_creator.ExerciseTypeCreatorFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="Create your exercise type here!" />
+
+    <com.softwareoverflow.hiit_trainer.ui.view.picker.XViewPagerPicker
+        android:id="@+id/etViewPagerPicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

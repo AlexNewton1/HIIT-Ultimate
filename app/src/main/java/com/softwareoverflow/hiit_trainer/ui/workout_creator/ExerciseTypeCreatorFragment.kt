@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.softwareoverflow.hiit_trainer.R
+import kotlinx.android.synthetic.main.activity_main.*
 
-/**
- * A simple [Fragment] subclass.
- */
-class ExerciseTypeCreator : Fragment() {
+// TODO - move this out of workout_creator package. Not really directly related to creating a workout
+class ExerciseTypeCreatorFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,5 +21,13 @@ class ExerciseTypeCreator : Fragment() {
         return inflater.inflate(R.layout.fragment_exercise_type_creator, container, false)
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        activity!!.mainActivityFAB.setImageResource(R.drawable.icon_tick)
+        activity!!.mainActivityFAB.show()
+        activity?.mainActivityFAB?.setOnClickListener {
+            findNavController().navigateUp()
+            // TODO handle animation of button
+        }
+    }
 }

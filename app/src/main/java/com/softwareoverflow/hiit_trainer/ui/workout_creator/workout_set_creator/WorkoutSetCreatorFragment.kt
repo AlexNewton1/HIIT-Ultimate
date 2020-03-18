@@ -1,48 +1,70 @@
-package com.softwareoverflow.hiit_trainer.ui.workout_creator
+package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorBinding
+import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
+import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.fragment_workout_set_creator.*
 
 class WorkoutSetCreatorFragment : Fragment() {
 
-    private lateinit var viewModel: WorkoutCreatorViewModel
+    private val workoutCreatorViewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
+        // TODO - update this to actually get and send the correct ID
+        WorkoutCreatorViewModelFactory(
+            activity!!,
+            null
+        )
+    }
+
+    // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
+    private val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_workout_set_creator, container, false)
+        val binding = DataBindingUtil.inflate<FragmentWorkoutSetCreatorBinding>(
+            inflater, R.layout.fragment_workout_set_creator, container, false
+        )
 
-        // TODO - update this to actually get and send the correct ID
-        val viewModelFactory = WorkoutCreatorViewModelFactory(activity!!, null)
-        // Ensure to use the activity as the lifecycle owner, not the fragment as this view model
-        // is shared across multiple fragments
-        viewModel =
-            ViewModelProvider(activity!!, viewModelFactory).get(WorkoutCreatorViewModel::class.java)
+        binding.viewModel = workoutSetViewModel
 
-        Timber.d(viewModel.hashCode().toString())
+        workoutSetViewModel.exerciseType.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.exerciseTypeIcon.setBackground(it.getIconId(context!!))
+                binding.exerciseTypeIcon.setColor(it.getColor(context!!))
+            }
+        })
 
-        return view
+        return binding.root
     }
+
 
     override fun onStart() {
         super.onStart()
 
         activity!!.mainActivityFAB.show()
-        activity!!.mainActivityFAB.setOnClickListener { v: View ->
+        activity?.mainActivityFAB?.setImageResource(R.drawable.icon_plus)
+        /*activity!!.mainActivityFAB.setOnClickListener { v: View ->
             findNavController().navigate(R.id.action_workoutSetCreator_to_workoutCreatorHomeFragment)
             // TODO - start FAB animation back to add for the previous screen!
-        }
+        }*/
+
+        // TODO change this to data binding - will require working out handling of the viewModel for a given workoutSet
+        exerciseTypeIcon.setColor(Color.BLUE)
+        exerciseTypeIcon.setImageResource(R.drawable.icon_fire)
     }
 
 

@@ -5,10 +5,8 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "ExerciseType")
-class ExerciseType {
-
-    @PrimaryKey(autoGenerate = true) val id: Int? = null
-
-    var name: String = ""
-    var icon: String = ""
-}
+class ExerciseTypeEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    var name: String,
+    var icon: String,
+    var color: String)

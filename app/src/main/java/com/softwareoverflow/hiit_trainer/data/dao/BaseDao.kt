@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.data
+package com.softwareoverflow.hiit_trainer.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Update
 
 @Dao
-internal interface BaseDao<T> {
+interface BaseDao<T> {
 
     @Insert
     fun insert(obj: T) : Long

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="create_workout_footer_height">100dp</dimen>
+    <dimen name="fragment_padding">8dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_size_padded">64dp</dimen>
+
+    <dimen name="viewPagerPageMargin">20dp</dimen>
+    <dimen name="viewPagerOffset">30dp</dimen>
 </resources>

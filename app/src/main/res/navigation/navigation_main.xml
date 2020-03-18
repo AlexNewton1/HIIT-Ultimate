@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_main">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/homeScreenFragment">
 
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.HomeScreenFragment"
+        android:label="HIIT Trainer"
+        tools:layout="@layout/fragment_home_screen">
+        <action
+            android:id="@+id/action_homeScreenFragment_to_workoutCreatorHomeFragment"
+            app:destination="@id/nav_workout_creator" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.AboutFragment"
+        android:label="About HIIT Trainer"
+        tools:layout="@layout/fragment_about" />
+    <navigation
+        android:id="@+id/nav_workout_creator"
+        app:startDestination="@id/workoutCreatorHomeFragment" >
+        <fragment
+            android:id="@+id/workoutCreatorHomeFragment"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorHomeFragment"
+            android:label="Create Your Workout"
+            tools:layout="@layout/fragment_workout_creator_home">
+            <action
+                android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
+                app:destination="@id/nav_workout_set_creator" />
+        </fragment>
+        <fragment
+            android:id="@+id/exerciseTypeCreator"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.ExerciseTypeCreatorFragment"
+            android:label="Create Exercise Type"
+            tools:layout="@layout/fragment_exercise_type_creator" />
+        <navigation
+            android:id="@+id/nav_workout_set_creator"
+            app:startDestination="@id/exerciseTypePickerFragment" >
+            <fragment
+                android:id="@+id/exerciseTypePickerFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.ExerciseTypePickerFragment"
+                android:label="Create Workout Set (Step 1)"
+                tools:layout="@layout/fragment_exercise_type_picker">
+                <action
+                    android:id="@+id/action_exerciseTypePickerFragment_to_workoutSetCreator"
+                    app:destination="@id/workoutSetCreator" />
+                <action
+                    android:id="@+id/action_exerciseTypePickerFragment_to_exerciseTypeCreator"
+                    app:destination="@id/exerciseTypeCreator" />
+            </fragment>
+            <fragment
+                android:id="@+id/workoutSetCreator"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorFragment"
+                android:label="Create Workout Set (Step 2)"
+                tools:layout="@layout/fragment_workout_set_creator">
+                <action
+                    android:id="@+id/action_workoutSetCreator_to_workoutCreatorHomeFragment"
+                    app:destination="@id/workoutCreatorHomeFragment" />
+            </fragment>
+        </navigation>
+    </navigation>
 </navigation>
