@@ -9,7 +9,6 @@
         android:id="@+id/list_color_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/icon_fire"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintEnd_toEndOf="parent"

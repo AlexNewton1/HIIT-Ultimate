@@ -7,7 +7,7 @@ class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
 
     private var previouslySelectedPage = 0
     private var selectedPage = 0
-    private val pagerAdapter = viewPager.adapter as IntArrayPagerAdapterBase
+    private val pagerAdapter = viewPager.adapter as ExerciseTypePagerAdapter
 
     private var internalPageChange = false
 
