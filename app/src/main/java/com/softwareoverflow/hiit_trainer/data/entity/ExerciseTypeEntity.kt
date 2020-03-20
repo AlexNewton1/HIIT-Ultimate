@@ -9,4 +9,5 @@ class ExerciseTypeEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     var name: String,
     var icon: String,
-    var color: String)
+    var color: String
+)

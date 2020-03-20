@@ -56,6 +56,7 @@ class XViewPagerPicker : ConstraintLayout {
         /* Duplicate all the IDs so when the currentItem is set to halfway it smooth scrolls through
             all the options and presents options either side */
         ids.addAll(ids)
+        ids.addAll(ids) // TODO remove this line once more icons have been generated
 
         val iconAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
         setupPager(iconViewPager, iconAdapter)
@@ -68,7 +69,7 @@ class XViewPagerPicker : ConstraintLayout {
         with(pager) {
             this.adapter = adapter
 
-            offscreenPageLimit = 3
+            offscreenPageLimit = 5
             clipToPadding = false
             clipChildren = false
 
@@ -78,9 +79,13 @@ class XViewPagerPicker : ConstraintLayout {
             currentItem = adapter.itemCount / 2
         }
     }
-    // TODO investigate if DiffUtil and ListAdapter can be used for the ViewPager2 instead of manually removing and adding the items each swipe
+    /*
+    TODO investigate use cases architecture further as a potential alternative to the DTO model
 
-    // TODO create some fake data for the database.
-    // TODO create recyclerview and listAdapter for showing all of the exercise types
-    // TODO use DiffUtil for it
+    TODO investigate if DiffUtil and ListAdapter can be used for the ViewPager2 instead of manually removing and adding the items each swipe
+
+    TODO create some fake data for the database.
+    TODO create recyclerview and listAdapter for showing all of the exercise types
+    TODO use DiffUtil for it
+     */
 }

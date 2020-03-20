@@ -20,23 +20,25 @@ class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
     }
 
     private fun notifyPageChange(){
-        internalPageChange = true
 
-        if( selectedPage < previouslySelectedPage) {// User is swiping right
-            pagerAdapter.loopBackward()
+        // Post the changes to the adapter to avoid calling directly during the scroll callback
+        viewPager.post {
+            internalPageChange = true
+            if (selectedPage < previouslySelectedPage) {// User is swiping right
+                pagerAdapter.loopBackward()
 
-            val newPage = selectedPage + 1
-            previouslySelectedPage = newPage
-            viewPager.setCurrentItem(newPage, false)
+                val newPage = selectedPage + 1
+                previouslySelectedPage = newPage
+                viewPager.setCurrentItem(newPage, false)
+            } else { // User is swiping left
+                pagerAdapter.loopForward()
+
+                val newPage = selectedPage - 1
+                previouslySelectedPage = newPage
+                viewPager.setCurrentItem(newPage, false)
+            }
+
+            internalPageChange = false
         }
-        else { // User is swiping left
-            pagerAdapter.loopForward()
-
-            val newPage = selectedPage - 1
-            previouslySelectedPage = newPage
-            viewPager.setCurrentItem(newPage, false)
-        }
-
-        internalPageChange = false
     }
 }

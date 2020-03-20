@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorBinding
+import com.softwareoverflow.hiit_trainer.ui.getColorId
+import com.softwareoverflow.hiit_trainer.ui.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,8 +45,8 @@ class WorkoutSetCreatorFragment : Fragment() {
 
         workoutSetViewModel.exerciseType.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.exerciseTypeIcon.setBackground(it.getIconId(context!!))
-                binding.exerciseTypeIcon.setColor(it.getColor(context!!))
+                binding.exerciseTypeIcon.setBackground(it.iconName.getDrawableId(context!!))
+                binding.exerciseTypeIcon.setColor(it.color.getColorId(context!!))
             }
         })
 

@@ -38,8 +38,18 @@ fun WorkoutSet.toDTO(): WorkoutSetDTO {
 fun ExerciseTypeEntity.toDTO(): ExerciseTypeDTO {
 
     return ExerciseTypeDTO(
+        id,
         name,
         icon,
+        color
+    )
+}
+
+fun ExerciseTypeDTO.toEntity() : ExerciseTypeEntity {
+    return ExerciseTypeEntity(
+        id,
+        name,
+        iconName,
         color
     )
 }

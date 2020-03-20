@@ -16,18 +16,18 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
+        android:hint="Exercise Type Name..."
         android:id="@+id/etExerciseTypeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/fab_size_padded"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_weight="1"
-        tools:text="Name Your Exercise Type...." />
+        app:layout_constraintVertical_weight="1" />
 
 
     <androidx.viewpager2.widget.ViewPager2

@@ -16,4 +16,8 @@ interface IWorkoutRepository {
     fun getWorkoutById(workoutId: Long) : LiveData<WorkoutDTO>
 
     fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>>
+
+    fun getExerciseTypeById(exerciseTypeId: Long) : LiveData<ExerciseTypeDTO>
+
+    fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO)
 }

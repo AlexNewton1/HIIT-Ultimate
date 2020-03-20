@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.softwareoverflow.hiit_trainer.data.Workout
 import com.softwareoverflow.hiit_trainer.data.WorkoutDatabase
+import com.softwareoverflow.hiit_trainer.data.entity.ExerciseTypeEntity
 import com.softwareoverflow.hiit_trainer.data.mapper.toDTO
+import com.softwareoverflow.hiit_trainer.data.mapper.toEntity
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 
@@ -37,5 +39,19 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         }
 
         return MutableLiveData<List<ExerciseTypeDTO>>(list)
+    }
+
+    override fun getExerciseTypeById(exerciseTypeId: Long): LiveData<ExerciseTypeDTO> {
+        val liveData = MutableLiveData<ExerciseTypeDTO>()
+
+        Transformations.map(exerciseTypeDao.getExerciseTypeById(exerciseTypeId)) { exerciseType: ExerciseTypeEntity ->
+            liveData.value = exerciseType.toDTO()
+        }
+
+        return liveData
+    }
+
+    override fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) {
+        exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
     }
 }

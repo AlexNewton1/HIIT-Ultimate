@@ -48,7 +48,7 @@ class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val
      * front
      */
     fun loopBackward() {
-        val removed = ids.removeAt(ids.size - 1)
+        val removed = ids.removeAt(itemCount - 1)
         ids.add(0, removed)
 
         notifyItemMoved(itemCount - 1, 0)

@@ -28,6 +28,8 @@ class ExerciseTypeCreatorFragment : Fragment() {
         activity?.mainActivityFAB?.setOnClickListener {
             findNavController().navigateUp()
             // TODO handle animation of button
+
+
         }
     }
 }
