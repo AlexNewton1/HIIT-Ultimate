@@ -185,7 +185,7 @@
             app:layout_constraintStart_toStartOf="@+id/recoverTimePickerET"
             tools:text="Recover Time" />
 
-        <com.softwareoverflow.hiit_trainer.ui.view.CircularImageView
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/exerciseTypeIcon"
             android:layout_width="56dp"
             android:layout_height="56dp"

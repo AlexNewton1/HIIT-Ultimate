@@ -9,7 +9,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.dpToPx
 
 
-class CircularImageView : AppCompatImageView {
+class CircularIconImageView : AppCompatImageView {
 
     constructor(context: Context) : super(context) {
         initialize(context)

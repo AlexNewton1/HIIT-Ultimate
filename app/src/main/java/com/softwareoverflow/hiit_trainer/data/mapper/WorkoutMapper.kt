@@ -7,16 +7,16 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 
-fun Workout.toDTO() : WorkoutDTO {
+fun Workout.toDTO(): WorkoutDTO {
 
     return WorkoutDTO(
         workout.id,
         workout.name,
-        workoutSets.toDTO()
+        workoutSets.toWorkoutSetDTO()
     )
 }
 
-fun List<WorkoutSet>.toDTO() : MutableList<WorkoutSetDTO> {
+fun List<WorkoutSet>.toWorkoutSetDTO(): MutableList<WorkoutSetDTO> {
     val dtoList = ArrayList<WorkoutSetDTO>()
     forEach { dtoList.add(it.toDTO()) }
     return dtoList
@@ -45,11 +45,18 @@ fun ExerciseTypeEntity.toDTO(): ExerciseTypeDTO {
     )
 }
 
-fun ExerciseTypeDTO.toEntity() : ExerciseTypeEntity {
+fun List<ExerciseTypeEntity>.toExerciseTypeDTO(): List<ExerciseTypeDTO> {
+    val list = ArrayList<ExerciseTypeDTO>()
+    this.forEach { list.add(it.toDTO()) }
+    return list
+}
+
+fun ExerciseTypeDTO.toEntity(): ExerciseTypeEntity {
+    val exerciseTypeId: Long = if (id == null) 0 else id!!
     return ExerciseTypeEntity(
-        id,
+        exerciseTypeId,
         name,
         iconName,
-        color
+        colorHex
     )
 }

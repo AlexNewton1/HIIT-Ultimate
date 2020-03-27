@@ -51,21 +51,20 @@ class WorkoutDatabaseTest {
         db.close()
     }
 
-
     @Test
     fun insertAndGetWorkout() {
         val workout = WorkoutEntity(null, "MyWorkout")
 
-        val exerciseType = ExerciseTypeEntity(null, "Test Type", "icon_name")
-        val exerciseTypeId = exerciseTypeDao.insert(exerciseType)
+        val exerciseType = ExerciseTypeEntity(null, "Test Type", "icon_name", "#666666")
+        val exerciseTypeId = exerciseTypeDao.createOrUpdate(exerciseType)
 
         val exerciseTypes = getValue(exerciseTypeDao.getAllExerciseTypes())
         assertEquals(exerciseTypes.size, 1)
 
-        val workoutId = workoutDao.insert(workout)
+        val workoutId = workoutDao.createOrUpdate(workout)
 
-        val workoutSet = WorkoutSetEntity(null, workoutId, exerciseTypeId, 5, 5, 6)
-        workoutSetDao.insert(workoutSet)
+        val workoutSet = WorkoutSetEntity(null, workoutId, exerciseTypeId, 5, 5, 6, 120)
+        workoutSetDao.createOrUpdate(workoutSet)
 
         val workouts = getValue(workoutDao.getAllWorkouts())
         assertEquals(workouts.size, 1)

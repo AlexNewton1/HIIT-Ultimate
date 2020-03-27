@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.view.CircularImageView
+import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
 
 class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val ids: MutableList<Int>) :
     RecyclerView.Adapter<ExerciseTypePagerAdapter.ExerciseTypeViewHolder>() {
@@ -27,7 +27,7 @@ class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val
 
     private fun createViewHolder(parent: ViewGroup): ExerciseTypeViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.list_item_exercise_type, parent, false)
+        val view = inflater.inflate(R.layout.list_item_exercise_type_creator, parent, false)
 
         return ExerciseTypeViewHolder(view)
     }
@@ -59,15 +59,15 @@ class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val
     }
 
     inner class ExerciseTypeViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: CircularImageView = itemView.findViewById(R.id.list_color_image)
+        private val iconImageView: CircularIconImageView = itemView.findViewById(R.id.list_color_image)
 
         fun bind(resourceId: Int) {
             when (adapterType) {
                 ExerciseTypeAdapter.ICON ->  {
-                    imageView.setColor(android.R.color.transparent)
-                    imageView.setBackground(resourceId)
+                    iconImageView.setColor(android.R.color.transparent)
+                    iconImageView.setBackground(resourceId)
                 }
-                ExerciseTypeAdapter.COLOR -> imageView.setColor(resourceId)
+                ExerciseTypeAdapter.COLOR -> iconImageView.setColor(resourceId)
             }
         }
     }

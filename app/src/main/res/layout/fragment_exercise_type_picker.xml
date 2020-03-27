@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.workout_creator.workout_set_creator.ExerciseTypePickerFragment">
 
-
     <SearchView
+        android:background="@color/colorPrimary"
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exerciseTypePickerList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
@@ -30,7 +31,7 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
-        android:layout_height="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size_padded"
         android:layout_marginEnd="@dimen/fab_size_padded"
         android:gravity="center"
         android:text="@string/create_new_exercise_type"

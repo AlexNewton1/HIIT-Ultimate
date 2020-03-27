@@ -18,7 +18,6 @@ import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 )
 abstract class WorkoutDatabase : RoomDatabase() {
 
-
     /**
      * The DAO to be able to access the data in the database
      */
@@ -33,7 +32,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
 
     companion object {
 
-        private val DATABASE_NAME = "WorkoutDatabase"
+        private const val DATABASE_NAME = "WorkoutDatabase"
 
         @Volatile
         private var INSTANCE: WorkoutDatabase? = null

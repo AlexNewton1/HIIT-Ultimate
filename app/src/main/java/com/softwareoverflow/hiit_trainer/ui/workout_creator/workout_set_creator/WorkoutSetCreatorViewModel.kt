@@ -7,10 +7,13 @@ import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 
-class WorkoutSetCreatorViewModel(workoutSetDTO: WorkoutSetDTO? = null, repo: IWorkoutRepository) :
+class WorkoutSetCreatorViewModel(
+    workoutSetDTO: WorkoutSetDTO? = null,
+    private val repo: IWorkoutRepository
+) :
     ViewModel() {
 
-    val allExerciseTypes: LiveData<List<ExerciseTypeDTO>> = repo.getAllExerciseTypes()
+    val allExerciseTypes = repo.getAllExerciseTypes()
 
     private var _exerciseType: MutableLiveData<ExerciseTypeDTO?> =
         MutableLiveData(workoutSetDTO?.exerciseTypeDTO)
@@ -35,18 +38,15 @@ class WorkoutSetCreatorViewModel(workoutSetDTO: WorkoutSetDTO? = null, repo: IWo
 
     init {
         workoutSetDTO?.let {
-            setValues(it.workTime, it.restTime, it.numReps, it.recoverTime)
+            _workTime.value = it.workTime
+            _restTime.value = it.restTime
+            _numReps.value = it.numReps
+            _recoverTime.value = it.recoverTime
+            _exerciseType.value = it.exerciseTypeDTO
         }
     }
 
     fun setExerciseType(exerciseType: ExerciseTypeDTO) {
         _exerciseType.value = exerciseType
-    }
-
-    fun setValues(workTime: Int, restTime: Int, numReps: Int, recoverTime: Int) {
-        _workTime.value = workTime
-        _restTime.value = restTime
-        _numReps.value = numReps
-        _recoverTime.value = recoverTime
     }
 }

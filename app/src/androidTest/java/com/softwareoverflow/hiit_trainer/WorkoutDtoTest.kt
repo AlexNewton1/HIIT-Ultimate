@@ -18,12 +18,12 @@ class WorkoutDtoTest {
         // Arrange
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
-        val exerciseType = ExerciseTypeDTO("Test Exercise Type", "test_icon")
+        val exerciseType = ExerciseTypeDTO(null, "Test Exercise Type", "test_icon", "#666666")
 
-        val set1 = WorkoutSetDTO(null, exerciseType, 5,5, 6) // 00:55
-        val set2 = WorkoutSetDTO(null, exerciseType, 7, 3, 2) // 00:17
-        val set3 = WorkoutSetDTO(null, exerciseType, 0, 0, 0) // 00:00
-        val set4 = WorkoutSetDTO(null, exerciseType, 30, 30, 1) // 00:30
+        val set1 = WorkoutSetDTO(null, exerciseType, 5,5, 6, 120) // 02:55
+        val set2 = WorkoutSetDTO(null, exerciseType, 7, 3, 2, 0) // 00:17
+        val set3 = WorkoutSetDTO(null, exerciseType, 0, 0, 0, 30) // 00:30
+        val set4 = WorkoutSetDTO(null, exerciseType, 30, 30, 1, 1000000) // 00:30
 
         val dto = WorkoutDTO()
         dto.workoutSets.addAll(0, arrayListOf(set1, set2, set3, set4))
@@ -32,7 +32,7 @@ class WorkoutDtoTest {
         val durationString = dto.getFormattedDuration(context.resources)
 
         // Assert
-        assertEquals("01:42", durationString)
+        assertEquals("04:12", durationString)
     }
 
 }

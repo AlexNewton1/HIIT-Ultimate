@@ -14,4 +14,10 @@ interface ExerciseTypeDao :
 
     @Query("SELECT * FROM ExerciseType WHERE id = :exerciseTypeId")
     fun getExerciseTypeById(exerciseTypeId: Long) : LiveData<ExerciseTypeEntity>
+
+    @Query("SELECT COUNT(*) FROM ExerciseType")
+    fun getCount() : Int
+
+    @Query("SELECT * FROM ExerciseType")
+    fun getAllExerciseTypeTest() : List<ExerciseTypeEntity>
 }

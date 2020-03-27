@@ -6,30 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/fab_size_padded"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:hint="Exercise Type Name..."
-        android:id="@+id/etExerciseTypeName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="@dimen/fab_size_padded"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_weight="1" />
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/colorViewPager"
         android:layout_width="0dp"

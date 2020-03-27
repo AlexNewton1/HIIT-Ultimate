@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.view.picker.ExerciseTypePagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
+import timber.log.Timber
 
 class XViewPagerPicker : ConstraintLayout {
 
@@ -42,14 +43,18 @@ class XViewPagerPicker : ConstraintLayout {
         ids.addAll(ids)
         val colorAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
         setupPager(colorViewPager, colorAdapter)
+
+        Timber.d("COLORS: ${ids.joinToString(",")}")
     }
 
     private fun setupIconPager() {
         val ids: MutableList<Int> = ArrayList()
         val icons = resources.obtainTypedArray(R.array.et_icons)
         try {
-            for (i in 0 until icons.length())
+            for (i in 0 until icons.length()) {
+                val abc = icons.getIndex(i)
                 ids.add(icons.getResourceIdOrThrow(i))
+            }
         } finally {
             icons.recycle()
         }
@@ -57,6 +62,8 @@ class XViewPagerPicker : ConstraintLayout {
             all the options and presents options either side */
         ids.addAll(ids)
         ids.addAll(ids) // TODO remove this line once more icons have been generated
+
+        Timber.d("ICONS: ${ids.joinToString(",")}")
 
         val iconAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
         setupPager(iconViewPager, iconAdapter)
@@ -79,6 +86,15 @@ class XViewPagerPicker : ConstraintLayout {
             currentItem = adapter.itemCount / 2
         }
     }
+
+    fun getColorId(): Int {
+        return colorViewPager.adapter!!.getItemId(colorViewPager.currentItem).toInt()
+    }
+
+    fun getIconId(): Int {
+        return iconViewPager.adapter!!.getItemId(iconViewPager.currentItem).toInt()
+    }
+
     /*
     TODO investigate use cases architecture further as a potential alternative to the DTO model
 
