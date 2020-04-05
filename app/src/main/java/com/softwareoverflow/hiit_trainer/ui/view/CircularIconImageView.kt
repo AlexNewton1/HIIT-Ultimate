@@ -30,11 +30,17 @@ class CircularIconImageView : AppCompatImageView {
         background = context.resources.getDrawable(R.drawable.bg_circle, context.theme)
     }
 
-    fun setColor(color: Int){
+    fun setColor(color: Int?){
+        if(color == null)
+            return
+
         background.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
     }
 
-    fun setBackground(drawableId: Int){
+    fun setBackground(drawableId: Int?){
+        if(drawableId == null)
+            return
+
         setImageResource(drawableId)
     }
 }

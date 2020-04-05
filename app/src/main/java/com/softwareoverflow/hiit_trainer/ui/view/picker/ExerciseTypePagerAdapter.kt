@@ -5,10 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.takeN
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
 
-class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val ids: MutableList<Int>) :
-    RecyclerView.Adapter<ExerciseTypePagerAdapter.ExerciseTypeViewHolder>() {
+class ExerciseTypePagerAdapter(
+    val adapterType: ExerciseTypeAdapter,
+    private var ids: MutableList<Int>
+) : RecyclerView.Adapter<ExerciseTypePagerAdapter.ExerciseTypeViewHolder>() {
 
     override fun getItemCount(): Int = ids.size
 
@@ -30,6 +33,31 @@ class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val
         val view = inflater.inflate(R.layout.list_item_exercise_type_creator, parent, false)
 
         return ExerciseTypeViewHolder(view)
+    }
+
+    /**
+     * This item will move the requested id to the middle of the list, maintaining the list order
+     * with respect to the infinite page scroll
+     *
+     * @param id the id in the adapter data to move to the center of the list
+     */
+    fun moveItemToCenter(id: Int) {
+        val position = ids.indexOf(id)
+
+        if (position == -1)
+            return
+
+        val itemCount = ids.count()
+        val numToMove = position - itemCount / 2
+        val movedItems = ids.takeN(numToMove)
+
+        if (numToMove < 0) {
+            ids.addAll(0, movedItems)
+            ids = ids.takeN(itemCount).toMutableList()
+        } else if (numToMove > 0) {
+            ids.addAll(movedItems)
+            ids = ids.takeN(itemCount * -1).toMutableList()
+        }
     }
 
     /**
@@ -58,12 +86,13 @@ class ExerciseTypePagerAdapter(val adapterType: ExerciseTypeAdapter, private val
         enum class ExerciseTypeAdapter { ICON, COLOR }
     }
 
-    inner class ExerciseTypeViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val iconImageView: CircularIconImageView = itemView.findViewById(R.id.list_color_image)
+    inner class ExerciseTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val iconImageView: CircularIconImageView =
+            itemView.findViewById(R.id.list_color_image)
 
         fun bind(resourceId: Int) {
             when (adapterType) {
-                ExerciseTypeAdapter.ICON ->  {
+                ExerciseTypeAdapter.ICON -> {
                     iconImageView.setColor(android.R.color.transparent)
                     iconImageView.setBackground(resourceId)
                 }

@@ -1,3 +1,8 @@
 package com.softwareoverflow.hiit_trainer.repository.dto
 
-data class ExerciseTypeDTO(var id: Long?, var name: String, var iconName: String, var colorHex: String)
+data class ExerciseTypeDTO(
+    var id: Long? = null,
+    var name: String? = null,
+    var iconName: String? = null,
+    var colorHex: String? = null
+)

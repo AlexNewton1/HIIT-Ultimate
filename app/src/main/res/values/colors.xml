@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <!-- TODO - DELETE the below -->
     <!-- The following are all referenced in the arrays.xml file -->
     <color name="et_black">#000000</color>
     <color name="et_grey_dark">#666666</color>

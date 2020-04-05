@@ -7,44 +7,43 @@ import androidx.core.content.res.getResourceIdOrThrow
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.getColorId
+import com.softwareoverflow.hiit_trainer.ui.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.view.picker.ExerciseTypePagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class XViewPagerPicker : ConstraintLayout {
+class XViewPagerPicker @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ConstraintLayout(context, attrs, defStyle) {
 
-    constructor(context: Context) : super(context) {
-        initialize(context)
-    }
+    private var job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initialize(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-        initialize(context)
-    }
-
-    private fun initialize(context: Context) {
+    init {
         inflate(context, R.layout.x_view_pager_picker, this)
 
         setupColorPager()
         setupIconPager()
     }
 
-    private fun setupColorPager() {
-        val ids: MutableList<Int> = resources.getIntArray(R.array.et_colors).toMutableList()
-        /* Duplicate all the IDs so when the currentItem is set to halfway it smooth scrolls through
-            all the options */
-        ids.addAll(ids)
-        val colorAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
-        setupPager(colorViewPager, colorAdapter)
+    // TODO maybe make a custom view extending ViewPager2 which can handle the setting by name, moving forward / backward etc etc instead of handling iconPager and ColorPager here
 
-        Timber.d("COLORS: ${ids.joinToString(",")}")
+    private fun setupColorPager() {
+        val colorHexIds: MutableList<String> = resources.getStringArray(R.array.et_colors).toMutableList()
+        val ids = colorHexIds.map{
+            it.getColorId()
+        }.toMutableList()
+
+        val colorAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
+
+        // TODO change this if it works for iconAdapter
+        setupPager(colorViewPager, colorAdapter)
     }
 
     private fun setupIconPager() {
@@ -52,20 +51,14 @@ class XViewPagerPicker : ConstraintLayout {
         val icons = resources.obtainTypedArray(R.array.et_icons)
         try {
             for (i in 0 until icons.length()) {
-                val abc = icons.getIndex(i)
                 ids.add(icons.getResourceIdOrThrow(i))
             }
         } finally {
             icons.recycle()
         }
-        /* Duplicate all the IDs so when the currentItem is set to halfway it smooth scrolls through
-            all the options and presents options either side */
-        ids.addAll(ids)
-        ids.addAll(ids) // TODO remove this line once more icons have been generated
-
-        Timber.d("ICONS: ${ids.joinToString(",")}")
 
         val iconAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
+
         setupPager(iconViewPager, iconAdapter)
     }
 
@@ -76,14 +69,44 @@ class XViewPagerPicker : ConstraintLayout {
         with(pager) {
             this.adapter = adapter
 
-            offscreenPageLimit = 5
             clipToPadding = false
             clipChildren = false
+            currentItem = adapter.itemCount / 2 // Default to starting at the middle item
+            offscreenPageLimit = 5
 
             setPageTransformer(MultipleVisiblePagesTransformer(context))
-            registerOnPageChangeCallback(InfiniteScrollPageChangeListener(pager))
+            registerOnPageChangeCallback(InfiniteScrollPageChangeListener(this))
+        }
+    }
 
-            currentItem = adapter.itemCount / 2
+    fun setIconByName(iconName: String) {
+        val adapter = (iconViewPager.adapter as ExerciseTypePagerAdapter)
+
+        val iconId = iconName.getDrawableId(context)
+        adapter.moveItemToCenter(iconId)
+        adapter.notifyDataSetChanged()
+
+        uiScope.launch {
+            // Set the current item to half way through now the required item has been centered.
+            // Account for 0 indexing and odd-length lists
+            iconViewPager.currentItem = adapter.itemCount / 2
+        }
+    }
+
+    fun setColorByHex(colorHex: String?) {
+        // TODO - change this to be an interface!
+        val adapter = (colorViewPager.adapter as ExerciseTypePagerAdapter)
+
+        colorHex?.let {
+            val colorId = colorHex.getColorId()
+            adapter.moveItemToCenter(colorId)
+            adapter.notifyDataSetChanged()
+        }
+
+        uiScope.launch {
+            // Set the current item to half way through now the required item has been centered.
+            // Account for 0 indexing and odd-length lists
+            colorViewPager.currentItem = adapter.itemCount / 2
         }
     }
 

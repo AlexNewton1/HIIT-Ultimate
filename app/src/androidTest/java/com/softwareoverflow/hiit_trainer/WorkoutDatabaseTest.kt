@@ -55,7 +55,7 @@ class WorkoutDatabaseTest {
     fun insertAndGetWorkout() {
         val workout = WorkoutEntity(null, "MyWorkout")
 
-        val exerciseType = ExerciseTypeEntity(null, "Test Type", "icon_name", "#666666")
+        val exerciseType = ExerciseTypeEntity(0, "Test Type", "icon_name", "#666666")
         val exerciseTypeId = exerciseTypeDao.createOrUpdate(exerciseType)
 
         val exerciseTypes = getValue(exerciseTypeDao.getAllExerciseTypes())

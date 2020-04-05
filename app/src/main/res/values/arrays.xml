@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <array name="et_colors">
-        <item>@color/et_black</item>
-        <item>@color/et_grey_dark</item>
-        <item>@color/et_red</item>
-        <item>@color/et_firebrick</item>
-        <item>@color/et_orange</item>
-        <item>@color/et_gold</item>
-        <item>@color/et_lime</item>
-        <item>@color/et_green</item>
-        <item>@color/et_turquoise</item>
-        <item>@color/et_blue_light</item>
-        <item>@color/et_blue_dark</item>
-        <item>@color/et_mauve</item>
-        <item>@color/et_purple</item>
-        <item>@color/et_pink</item>
-    </array>
+    <string-array name="et_colors">
+        <item>#000000</item>
+        <item>#666666</item>
+        <item>#E53935</item>
+        <item>#F4511E</item>
+        <item>#FB8C00</item>
+        <item>#FFB300</item>
+        <item>#43A047</item>
+        <item>#00897B</item>
+        <item>#039BE5</item>
+        <item>#3949AB</item>
+        <item>#5E35B1</item>
+        <item>#8E24AA</item>
+        <item>#D81B60</item>
+    </string-array>
 
     <array name="et_icons">
         <item>@drawable/et_icon_flash</item>
@@ -28,8 +27,12 @@
 
 
         <!-- TODO replace below icons with the correct ones -->
-<!--        <item>@drawable/icon_recover</item>
+        <item>@drawable/icon_recover</item>
         <item>@drawable/icon_repeat</item>
-        <item>@drawable/icon_fire</item>-->
+        <item>@drawable/icon_fire</item>
+        <item>@drawable/icon_timer</item>
+        <item>@drawable/icon_tick</item>
+        <item>@drawable/icon_rest</item>
+        <item>@drawable/icon_plus</item>
     </array>
 </resources>

@@ -4,4 +4,6 @@
     <string name="min_sec_time_format">%1$02d:%2$2d</string> <!-- e.g. 02:25 -->
 
     <string name="create_new_exercise_type">Create New Exercise Type</string>
+
+    <string name="error_exercise_type_name_required">Please enter a name.</string>
 </resources>

@@ -5,9 +5,9 @@ import androidx.viewpager2.widget.ViewPager2
 class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
     ViewPager2.OnPageChangeCallback() {
 
-    private var previouslySelectedPage = 0
-    private var selectedPage = 0
     private val pagerAdapter = viewPager.adapter as ExerciseTypePagerAdapter
+    private var previouslySelectedPage = viewPager.currentItem
+    private var selectedPage = viewPager.currentItem
 
     private var internalPageChange = false
 
@@ -20,7 +20,6 @@ class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
     }
 
     private fun notifyPageChange(){
-
         // Post the changes to the adapter to avoid calling directly during the scroll callback
         viewPager.post {
             internalPageChange = true
@@ -30,7 +29,7 @@ class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
                 val newPage = selectedPage + 1
                 previouslySelectedPage = newPage
                 viewPager.setCurrentItem(newPage, false)
-            } else { // User is swiping left
+            } else if (selectedPage > previouslySelectedPage) { // User is swiping left
                 pagerAdapter.loopForward()
 
                 val newPage = selectedPage - 1

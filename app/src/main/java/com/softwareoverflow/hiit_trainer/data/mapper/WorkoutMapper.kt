@@ -51,12 +51,18 @@ fun List<ExerciseTypeEntity>.toExerciseTypeDTO(): List<ExerciseTypeDTO> {
     return list
 }
 
+/**
+ * Convert [ExerciseTypeDTO] to [ExerciseTypeEntity].
+ *
+ * @throws NullPointerException when [ExerciseTypeDTO.name], [ExerciseTypeDTO.iconName]
+ * or [ExerciseTypeDTO.colorHex] is null
+ */
 fun ExerciseTypeDTO.toEntity(): ExerciseTypeEntity {
     val exerciseTypeId: Long = if (id == null) 0 else id!!
     return ExerciseTypeEntity(
         exerciseTypeId,
-        name,
-        iconName,
-        colorHex
+        name!!,
+        iconName!!,
+        colorHex!!
     )
 }

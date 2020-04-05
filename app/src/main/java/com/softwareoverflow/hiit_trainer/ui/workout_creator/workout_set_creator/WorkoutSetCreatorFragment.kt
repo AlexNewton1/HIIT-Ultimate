@@ -45,8 +45,8 @@ class WorkoutSetCreatorFragment : Fragment() {
 
         workoutSetViewModel.exerciseType.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.exerciseTypeIcon.setBackground(it.iconName.getDrawableId(context!!))
-                binding.exerciseTypeIcon.setColor(it.colorHex.getColorId(context!!))
+                binding.exerciseTypeIcon.setBackground(it.iconName?.getDrawableId(context!!))
+                binding.exerciseTypeIcon.setColor(it.colorHex?.getColorId())
             }
         })
 

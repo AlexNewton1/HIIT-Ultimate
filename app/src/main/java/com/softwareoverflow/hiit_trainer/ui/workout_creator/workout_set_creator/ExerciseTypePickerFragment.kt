@@ -16,7 +16,6 @@ import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewMo
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_picker.view.*
-import timber.log.Timber
 
 class ExerciseTypePickerFragment : Fragment() {
 
@@ -50,9 +49,7 @@ class ExerciseTypePickerFragment : Fragment() {
         list.adapter = adapter
 
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
-            Timber.d("ETPicker: allET changed: ${it.count()}")
             it?.let{
-                Timber.d("ETPicker objects: $it")
                 adapter.submitList(it)
             }
         })
