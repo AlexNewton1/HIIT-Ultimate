@@ -5,7 +5,7 @@ import androidx.viewpager2.widget.ViewPager2
 class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
     ViewPager2.OnPageChangeCallback() {
 
-    private val pagerAdapter = viewPager.adapter as ExerciseTypePagerAdapter
+    private val pagerAdapter = viewPager.adapter as ExerciseTypeCreatorPagerAdapter
     private var previouslySelectedPage = viewPager.currentItem
     private var selectedPage = viewPager.currentItem
 

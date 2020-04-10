@@ -11,10 +11,11 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+// TODO - handle this so that it only does it for pages within the numExtraPages setting. Other pages should have 0 alpha and not be visible
 class MultipleVisiblePagesTransformer(context: Context) : ViewPager2.PageTransformer {
     private val numExtraPages = 6
 
-    private val minScaleFactor = 0.25f
+    private val minScaleFactor = 0f
     private val scalePerPage = (1f - minScaleFactor) / (numExtraPages / 2)
 
     override fun transformPage(page: View, position: Float) {

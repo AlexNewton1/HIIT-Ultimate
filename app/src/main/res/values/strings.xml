@@ -6,4 +6,6 @@
     <string name="create_new_exercise_type">Create New Exercise Type</string>
 
     <string name="error_exercise_type_name_required">Please enter a name.</string>
+    <string name="char_limit_exceeded">Maximum length %1$02d characters.</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

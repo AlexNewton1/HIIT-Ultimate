@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.getColorId
 import com.softwareoverflow.hiit_trainer.ui.getDrawableId
-import com.softwareoverflow.hiit_trainer.ui.view.picker.ExerciseTypePagerAdapter.Companion
+import com.softwareoverflow.hiit_trainer.ui.view.picker.ExerciseTypeCreatorPagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class XViewPagerPicker @JvmOverloads constructor(
             it.getColorId()
         }.toMutableList()
 
-        val colorAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
+        val colorAdapter = ExerciseTypeCreatorPagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
 
         // TODO change this if it works for iconAdapter
         setupPager(colorViewPager, colorAdapter)
@@ -57,7 +57,7 @@ class XViewPagerPicker @JvmOverloads constructor(
             icons.recycle()
         }
 
-        val iconAdapter = ExerciseTypePagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
+        val iconAdapter = ExerciseTypeCreatorPagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
 
         setupPager(iconViewPager, iconAdapter)
     }
@@ -72,7 +72,7 @@ class XViewPagerPicker @JvmOverloads constructor(
             clipToPadding = false
             clipChildren = false
             currentItem = adapter.itemCount / 2 // Default to starting at the middle item
-            offscreenPageLimit = 5
+            offscreenPageLimit = 4
 
             setPageTransformer(MultipleVisiblePagesTransformer(context))
             registerOnPageChangeCallback(InfiniteScrollPageChangeListener(this))
@@ -80,7 +80,7 @@ class XViewPagerPicker @JvmOverloads constructor(
     }
 
     fun setIconByName(iconName: String) {
-        val adapter = (iconViewPager.adapter as ExerciseTypePagerAdapter)
+        val adapter = (iconViewPager.adapter as ExerciseTypeCreatorPagerAdapter)
 
         val iconId = iconName.getDrawableId(context)
         adapter.moveItemToCenter(iconId)
@@ -93,9 +93,10 @@ class XViewPagerPicker @JvmOverloads constructor(
         }
     }
 
+    // TODO - investigate the issues caused by swiping too quickly when the view is already scrolling to the inital position
     fun setColorByHex(colorHex: String?) {
         // TODO - change this to be an interface!
-        val adapter = (colorViewPager.adapter as ExerciseTypePagerAdapter)
+        val adapter = (colorViewPager.adapter as ExerciseTypeCreatorPagerAdapter)
 
         colorHex?.let {
             val colorId = colorHex.getColorId()
@@ -104,8 +105,6 @@ class XViewPagerPicker @JvmOverloads constructor(
         }
 
         uiScope.launch {
-            // Set the current item to half way through now the required item has been centered.
-            // Account for 0 indexing and odd-length lists
             colorViewPager.currentItem = adapter.itemCount / 2
         }
     }

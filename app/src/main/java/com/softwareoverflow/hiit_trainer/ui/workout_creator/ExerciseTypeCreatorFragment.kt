@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doBeforeTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +14,14 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypeCreatorBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_creator.*
+import timber.log.Timber
 
 // TODO - move this out of workout_creator package. Not really directly related to creating a workout
 class ExerciseTypeCreatorFragment : Fragment() {
 
     private lateinit var viewModel: ExerciseTypeViewModel
+
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,16 +39,39 @@ class ExerciseTypeCreatorFragment : Fragment() {
         // TODO - pass in the correct Id
         val viewModelFactory = ExerciseTypeViewModelFactory(activity!!, null)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ExerciseTypeViewModel::class.java)
-
         binding.viewModel = viewModel
 
         binding.lifecycleOwner = this
+
+        val etNameMaxLength = activity!!.resources.getInteger(R.integer.et_name_length_max)
+        binding.etExerciseTypeName.apply {
+            Timber.e("apply: $this")
+            doBeforeTextChanged { text, start, count, after ->
+                Timber.e("SOMETHING TO DO BEFORE TEXT CHANGED! ${text?.length}")
+                if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
+                    snackbar?.show()
+            }
+        }
 
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
+
+        if (snackbar == null) {
+            snackbar = Snackbar.make(
+                etExerciseTypeName,
+                activity!!.applicationContext.getString(
+                    R.string.char_limit_exceeded,
+                    context?.resources?.getInteger(R.integer.et_name_length_max)
+                ),
+                Snackbar.LENGTH_SHORT
+            ).setAction(R.string.dismiss) {
+                snackbar?.dismiss()
+            }
+        }
+
         activity!!.mainActivityFAB.setImageResource(R.drawable.icon_tick)
         activity!!.mainActivityFAB.show()
         activity?.mainActivityFAB?.setOnClickListener {

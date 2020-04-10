@@ -4,40 +4,40 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class ExerciseTypePagerAdapterTest {
+class ExerciseTypeCreatorPagerAdapterTest {
 
-    lateinit var adapter: ExerciseTypePagerAdapter
+    lateinit var adapterCreator: ExerciseTypeCreatorPagerAdapter
     private val adapterList = arrayListOf(1, 2, 3, 4, 5, 6, 7)
 
     @Before
     fun init() {
-        adapter = ExerciseTypePagerAdapter(
-            ExerciseTypePagerAdapter.Companion.ExerciseTypeAdapter.ICON,
+        adapterCreator = ExerciseTypeCreatorPagerAdapter(
+            ExerciseTypeCreatorPagerAdapter.Companion.ExerciseTypeAdapter.ICON,
             adapterList
         )
     }
 
     @Test
     fun moveItemToCenter_unchanged() {
-        adapter.moveItemToCenter(4)
+        adapterCreator.moveItemToCenter(4)
         checkAdapterValues(adapterList)
     }
 
     @Test
     fun moveItemToCenter_fromPreMiddle(){
-        adapter.moveItemToCenter(3)
+        adapterCreator.moveItemToCenter(3)
         checkAdapterValues(arrayListOf(7, 1, 2, 3, 4, 5, 6))
 
-        adapter.moveItemToCenter(1)
+        adapterCreator.moveItemToCenter(1)
         checkAdapterValues(arrayListOf(5, 6, 7, 1, 2, 3, 4))
     }
 
     @Test
     fun moveItemToCenter_fromPostMiddle(){
-        adapter.moveItemToCenter(6)
+        adapterCreator.moveItemToCenter(6)
         checkAdapterValues(arrayListOf(3, 4, 5, 6, 7, 1, 2))
 
-        adapter.moveItemToCenter(7)
+        adapterCreator.moveItemToCenter(7)
         checkAdapterValues(arrayListOf(4, 5, 6, 7, 1, 2, 3))
     }
 
@@ -64,10 +64,10 @@ class ExerciseTypePagerAdapterTest {
     }*/
 
     private fun checkAdapterValues(expectedValues: MutableList<Int>){
-        assertEquals(expectedValues.size, adapter.itemCount)
+        assertEquals(expectedValues.size, adapterCreator.itemCount)
 
         for (i in 0 until expectedValues.size){
-            assertEquals(expectedValues[i], adapter.getItemId(i).toInt())
+            assertEquals(expectedValues[i], adapterCreator.getItemId(i).toInt())
         }
     }
 }

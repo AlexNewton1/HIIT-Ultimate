@@ -15,6 +15,7 @@ class WorkoutSetCreatorViewModel(
 
     val allExerciseTypes = repo.getAllExerciseTypes()
 
+    // TODO - change all of these values to be Transformations.map (or switchMap?) to avoid having to set them all once at init
     private var _exerciseType: MutableLiveData<ExerciseTypeDTO?> =
         MutableLiveData(workoutSetDTO?.exerciseTypeDTO)
     val exerciseType: LiveData<ExerciseTypeDTO?>

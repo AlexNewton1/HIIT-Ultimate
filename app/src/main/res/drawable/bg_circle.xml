@@ -5,7 +5,7 @@
 
     <!-- This must have a color by default so that the PorterDuff works when changing colors -->
     <solid
-        android:color="@color/colorPrimary"/>
+        android:color="@android:color/holo_green_dark"/>
 
     <size
         android:width="120dp"

@@ -8,10 +8,10 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.takeN
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
 
-class ExerciseTypePagerAdapter(
+class ExerciseTypeCreatorPagerAdapter(
     val adapterType: ExerciseTypeAdapter,
     private var ids: MutableList<Int>
-) : RecyclerView.Adapter<ExerciseTypePagerAdapter.ExerciseTypeViewHolder>() {
+) : RecyclerView.Adapter<ExerciseTypeCreatorPagerAdapter.ExerciseTypeViewHolder>() {
 
     override fun getItemCount(): Int = ids.size
 
