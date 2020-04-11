@@ -23,20 +23,30 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/createNewExerciseTypeFAB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
+        app:spanCount="3" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createNewExerciseTypeFAB"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:padding="@dimen/fragment_padding"
+        android:src="@drawable/icon_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/fab_size_padded"
-        android:layout_marginEnd="@dimen/fab_size_padded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginStart="@dimen/fragment_padding"
         android:text="@string/create_new_exercise_type"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/createNewExerciseTypeFAB"
+        app:layout_constraintStart_toEndOf="@id/createNewExerciseTypeFAB"
+        app:layout_constraintTop_toTopOf="@+id/createNewExerciseTypeFAB" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

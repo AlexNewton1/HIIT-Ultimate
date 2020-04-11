@@ -11,7 +11,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/exerciseTypeName"
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,24 +21,24 @@
         android:id="@+id/exerciseTypeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:breakStrategy="high_quality"
         android:gravity="center"
-        android:maxLength="30"
+        android:maxLength="@integer/et_name_length_max"
         android:padding="@dimen/fragment_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/exerciseTypeIcon"
         app:layout_constraintStart_toStartOf="@+id/exerciseTypeIcon"
         app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
-        tools:text="Burpeespllupsetcsdkljg getcet" />
+        tools:text="This is the exercise type name" />
 
-    <!-- TODO - change this icon to an edit icon -->
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:src="@android:drawable/ic_menu_delete"
+        android:id="@+id/overflowMenu"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_margin="4dp"
+        android:src="@drawable/icon_overflow_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,8 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
             android:id="@+id/view2"

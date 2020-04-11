@@ -42,7 +42,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="@dimen/fab_size_padded"
             android:gravity="center"
-            android:maxLength="30"
+            android:maxLength="@integer/et_name_length_max"
             android:hint="Exercise Type Name..."
             android:text="@{viewModel.exerciseTypeName}"
             app:layout_constraintBottom_toBottomOf="parent"
