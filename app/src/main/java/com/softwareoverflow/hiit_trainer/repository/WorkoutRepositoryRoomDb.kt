@@ -53,14 +53,17 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         }
     }
 
-    override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) {
+    override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) : Long {
         Timber.d("Repository: CREATE $exerciseTypeDao")
 
+        var id = 0L
         withContext(Dispatchers.IO) {
             launch {
-                val id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
+                id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
                 Timber.d("Repository: Saved with id $id")
             }
         }
+
+        return id
     }
 }

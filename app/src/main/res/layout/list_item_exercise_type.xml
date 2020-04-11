@@ -35,8 +35,8 @@
 
     <ImageView
         android:id="@+id/overflowMenu"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_margin="4dp"
         android:src="@drawable/icon_overflow_menu"
         app:layout_constraintEnd_toEndOf="parent"

@@ -9,9 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypeCreatorBinding
+import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_creator.*
 import timber.log.Timber
@@ -36,8 +38,10 @@ class ExerciseTypeCreatorFragment : Fragment() {
             false
         )
 
-        // TODO - pass in the correct Id
-        val viewModelFactory = ExerciseTypeViewModelFactory(activity!!, null)
+        // TODO - pass in the correct Id to the factory
+        // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
+        val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
+        val viewModelFactory = ExerciseTypeViewModelFactory(activity!!, null, workoutSetViewModel)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ExerciseTypeViewModel::class.java)
         binding.viewModel = viewModel
 
@@ -47,7 +51,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         binding.etExerciseTypeName.apply {
             Timber.e("apply: $this")
             doBeforeTextChanged { text, start, count, after ->
-                Timber.e("SOMETHING TO DO BEFORE TEXT CHANGED! ${text?.length}")
+                // TODO fix the issue where this doesn't show up properly
                 if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
                     snackbar?.show()
             }

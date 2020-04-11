@@ -20,5 +20,5 @@ interface IWorkoutRepository {
 
     fun getExerciseTypeById(exerciseTypeId: Long?) : LiveData<ExerciseTypeDTO>
 
-    suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO)
+    suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) :Long
 }

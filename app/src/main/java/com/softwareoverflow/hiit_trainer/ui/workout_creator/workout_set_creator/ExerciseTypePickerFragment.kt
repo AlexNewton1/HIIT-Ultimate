@@ -16,6 +16,7 @@ import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewMo
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_picker.view.*
+import timber.log.Timber
 
 class ExerciseTypePickerFragment : Fragment() {
 
@@ -54,13 +55,22 @@ class ExerciseTypePickerFragment : Fragment() {
 
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
             it?.let{
-                adapter.submitList(it)
+                adapter.submitList(it) {
+                    Timber.d("List has been committed, re-notifying the adapter of the current value")
+                    // Re-notify in case the list was submitted
+                    adapter.notifyItemSelected(workoutSetViewModel.exerciseTypeId.value)
+                }
             }
         })
 
-        workoutSetViewModel.exerciseType.observe(viewLifecycleOwner, Observer {
-            adapter.notifyItemSelected(it?.id)
+        workoutSetViewModel.exerciseTypeId.observe(viewLifecycleOwner, Observer {
+            Timber.d("Observed changed to exercise type id: $it")
+            adapter.notifyItemSelected(it)
         })
+
+        view.createNewExerciseTypeFAB.setOnClickListener {
+            findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
+        }
 
 
         // TODO - bind the viewModel to the UI & / or observe changes in livedata and set the focus on the correct item in the grid
@@ -70,10 +80,10 @@ class ExerciseTypePickerFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity!!.mainActivityFAB.setImageResource(R.drawable.icon_plus)
+        activity!!.mainActivityFAB.setImageResource(R.drawable.icon_arrow_right)
         activity!!.mainActivityFAB.show()
         activity?.mainActivityFAB?.setOnClickListener {
-            findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
+
             // TODO handle animation of button
         }
     }

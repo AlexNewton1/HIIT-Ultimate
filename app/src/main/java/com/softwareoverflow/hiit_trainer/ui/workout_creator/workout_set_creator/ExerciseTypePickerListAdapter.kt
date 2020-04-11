@@ -51,8 +51,8 @@ class ExerciseTypePickerListAdapter :
     }
 
     companion object {
-        var previouslySelectedPosition: Int = -1
-        var selectedItemPosition: Int = -1
+        private var previouslySelectedPosition: Int = -1
+        private var selectedItemPosition: Int = -1
     }
 
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
