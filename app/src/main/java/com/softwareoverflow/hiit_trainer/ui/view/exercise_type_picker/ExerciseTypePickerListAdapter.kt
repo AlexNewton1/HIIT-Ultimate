@@ -20,7 +20,8 @@ class ExerciseTypePickerListAdapter :
     ) {
 
     // TODO this can probably be handled elsehwere to prevent having multiple variables tracking the same value
-    private var selectedItemPosition: Int = -1
+    var selectedItemPosition: Int = -1
+        private set
 
     private var selectedItemChangeListener :ISelectableListener? = null
 
@@ -59,6 +60,13 @@ class ExerciseTypePickerListAdapter :
     fun setSelectedItemChangeListener(listener: ISelectableListener) {
         Timber.d("1waybind Setting listener inside adapter")
         selectedItemChangeListener = listener
+    }
+
+    fun getSelectedItemId(): Long? {
+        if(selectedItemPosition >= 0)
+            return currentList[selectedItemPosition].id
+
+        return null
     }
 
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {

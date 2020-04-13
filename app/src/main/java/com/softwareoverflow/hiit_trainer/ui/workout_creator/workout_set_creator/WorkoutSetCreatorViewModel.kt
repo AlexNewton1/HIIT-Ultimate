@@ -17,7 +17,6 @@ class WorkoutSetCreatorViewModel(
 
     var selectedExerciseTypeId = MutableLiveData<Long?>(null)
 
-
     // TODO - change all of these values to be Transformations.map (or switchMap?) to avoid having to set them all once at init
     private var _exerciseType: MutableLiveData<ExerciseTypeDTO?> =
         MutableLiveData(workoutSetDTO?.exerciseTypeDTO)
@@ -48,22 +47,5 @@ class WorkoutSetCreatorViewModel(
             _recoverTime.value = it.recoverTime
             _exerciseType.value = it.exerciseTypeDTO
         }
-
-       /* viewModelScope.launch {
-            Timber.d("2waybind current value ${selectedExerciseTypeId.value}")
-            delay(5000)
-            Timber.d("2waybind later value ${selectedExerciseTypeId.value}")
-            delay(5000)
-            Timber.d("2waybind latest value ${selectedExerciseTypeId.value}")
-
-            delay (1000)
-            Timber.d("2waybind updating the livedata value")
-            selectedExerciseTypeId.setValue(1L)
-        }*/
     }
-
-    /*fun setSelectedExerciseTypeId(exerciseTypeId: Long) {
-        Timber.d("2waybind Inside setter")
-        selectedExerciseTypeId = exerciseTypeId
-    }*/
 }

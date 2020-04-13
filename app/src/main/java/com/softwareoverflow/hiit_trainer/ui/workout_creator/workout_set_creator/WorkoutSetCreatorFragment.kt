@@ -40,7 +40,7 @@ class WorkoutSetCreatorFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentWorkoutSetCreatorBinding>(
             inflater, R.layout.fragment_workout_set_creator, container, false
         )
-
+        binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
 
         workoutSetViewModel.exerciseType.observe(viewLifecycleOwner, Observer {
