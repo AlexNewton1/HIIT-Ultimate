@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.workout_creator.workout_set_creator.WorkoutSetCreatorFragment">
+    tools:context=".ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep2Fragment">
 
     <data>
 
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toStartOf="@+id/restTimeIcon"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
             tools:srcCompat="@drawable/icon_fire" />
 
         <EditText
@@ -44,7 +44,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/workTimeIcon"
-            android:text="@{viewModel.workTime}"
+            app:text="@={viewModel.workoutSet.workTime}"
             tools:text="15" />
 
         <TextView
@@ -53,11 +53,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:labelFor="@+id/workTimePickerET"
+            android:text="@string/work_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/workTimeIcon"
             app:layout_constraintEnd_toEndOf="@+id/workTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/workTimePickerET"
-            tools:text="Work Time" />
+            app:layout_constraintStart_toStartOf="@+id/workTimePickerET" />
 
         <ImageView
             android:id="@+id/restTimeIcon"
@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
             tools:srcCompat="@drawable/icon_rest" />
 
         <EditText
@@ -81,12 +81,12 @@
             android:gravity="center"
             android:inputType="number"
             android:textSize="30sp"
-            android:text="@{viewModel.restTime}"
             app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
             app:layout_constraintTop_toTopOf="@+id/restTimeIcon"
+            app:text="@={viewModel.workoutSet.restTime}"
             tools:text="5" />
 
         <TextView
@@ -95,19 +95,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:labelFor="@+id/restTimePickerET"
+            android:text="@string/rest_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
             app:layout_constraintEnd_toEndOf="@+id/restTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/restTimePickerET"
-            tools:text="Rest Time" />
+            app:layout_constraintStart_toStartOf="@+id/restTimePickerET" />
 
         <ImageView
             android:id="@+id/numRepsIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/fab_size_padded"
             android:padding="16dp"
             android:src="@drawable/icon_repeat"
-            app:layout_constraintBottom_toTopOf="@+id/exerciseTypeIcon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
             app:layout_constraintHorizontal_bias="0.5"
@@ -116,7 +117,6 @@
             tools:srcCompat="@drawable/icon_repeat" />
 
         <EditText
-            android:text="@{viewModel.numReps}"
             android:id="@+id/numRepsPickerET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -129,6 +129,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/numRepsIcon"
+            app:text="@={viewModel.workoutSet.numReps}"
             tools:text="6" />
 
         <TextView
@@ -137,19 +138,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:labelFor="@+id/restTimePickerET"
+            android:text="@string/num_reps"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
             app:layout_constraintEnd_toEndOf="@+id/numRepsPickerET"
-            app:layout_constraintStart_toStartOf="@+id/numRepsPickerET"
-            tools:text="Num Reps" />
+            app:layout_constraintStart_toStartOf="@+id/numRepsPickerET" />
 
         <ImageView
             android:id="@+id/recoverTimeIconIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/fab_size_padded"
             android:padding="16dp"
             android:src="@drawable/icon_recover"
-            app:layout_constraintBottom_toTopOf="@+id/exerciseTypeIcon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -158,7 +160,6 @@
             tools:srcCompat="@drawable/icon_recover" />
 
         <EditText
-            android:text="@{viewModel.recoverTime}"
             android:id="@+id/recoverTimePickerET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,6 +172,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
             app:layout_constraintTop_toTopOf="@+id/recoverTimeIconIcon"
+            app:text="@={viewModel.workoutSet.recoverTime}"
             tools:text="120" />
 
         <TextView
@@ -179,28 +181,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:labelFor="@+id/restTimePickerET"
+            android:text="@string/recovery_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
             app:layout_constraintEnd_toEndOf="@+id/recoverTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/recoverTimePickerET"
-            tools:text="Recover Time" />
+            app:layout_constraintStart_toStartOf="@+id/recoverTimePickerET" />
 
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/exerciseTypeIcon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@drawable/bg_circle"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:colorHex="@{viewModel.workoutSet.exerciseTypeDTO.colorHex}"
+            app:iconName="@{viewModel.workoutSet.exerciseTypeDTO.iconName}"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/icon_fire" />
 
         <TextView
+            text="@{viewModel.workoutSet.exerciseTypeDTO.name}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="@dimen/fab_size_padded"
-            android:text="@{viewModel.exerciseType.name}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/exerciseTypeIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
             app:layout_constraintTop_toTopOf="@+id/exerciseTypeIcon"

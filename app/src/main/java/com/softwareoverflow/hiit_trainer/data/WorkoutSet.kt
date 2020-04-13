@@ -5,7 +5,7 @@ import androidx.room.Relation
 import com.softwareoverflow.hiit_trainer.data.entity.ExerciseTypeEntity
 import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 
-class WorkoutSet(
+data class WorkoutSet(
     @Embedded var workoutSet: WorkoutSetEntity,
 
     @Relation(

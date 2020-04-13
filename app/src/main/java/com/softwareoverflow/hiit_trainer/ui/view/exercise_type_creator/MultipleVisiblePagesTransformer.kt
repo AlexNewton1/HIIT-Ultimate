@@ -1,6 +1,5 @@
 package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
 
-import android.content.Context
 import android.view.View
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
@@ -12,7 +11,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 // TODO - handle this so that it only does it for pages within the numExtraPages setting. Other pages should have 0 alpha and not be visible
-class MultipleVisiblePagesTransformer(context: Context) : ViewPager2.PageTransformer {
+class MultipleVisiblePagesTransformer : ViewPager2.PageTransformer {
     private val numExtraPages = 6
 
     private val minScaleFactor = 0f

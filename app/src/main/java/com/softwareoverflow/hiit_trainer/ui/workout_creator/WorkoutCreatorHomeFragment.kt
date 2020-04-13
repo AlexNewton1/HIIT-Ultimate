@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
@@ -13,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class WorkoutCreatorHomeFragment : Fragment() {
 
+    // TODO probably need to use this viewmodel so that it is created in time for the other fragments which (might) use it. Can acheive by using data bidning and assigning bidning.viewModel = viewModel
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
         WorkoutCreatorViewModelFactory(
             activity!!,
@@ -24,13 +24,7 @@ class WorkoutCreatorHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_workout_creator_home, container, false)
-
-        viewModel.workout.observe(viewLifecycleOwner, Observer {
-            val abc = it.name
-        })
-
-        return view
+        return inflater.inflate(R.layout.fragment_workout_creator_home, container, false)
     }
 
     override fun onStart() {

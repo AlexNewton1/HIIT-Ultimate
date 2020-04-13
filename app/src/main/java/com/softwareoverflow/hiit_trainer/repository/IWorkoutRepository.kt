@@ -3,6 +3,7 @@ package com.softwareoverflow.hiit_trainer.repository
 import androidx.lifecycle.LiveData
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
+import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 
 /**
  * Repository layer of abstraction from the backing data source
@@ -15,6 +16,8 @@ interface IWorkoutRepository {
      * Load the workout for a given id
      */
     fun getWorkoutById(workoutId: Long) : LiveData<WorkoutDTO>
+
+    fun getWorkoutSetById(workoutSetId: Long?) : LiveData<WorkoutSetDTO>
 
     fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>>
 

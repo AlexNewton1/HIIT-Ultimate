@@ -74,7 +74,7 @@ class XViewPagerPicker @JvmOverloads constructor(
             currentItem = adapter.itemCount / 2 // Default to starting at the middle item
             offscreenPageLimit = 4
 
-            setPageTransformer(MultipleVisiblePagesTransformer(context))
+            setPageTransformer(MultipleVisiblePagesTransformer())
             registerOnPageChangeCallback(InfiniteScrollPageChangeListener(this))
         }
     }
@@ -88,7 +88,6 @@ class XViewPagerPicker @JvmOverloads constructor(
 
         uiScope.launch {
             // Set the current item to half way through now the required item has been centered.
-            // Account for 0 indexing and odd-length lists
             iconViewPager.currentItem = adapter.itemCount / 2
         }
     }

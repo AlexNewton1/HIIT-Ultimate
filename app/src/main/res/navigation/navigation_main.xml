@@ -42,9 +42,9 @@
                 tools:layout="@layout/fragment_exercise_type_creator" />
             <fragment
                 android:id="@+id/exerciseTypePickerFragment"
-                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.ExerciseTypePickerFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep1Fragment"
                 android:label="Create Workout Set (Step 1)"
-                tools:layout="@layout/fragment_exercise_type_picker">
+                tools:layout="@layout/fragment_workout_set_creator_step_1">
                 <action
                     android:id="@+id/action_exerciseTypePickerFragment_to_workoutSetCreator"
                     app:destination="@id/workoutSetCreator" />
@@ -54,9 +54,9 @@
             </fragment>
             <fragment
                 android:id="@+id/workoutSetCreator"
-                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep2Fragment"
                 android:label="Create Workout Set (Step 2)"
-                tools:layout="@layout/fragment_workout_set_creator">
+                tools:layout="@layout/fragment_workout_set_creator_step_2">
                 <action
                     android:id="@+id/action_workoutSetCreator_to_workoutCreatorHomeFragment"
                     app:destination="@id/workoutCreatorHomeFragment" />

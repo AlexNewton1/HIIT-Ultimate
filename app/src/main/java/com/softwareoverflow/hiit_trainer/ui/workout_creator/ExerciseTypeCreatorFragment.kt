@@ -47,6 +47,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+        // TODO - fix this issue
         val etNameMaxLength = activity!!.resources.getInteger(R.integer.et_name_length_max)
         binding.etExerciseTypeName.apply {
             Timber.e("apply: $this")

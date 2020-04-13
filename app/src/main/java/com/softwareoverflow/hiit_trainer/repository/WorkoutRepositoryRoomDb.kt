@@ -11,8 +11,8 @@ import com.softwareoverflow.hiit_trainer.data.mapper.toEntity
 import com.softwareoverflow.hiit_trainer.data.mapper.toExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
+import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
@@ -20,6 +20,7 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
     private val database = WorkoutDatabase.getInstance(context.applicationContext)
     private val workoutDao = database.workoutDao
+    private val workoutSetDao = database.workoutSetDao
     private val exerciseTypeDao = database.exerciseTypeDao
 
     override fun getWorkoutById(workoutId: Long): LiveData<WorkoutDTO> {
@@ -32,6 +33,16 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         return liveData
     }
 
+    override fun getWorkoutSetById(workoutSetId: Long?): LiveData<WorkoutSetDTO> {
+        Timber.d("Repository: Trying to lead workout set with id $workoutSetId")
+        if (workoutSetId == null)
+            return MutableLiveData(WorkoutSetDTO())
+
+        return Transformations.switchMap(workoutSetDao.getWorkoutSetById(workoutSetId)) {
+            MutableLiveData(it.toDTO())
+        }
+    }
+
     // TODO maybe have a separate Repository object for exercise types if this one becomes cluttered
     override fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>> {
         return Transformations.switchMap(exerciseTypeDao.getAllExerciseTypes()) {
@@ -42,27 +53,24 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     override fun getExerciseTypeById(exerciseTypeId: Long?): LiveData<ExerciseTypeDTO> {
         Timber.d("Repository: Trying to load exercise type with id $exerciseTypeId")
 
-        if(exerciseTypeId == null){
+        if (exerciseTypeId == null) {
             return MutableLiveData(ExerciseTypeDTO())
         }
 
         // TODO - fix the case where the number passed doesn't reflect a db record and causes an IllegalStateException
-        val et = exerciseTypeDao.getExerciseTypeById(exerciseTypeId)
-        return Transformations.switchMap(et) {
+        return Transformations.switchMap(exerciseTypeDao.getExerciseTypeById(exerciseTypeId)) {
             MutableLiveData(it.toDTO())
         }
     }
 
     // TODO check this still works :o
-    override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) : Long {
+    override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO): Long {
         Timber.d("Repository: CREATE $exerciseTypeDao")
 
         var id = 0L
         withContext(Dispatchers.IO) {
-            launch {
-                id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
-                Timber.d("Repository: Saved with id $id")
-            }
+            id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
+            Timber.d("Repository: Saved with id $id")
         }
         return id
     }

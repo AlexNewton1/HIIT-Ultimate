@@ -10,6 +10,6 @@ import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 interface WorkoutSetDao :
     BaseDao<WorkoutSetEntity> {
 
-    @Query("SELECT * FROM WorkoutSet")
-    fun getAllWorkoutSets(): LiveData<List<WorkoutSet>>
+    @Query("SELECT * FROM WorkoutSet where id = :workoutSetId")
+    fun getWorkoutSetById(workoutSetId: Long): LiveData<WorkoutSet>
 }

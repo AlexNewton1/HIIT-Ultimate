@@ -28,6 +28,7 @@ class ExerciseTypeViewModel(
 
         val exerciseType = ExerciseTypeDTO(id, name, iconName, colorHex)
 
+        // Launch in the workoutSetCreatorViewModel scope as that will persist longer and allow the application to go back to the WorkoutSetCreator wizard
         workoutSetCreatorViewModel.viewModelScope.launch {
             Timber.d("Saving exerciseType: $exerciseType")
             val newId = repository.createOrUpdateExerciseType(exerciseType)

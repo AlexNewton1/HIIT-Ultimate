@@ -11,42 +11,28 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypePickerBinding
-import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
 import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
-import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
-class ExerciseTypePickerFragment : Fragment() {
+class WorkoutSetCreatorStep1Fragment : Fragment() {
 
-    // TODO Not sure this is actually needed? Might be best to use nav arguments to pass data back and forth between fragments...
-    private val workoutViewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
-        // TODO - update this to actually get and send the correct ID
-        WorkoutCreatorViewModelFactory(
-            activity!!,
-            null
-        )
-    }
+    // TODO Not sure this is actually needed? Might be best to use nav arguments to pass data back and forth between these fragments...
+    private val workoutViewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator)
 
-    // TODO - N.B if this isn't used, then it isn't created and the app will crash when trying to create a new exercise type
     private val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
     {
-        // TODO this should probably come through the args?
-        var workoutSet = workoutViewModel.getWorkoutSetToEdit()
-        if (workoutSet == null) {
-            workoutSet = WorkoutSetDTO(null, null, 15, 5, 3, 120)
-        }
-
-        WorkoutSetCreatorViewModelFactory(workoutSet, context!!)
+        // TODO pass in the correct ID - this should probably come through the args?
+        WorkoutSetCreatorViewModelFactory(null, context!!)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentExerciseTypePickerBinding>(
-            inflater, R.layout.fragment_exercise_type_picker, container, false
+        val binding = DataBindingUtil.inflate<FragmentWorkoutSetCreatorStep1Binding>(
+            inflater, R.layout.fragment_workout_set_creator_step_1, container, false
         )
         binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
