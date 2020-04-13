@@ -35,7 +35,7 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     // TODO maybe have a separate Repository object for exercise types if this one becomes cluttered
     override fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>> {
         return Transformations.switchMap(exerciseTypeDao.getAllExerciseTypes()) {
-            MutableLiveData<List<ExerciseTypeDTO>>(it.toExerciseTypeDTO())
+            MutableLiveData(it.toExerciseTypeDTO())
         }
     }
 
@@ -49,10 +49,11 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         // TODO - fix the case where the number passed doesn't reflect a db record and causes an IllegalStateException
         val et = exerciseTypeDao.getExerciseTypeById(exerciseTypeId)
         return Transformations.switchMap(et) {
-            MutableLiveData<ExerciseTypeDTO>(it.toDTO())
+            MutableLiveData(it.toDTO())
         }
     }
 
+    // TODO check this still works :o
     override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) : Long {
         Timber.d("Repository: CREATE $exerciseTypeDao")
 
@@ -63,7 +64,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
                 Timber.d("Repository: Saved with id $id")
             }
         }
-
         return id
     }
 }

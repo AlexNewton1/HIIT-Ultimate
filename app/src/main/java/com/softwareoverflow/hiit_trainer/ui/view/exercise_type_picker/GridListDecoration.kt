@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view
+package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker
 
 import android.content.Context
 import android.graphics.Rect

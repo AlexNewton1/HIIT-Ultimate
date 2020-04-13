@@ -32,7 +32,7 @@ class ExerciseTypeViewModel(
             Timber.d("Saving exerciseType: $exerciseType")
             val newId = repository.createOrUpdateExerciseType(exerciseType)
 
-            workoutSetCreatorViewModel.setExerciseTypeById(newId)
+            workoutSetCreatorViewModel.selectedExerciseTypeId.postValue(newId)
         }
     }
 }

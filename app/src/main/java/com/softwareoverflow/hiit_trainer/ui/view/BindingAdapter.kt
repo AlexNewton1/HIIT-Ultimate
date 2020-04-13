@@ -1,7 +1,7 @@
 package com.softwareoverflow.hiit_trainer.ui.view
 
 import androidx.databinding.BindingAdapter
-import com.softwareoverflow.hiit_trainer.ui.view.picker.XViewPagerPicker
+import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator.XViewPagerPicker
 import timber.log.Timber
 
 @BindingAdapter("iconName")
@@ -19,3 +19,12 @@ fun XViewPagerPicker.setColorHex(hex: String?){
         this.setColorByHex(hex)
     }
 }
+
+/*
+@BindingAdapter("data")
+fun  SelectableRecyclerView.setData(items: List<ExerciseTypeDTO>?){
+    Timber.d("1waybind setting data from binding $items")
+    if(this.adapter is ExerciseTypePickerListAdapter){
+        (this.adapter as ExerciseTypePickerListAdapter).submitList(items)
+    }
+}*/

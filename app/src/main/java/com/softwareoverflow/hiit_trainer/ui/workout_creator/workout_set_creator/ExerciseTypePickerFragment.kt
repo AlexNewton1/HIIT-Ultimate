@@ -5,17 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypePickerBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import com.softwareoverflow.hiit_trainer.ui.view.GridListDecoration
+import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
+import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker.ISelectableListener
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_exercise_type_picker.view.*
+import kotlinx.android.synthetic.main.fragment_exercise_type_picker.*
 import timber.log.Timber
 
 class ExerciseTypePickerFragment : Fragment() {
@@ -29,6 +32,7 @@ class ExerciseTypePickerFragment : Fragment() {
         )
     }
 
+    // TODO - N.B if this isn't used, then it isn't created and the app will crash when trying to create a new exercise type
     private val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
     {
         // TODO this should probably come through the args?
@@ -44,38 +48,37 @@ class ExerciseTypePickerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_exercise_type_picker, container, false)
+        val binding = DataBindingUtil.inflate<FragmentExerciseTypePickerBinding>(
+            inflater, R.layout.fragment_exercise_type_picker, container, false
+        )
+        binding.lifecycleOwner = this
 
-        val adapter =
-            ExerciseTypePickerListAdapter()
-        val list = view.exerciseTypePickerList
-        list.adapter = adapter
-        list.addItemDecoration(GridListDecoration(view.context))
-
-        workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                adapter.submitList(it) {
-                    Timber.d("List has been committed, re-notifying the adapter of the current value")
-                    // Re-notify in case the list was submitted
-                    adapter.notifyItemSelected(workoutSetViewModel.exerciseTypeId.value)
-                }
+        binding.exerciseTypePickerList.setSelectedItemListener(object : ISelectableListener {
+            override fun onItemSelected(selected: Long?) {
+                Timber.d("1waybind onItemSelected in fragment $selected")
+                workoutSetViewModel.selectedExerciseTypeId.postValue(selected)
             }
         })
 
-        workoutSetViewModel.exerciseTypeId.observe(viewLifecycleOwner, Observer {
-            Timber.d("Observed changed to exercise type id: $it")
-            adapter.notifyItemSelected(it)
+        // TODO hopefully data bind the list straight to the recycler view and remove this boilerplate
+        workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
+            Timber.d("1waybind observed changes to allExerciseTypes $it")
+            it?.let {
+                exerciseTypePickerList.submitList(it, workoutSetViewModel.selectedExerciseTypeId.value)
+            }
         })
 
-        view.createNewExerciseTypeFAB.setOnClickListener {
+        // TODO maybe get rid of this method entirely
+        workoutSetViewModel.selectedExerciseTypeId.observe(viewLifecycleOwner, Observer {
+            Timber.d("2waybind Observed changed to exercise type id: $it")
+            exerciseTypePickerList.notifyItemSelected(it)
+        })
+
+        binding.createNewExerciseTypeFAB.setOnClickListener {
             findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
         }
 
-
-        // TODO - bind the viewModel to the UI & / or observe changes in livedata and set the focus on the correct item in the grid
-
-        return view
+        return binding.root
     }
 
     override fun onStart() {
@@ -86,5 +89,7 @@ class ExerciseTypePickerFragment : Fragment() {
 
             // TODO handle animation of button
         }
+
+        hideKeyboard(activity!!)
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import timber.log.Timber
 
 class WorkoutSetCreatorViewModel(
     workoutSetDTO: WorkoutSetDTO? = null,
@@ -16,9 +15,8 @@ class WorkoutSetCreatorViewModel(
 
     val allExerciseTypes = repo.getAllExerciseTypes()
 
-    private var _exerciseTypeId = MutableLiveData<Long?>(null)
-    val exerciseTypeId : LiveData<Long?>
-        get() = _exerciseTypeId
+    var selectedExerciseTypeId = MutableLiveData<Long?>(null)
+
 
     // TODO - change all of these values to be Transformations.map (or switchMap?) to avoid having to set them all once at init
     private var _exerciseType: MutableLiveData<ExerciseTypeDTO?> =
@@ -50,10 +48,22 @@ class WorkoutSetCreatorViewModel(
             _recoverTime.value = it.recoverTime
             _exerciseType.value = it.exerciseTypeDTO
         }
+
+       /* viewModelScope.launch {
+            Timber.d("2waybind current value ${selectedExerciseTypeId.value}")
+            delay(5000)
+            Timber.d("2waybind later value ${selectedExerciseTypeId.value}")
+            delay(5000)
+            Timber.d("2waybind latest value ${selectedExerciseTypeId.value}")
+
+            delay (1000)
+            Timber.d("2waybind updating the livedata value")
+            selectedExerciseTypeId.setValue(1L)
+        }*/
     }
 
-    fun setExerciseTypeById(exerciseTypeId: Long) {
-        Timber.d("Setting new exerciseType by id")
-        _exerciseTypeId.value = exerciseTypeId
-    }
+    /*fun setSelectedExerciseTypeId(exerciseTypeId: Long) {
+        Timber.d("2waybind Inside setter")
+        selectedExerciseTypeId = exerciseTypeId
+    }*/
 }

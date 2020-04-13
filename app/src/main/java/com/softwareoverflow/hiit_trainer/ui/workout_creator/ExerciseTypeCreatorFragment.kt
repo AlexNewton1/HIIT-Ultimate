@@ -38,7 +38,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
             false
         )
 
-        // TODO - pass in the correct Id to the factory
+        // TODO - pass in the correct Id
         // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
         val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
         val viewModelFactory = ExerciseTypeViewModelFactory(activity!!, null, workoutSetViewModel)
@@ -51,7 +51,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         binding.etExerciseTypeName.apply {
             Timber.e("apply: $this")
             doBeforeTextChanged { text, start, count, after ->
-                // TODO fix the issue where this doesn't show up properly
+                Timber.e("SOMETHING TO DO BEFORE TEXT CHANGED! ${text?.length}")
                 if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
                     snackbar?.show()
             }

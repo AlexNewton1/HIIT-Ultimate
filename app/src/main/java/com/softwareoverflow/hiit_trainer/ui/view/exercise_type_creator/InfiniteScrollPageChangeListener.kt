@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.picker
+package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
 
 import androidx.viewpager2.widget.ViewPager2
 

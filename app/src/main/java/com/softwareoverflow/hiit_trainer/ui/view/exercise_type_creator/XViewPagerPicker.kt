@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.picker
+package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.getColorId
 import com.softwareoverflow.hiit_trainer.ui.getDrawableId
-import com.softwareoverflow.hiit_trainer.ui.view.picker.ExerciseTypeCreatorPagerAdapter.Companion
+import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator.ExerciseTypeCreatorPagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
