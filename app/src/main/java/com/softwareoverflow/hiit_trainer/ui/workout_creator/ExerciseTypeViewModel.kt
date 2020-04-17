@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
+import com.softwareoverflow.hiit_trainer.ui.LoadingSpinner
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class ExerciseTypeViewModel(
     val repository: IWorkoutRepository,
@@ -16,7 +16,7 @@ class ExerciseTypeViewModel(
     private val workoutSetCreatorViewModel: WorkoutSetCreatorViewModel
 ) : ViewModel() {
 
-    private var _exerciseType = repository.getExerciseTypeById(id)
+    private val _exerciseType = repository.getExerciseTypeById(id)
 
     val exerciseTypeName = Transformations.map(_exerciseType) { it?.name }
     val iconName = Transformations.map(_exerciseType) { it?.iconName }
@@ -30,10 +30,10 @@ class ExerciseTypeViewModel(
 
         // Launch in the workoutSetCreatorViewModel scope as that will persist longer and allow the application to go back to the WorkoutSetCreator wizard
         workoutSetCreatorViewModel.viewModelScope.launch {
-            Timber.d("Saving exerciseType: $exerciseType")
+            LoadingSpinner.showLoadingIcon()
             val newId = repository.createOrUpdateExerciseType(exerciseType)
-
             workoutSetCreatorViewModel.selectedExerciseTypeId.postValue(newId)
+            LoadingSpinner.hideLoadingIcon()
         }
     }
 }

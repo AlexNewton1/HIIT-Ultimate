@@ -9,9 +9,9 @@ import com.softwareoverflow.hiit_trainer.data.entity.ExerciseTypeEntity
 interface ExerciseTypeDao :
     BaseDao<ExerciseTypeEntity> {
 
-    @Query("SELECT * FROM ExerciseType")
+    @Query("SELECT * FROM ExerciseType order by [name] asc")
     fun getAllExerciseTypes(): LiveData<List<ExerciseTypeEntity>>
 
-    @Query("SELECT * FROM ExerciseType WHERE id = :exerciseTypeId")
+    @Query("SELECT * FROM ExerciseType WHERE [id] = :exerciseTypeId")
     fun getExerciseTypeById(exerciseTypeId: Long) : LiveData<ExerciseTypeEntity>
 }

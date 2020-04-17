@@ -16,7 +16,6 @@ import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypeCreator
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_creator.*
-import timber.log.Timber
 
 // TODO - move this out of workout_creator package. Not really directly related to creating a workout
 class ExerciseTypeCreatorFragment : Fragment() {
@@ -41,7 +40,11 @@ class ExerciseTypeCreatorFragment : Fragment() {
         // TODO - pass in the correct Id
         // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
         val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
-        val viewModelFactory = ExerciseTypeViewModelFactory(activity!!, null, workoutSetViewModel)
+        val viewModelFactory = ExerciseTypeViewModelFactory(
+            activity!!,
+            workoutSetViewModel.selectedExerciseTypeId.value,
+            workoutSetViewModel
+        )
         viewModel = ViewModelProvider(this, viewModelFactory).get(ExerciseTypeViewModel::class.java)
         binding.viewModel = viewModel
 
@@ -50,9 +53,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         // TODO - fix this issue
         val etNameMaxLength = activity!!.resources.getInteger(R.integer.et_name_length_max)
         binding.etExerciseTypeName.apply {
-            Timber.e("apply: $this")
             doBeforeTextChanged { text, start, count, after ->
-                Timber.e("SOMETHING TO DO BEFORE TEXT CHANGED! ${text?.length}")
                 if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
                     snackbar?.show()
             }

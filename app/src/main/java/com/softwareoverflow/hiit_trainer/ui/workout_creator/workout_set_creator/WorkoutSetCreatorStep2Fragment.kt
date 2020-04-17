@@ -7,12 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep2Binding
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 
 class WorkoutSetCreatorStep2Fragment : Fragment() {
 
@@ -42,9 +42,9 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
         activity!!.mainActivityFAB.show()
         activity?.mainActivityFAB?.setImageResource(R.drawable.icon_tick)
         activity!!.mainActivityFAB.setOnClickListener {
-            Timber.d("Clicked save on workoutSet ${workoutSetViewModel.workoutSet.value}")
-            //findNavController().navigate(R.id.action_workoutSetCreator_to_workoutCreatorHomeFragment)
-            // TODO - start FAB animation back to add for the previous screen!
+            // At the point we try and add this workout set to the workout, it should not be null. Throw NPE if it is ever null
+            workoutCreatorViewModel.addOrUpdateWorkoutSet(workoutSetViewModel.workoutSet.value!!)
+            findNavController().popBackStack(R.id.workoutCreatorHomeFragment, false)
         }
     }
 

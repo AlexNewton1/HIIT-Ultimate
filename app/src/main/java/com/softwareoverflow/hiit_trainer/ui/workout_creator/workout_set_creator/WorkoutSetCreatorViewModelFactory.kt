@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryRoomDb
+import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 
 class WorkoutSetCreatorViewModelFactory(
-    private val workoutSetId: Long?,
+    private val workoutSet: WorkoutSetDTO,
     private val context: Context
 ) :
     ViewModelProvider.Factory {
@@ -15,7 +16,7 @@ class WorkoutSetCreatorViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WorkoutSetCreatorViewModel::class.java)) {
             val repo = WorkoutRepositoryRoomDb(context)
-            return WorkoutSetCreatorViewModel(workoutSetId, repo) as T
+            return WorkoutSetCreatorViewModel(workoutSet, repo) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

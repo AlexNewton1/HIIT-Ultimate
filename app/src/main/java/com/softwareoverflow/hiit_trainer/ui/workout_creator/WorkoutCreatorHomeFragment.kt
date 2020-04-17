@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class WorkoutCreatorHomeFragment : Fragment() {
 
@@ -24,7 +26,13 @@ class WorkoutCreatorHomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_workout_creator_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_workout_creator_home, container, false)
+
+        viewModel.workout.observe(viewLifecycleOwner, Observer {
+            Timber.d("Workout was changed to .... ${it.workoutSets}")
+        })
+
+        return view
     }
 
     override fun onStart() {

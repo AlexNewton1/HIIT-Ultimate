@@ -14,7 +14,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
@@ -34,7 +33,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     }
 
     override fun getWorkoutSetById(workoutSetId: Long?): LiveData<WorkoutSetDTO> {
-        Timber.d("Repository: Trying to lead workout set with id $workoutSetId")
         if (workoutSetId == null)
             return MutableLiveData(WorkoutSetDTO())
 
@@ -51,8 +49,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     }
 
     override fun getExerciseTypeById(exerciseTypeId: Long?): LiveData<ExerciseTypeDTO> {
-        Timber.d("Repository: Trying to load exercise type with id $exerciseTypeId")
-
         if (exerciseTypeId == null) {
             return MutableLiveData(ExerciseTypeDTO())
         }
@@ -65,13 +61,16 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
     // TODO check this still works :o
     override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO): Long {
-        Timber.d("Repository: CREATE $exerciseTypeDao")
-
         var id = 0L
         withContext(Dispatchers.IO) {
             id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
-            Timber.d("Repository: Saved with id $id")
         }
         return id
+    }
+
+    override suspend fun deleteExerciseType(dto: ExerciseTypeDTO) {
+        withContext(Dispatchers.IO){
+            exerciseTypeDao.delete(dto.toEntity())
+        }
     }
 }

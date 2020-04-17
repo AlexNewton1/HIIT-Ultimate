@@ -1,7 +1,9 @@
 package com.softwareoverflow.hiit_trainer.ui
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         NavigationUI.setupWithNavController(navView, navController)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_bar_menu, menu)
+        LoadingSpinner.initialise(menu!![0], applicationContext)
+        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -2,34 +2,36 @@ package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.LoadingSpinner
+import kotlinx.coroutines.launch
 
 class WorkoutSetCreatorViewModel(
-    workoutSetId: Long?,
+    workoutSetToEdit: WorkoutSetDTO,
     private val repo: IWorkoutRepository
 ) :
     ViewModel() {
 
-    val workoutSet = MutableLiveData<WorkoutSetDTO?>(null)
-        get() {
-            if (field.value?.exerciseTypeDTO?.id != selectedExerciseTypeId.value)
-                field.value?.exerciseTypeDTO =
-                    allExerciseTypes.value?.first { it.id == selectedExerciseTypeId.value }
-
-            return field
-        }
+    val workoutSet = MutableLiveData(workoutSetToEdit)
 
     val allExerciseTypes = repo.getAllExerciseTypes()
-    var selectedExerciseTypeId = MutableLiveData<Long?>(null)
 
+    var selectedExerciseTypeId = MutableLiveData<Long?>(workoutSetToEdit.exerciseTypeDTO?.id)
 
-    init {
-        val savedWorkoutSet = repo.getWorkoutSetById(workoutSetId)
-        selectedExerciseTypeId.postValue(savedWorkoutSet.value?.exerciseTypeDTO?.id)
-        workoutSet.postValue(savedWorkoutSet.value)
+    fun setChosenExerciseTypeId(id: Long) {
+        val exerciseType = allExerciseTypes.value!!.first { it.id == id }
+        workoutSet.value!!.exerciseTypeDTO = exerciseType
     }
 
-    // TODO When the user accepts the values, need to pass the DTO back to the FragmentWorkoutCreatorHome, or update the value in the workout creator view model. TBD!
+    fun deleteExerciseTypeById(id: Long){
+        viewModelScope.launch {
+            LoadingSpinner.showLoadingIcon()
 
+            val exerciseType = allExerciseTypes.value!!.first { it.id == id }
+            repo.deleteExerciseType(exerciseType)
+            LoadingSpinner.hideLoadingIcon()
+        }
+    }
 }

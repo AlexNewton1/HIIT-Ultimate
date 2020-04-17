@@ -16,6 +16,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray">
 
+
         <ImageView
             android:id="@+id/workTimeIcon"
             android:layout_width="0dp"

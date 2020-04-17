@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import timber.log.Timber
 
 /**
  * ViewModel for creating / editing workouts.
@@ -20,56 +19,40 @@ class WorkoutCreatorViewModel(repository: IWorkoutRepository, id: Long?) : ViewM
     val workout: LiveData<WorkoutDTO>
         get() = _workout
 
-    private var workoutSetIndex: Int? = null
+    private var _workoutSet: MutableLiveData<WorkoutSetDTO> = MutableLiveData()
+    var workoutSet: WorkoutSetDTO = WorkoutSetDTO()
+        get() = _workoutSet.value ?: WorkoutSetDTO()
+        private set(value) {
+            val workoutSetIndex =
+                _workout.value!!.workoutSets.indexOfFirst { it.id == value.id } ?: -1
+            // TODO work out how the adapter can notify item changed in this case. Or just livedata the list of workout sets which should handle it auto-magically
+            // If the workoutSet id already exists in the list, update this entry only
+            if (workoutSetIndex >= 0) {
+                val newWorkoutSets = _workout.value!!.workoutSets.toCollection(mutableListOf())
+                newWorkoutSets.removeAt(workoutSetIndex)
+                newWorkoutSets.add(workoutSetIndex, value)
+            } else { // If the id is not already in the list this must be a new WorkoutSet
+                _workout.value!!.workoutSets.add(value)
+            }
+
+            //reset the field to default to be created as a new WorkoutSet
+            field = WorkoutSetDTO()
+        }
 
     init {
-        if(id == null) {
+        if (id == null)
             _workout.value = WorkoutDTO()
-        }
-        else {
+        else
             _workout.value = repository.getWorkoutById(id).value
-        }
     }
 
-    fun setWorkoutName(name: String){
-        _workout.value?.name = name
-    }
+    // TODO - 2 way bind the workout name edit text
 
     /**
-     * Updates the workout set at the workoutSetIndex. Inserts into the list if this number is
-     * larger than the current size of the list
+     * If the workoutSet has an id already present in the list, that entry will be updated.
+     * If the workoutSet has an id not already in the list, the item will be appended to the list
      */
-    fun updateWorkoutSet(workoutSet: WorkoutSetDTO){
-        if(workoutSetIndex == null){
-            Timber.e("Attempting to update workout set with a null index variable.")
-        }
-
-        workoutSetIndex?.let{
-            _workout.value?.workoutSets?.removeAt(it)
-            _workout.value?.workoutSets?.add(it, workoutSet)
-        }
-    }
-
-    /**
-     * Used to indicate that the workout set at the given index is currently being altered
-     */
-    fun setWorkoutSetIndex(index: Int?){
-        workoutSetIndex = index
-    }
-
-    /**
-     * Ease of use function to set the workout set index to indicate that the workout set being
-     * altered in a new workout set
-     */
-    fun setWorkoutSetIndexToNext(){
-        workoutSetIndex = _workout.value?.workoutSets?.size
-    }
-
-    fun getWorkoutSetToEdit() : WorkoutSetDTO? {
-        workoutSetIndex?.let {
-            return _workout.value?.workoutSets?.get(it)
-        }
-
-        return null
+    fun addOrUpdateWorkoutSet(workoutSet: WorkoutSetDTO) {
+        this.workoutSet = workoutSet
     }
 }
