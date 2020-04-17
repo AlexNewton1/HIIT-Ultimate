@@ -6,12 +6,15 @@
     <string name="create_new_exercise_type">Create New Exercise Type</string>
     <string name="error_exercise_type_name_required">Please enter a name.</string>
     <string name="char_limit_exceeded">Maximum length %1$02d characters.</string>
-    <string name="dismiss">Dismiss</string>
-
     <string name="select_exercise_type">Please select an exercise type.</string>
 
     <string name="work_time">Work Time</string>
     <string name="rest_time">Rest Time</string>
     <string name="num_reps"># Repititions</string>
     <string name="recovery_time">Recovery TIme</string>
+
+
+    <string name="dismiss">Dismiss</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -51,6 +51,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
             }
 
             override fun triggerItemDeletion(id: Long) {
+                workoutSetViewModel.selectedExerciseTypeId.value = null
                 workoutSetViewModel.deleteExerciseTypeById(id)
             }
 
@@ -84,7 +85,6 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
             }
 
             Snackbar.make(view!!, R.string.select_exercise_type, Snackbar.LENGTH_SHORT).show()
-
 
             // TODO handle animation of button
         }

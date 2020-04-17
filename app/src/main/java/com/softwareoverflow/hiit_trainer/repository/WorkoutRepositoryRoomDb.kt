@@ -60,12 +60,9 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     }
 
     // TODO check this still works :o
+    // TODO - test if this can
     override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO): Long {
-        var id = 0L
-        withContext(Dispatchers.IO) {
-            id = exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
-        }
-        return id
+       return exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
     }
 
     override suspend fun deleteExerciseType(dto: ExerciseTypeDTO) {
