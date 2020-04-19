@@ -16,6 +16,10 @@ fun Workout.toDTO(): WorkoutDTO {
     )
 }
 
+fun WorkoutDTO.toEntity(): Workout {
+    
+}
+
 fun List<WorkoutSet>.toWorkoutSetDTO(): MutableList<WorkoutSetDTO> {
     val dtoList = ArrayList<WorkoutSetDTO>()
     forEach { dtoList.add(it.toDTO()) }

@@ -25,12 +25,15 @@
         app:startDestination="@id/workoutCreatorHomeFragment" >
         <fragment
             android:id="@+id/workoutCreatorHomeFragment"
-            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorHomeFragment"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorStep1Fragment"
             android:label="Create Your Workout"
-            tools:layout="@layout/fragment_workout_creator_home">
+            tools:layout="@layout/fragment_workout_creator_step_1">
             <action
                 android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
                 app:destination="@id/nav_workout_set_creator" />
+            <action
+                android:id="@+id/action_workoutCreatorHomeFragment_to_workoutCreatorStep2Fragment"
+                app:destination="@id/workoutCreatorStep2Fragment" />
         </fragment>
         <navigation
             android:id="@+id/nav_workout_set_creator"
@@ -62,5 +65,10 @@
                     app:destination="@id/workoutCreatorHomeFragment" />
             </fragment>
         </navigation>
+        <fragment
+            android:id="@+id/workoutCreatorStep2Fragment"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorStep2Fragment"
+            android:label="fragment_workout_creator_step_2"
+            tools:layout="@layout/fragment_workout_creator_step_2" />
     </navigation>
 </navigation>

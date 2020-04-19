@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
-import com.softwareoverflow.hiit_trainer.ui.LoadingSpinner
+import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
 import kotlinx.coroutines.launch
 

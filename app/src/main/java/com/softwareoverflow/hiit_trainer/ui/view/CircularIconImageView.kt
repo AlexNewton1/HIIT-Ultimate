@@ -6,7 +6,8 @@ import android.graphics.PorterDuffColorFilter
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.dpToPx
+import kotlin.math.min
+import kotlin.math.sqrt
 
 
 class CircularIconImageView : AppCompatImageView {
@@ -24,10 +25,17 @@ class CircularIconImageView : AppCompatImageView {
     }
 
     private fun initialize(context: Context){
-        val padding = dpToPx(24)
-        this.setPadding(padding, padding, padding, padding)
-
         background = context.resources.getDrawable(R.drawable.bg_circle, context.theme)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+
+        //We want the image to always be fully contained within the circle
+        val paddingPx = (min(w, h) /2f) * (1 - 1/sqrt(2f))
+        val padding = paddingPx.toInt()
+
+        setPadding(padding, padding, padding, padding)
     }
 
     fun setColor(color: Int?){

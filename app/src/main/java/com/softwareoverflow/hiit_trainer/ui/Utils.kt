@@ -4,12 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
 import kotlin.math.abs
 
 
 fun dpToPx(value: Int): Int {
     return (value * Resources.getSystem().displayMetrics.density).toInt()
+}
+
+fun pxToDp(context: Context, value: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.resources.displayMetrics)
 }
 
 fun String.getDrawableId(context: Context): Int {

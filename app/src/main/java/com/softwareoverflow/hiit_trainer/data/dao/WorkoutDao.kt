@@ -2,6 +2,7 @@ package com.softwareoverflow.hiit_trainer.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.softwareoverflow.hiit_trainer.data.Workout
 import com.softwareoverflow.hiit_trainer.data.entity.WorkoutEntity
@@ -15,4 +16,7 @@ interface WorkoutDao :
 
     @Query("SELECT * FROM Workout")
     fun getAllWorkouts(): LiveData<List<Workout>>
+
+    @Insert
+    suspend fun createOrUpdate(workout: Workout): Long
 }

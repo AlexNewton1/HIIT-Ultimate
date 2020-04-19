@@ -32,7 +32,7 @@
             tools:srcCompat="@drawable/icon_fire" />
 
         <EditText
-            android:id="@+id/workTimePickerET"
+            android:id="@+id/workTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="3"
@@ -53,12 +53,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:labelFor="@+id/workTimePickerET"
+            android:labelFor="@+id/workTime"
             android:text="@string/work_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/workTimeIcon"
-            app:layout_constraintEnd_toEndOf="@+id/workTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/workTimePickerET" />
+            app:layout_constraintEnd_toEndOf="@+id/workTime"
+            app:layout_constraintStart_toStartOf="@+id/workTime" />
 
         <ImageView
             android:id="@+id/restTimeIcon"
@@ -75,7 +75,7 @@
             tools:srcCompat="@drawable/icon_rest" />
 
         <EditText
-            android:id="@+id/restTimePickerET"
+            android:id="@+id/restTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="3"
@@ -95,12 +95,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:labelFor="@+id/restTimePickerET"
+            android:labelFor="@+id/restTime"
             android:text="@string/rest_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
-            app:layout_constraintEnd_toEndOf="@+id/restTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/restTimePickerET" />
+            app:layout_constraintEnd_toEndOf="@+id/restTime"
+            app:layout_constraintStart_toStartOf="@+id/restTime" />
 
         <ImageView
             android:id="@+id/numRepsIcon"
@@ -118,7 +118,7 @@
             tools:srcCompat="@drawable/icon_repeat" />
 
         <EditText
-            android:id="@+id/numRepsPickerET"
+            android:id="@+id/numReps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="3"
@@ -138,12 +138,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:labelFor="@+id/restTimePickerET"
+            android:labelFor="@+id/restTime"
             android:text="@string/num_reps"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
-            app:layout_constraintEnd_toEndOf="@+id/numRepsPickerET"
-            app:layout_constraintStart_toStartOf="@+id/numRepsPickerET" />
+            app:layout_constraintEnd_toEndOf="@+id/numReps"
+            app:layout_constraintStart_toStartOf="@+id/numReps" />
 
         <ImageView
             android:id="@+id/recoverTimeIconIcon"
@@ -161,7 +161,7 @@
             tools:srcCompat="@drawable/icon_recover" />
 
         <EditText
-            android:id="@+id/recoverTimePickerET"
+            android:id="@+id/recoverTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="3"
@@ -181,12 +181,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:labelFor="@+id/restTimePickerET"
+            android:labelFor="@+id/restTime"
             android:text="@string/recovery_time"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
-            app:layout_constraintEnd_toEndOf="@+id/recoverTimePickerET"
-            app:layout_constraintStart_toStartOf="@+id/recoverTimePickerET" />
+            app:layout_constraintEnd_toEndOf="@+id/recoverTime"
+            app:layout_constraintStart_toStartOf="@+id/recoverTime" />
 
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/exerciseTypeIcon"

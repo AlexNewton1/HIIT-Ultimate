@@ -32,6 +32,10 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         return liveData
     }
 
+    override suspend fun createOrUpdateWorkout(dto: WorkoutDTO) {
+        return workoutDao.createOrUpdate(dto.toEntity())
+    }
+
     override fun getWorkoutSetById(workoutSetId: Long?): LiveData<WorkoutSetDTO> {
         if (workoutSetId == null)
             return MutableLiveData(WorkoutSetDTO())
@@ -59,8 +63,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         }
     }
 
-    // TODO check this still works :o
-    // TODO - test if this can
     override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO): Long {
        return exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
     }

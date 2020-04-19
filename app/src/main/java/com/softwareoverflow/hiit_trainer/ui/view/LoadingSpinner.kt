@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui
+package com.softwareoverflow.hiit_trainer.ui.view
 
 import android.content.Context
 import android.view.MenuItem
@@ -22,7 +22,8 @@ object LoadingSpinner {
         // Set the animation to non-cancellable. This will be unset when the animation finishes and
         // ensures the animation is present on screen long enough to avoid flashing up on screen
         canCancelAnimation = false
-        icon.actionView.animation = animation
+        icon.actionView.animation =
+            animation
         icon.actionView.animation.startNow()
 
     }
@@ -38,13 +39,14 @@ object LoadingSpinner {
     }
 
     fun initialise(icon: MenuItem, context: Context) {
-        this.icon = icon
+        LoadingSpinner.icon = icon
 
         animation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
             0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
         animation.repeatCount = Animation.INFINITE;
         animation.repeatMode = Animation.INFINITE;
-        animation.duration = minimumShowTime;
+        animation.duration =
+            minimumShowTime;
 
         animation.setAnimationListener(object:  Animation.AnimationListener {
             override fun onAnimationRepeat(animation: Animation?) {

@@ -19,6 +19,9 @@ import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewMo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_workout_set_creator_step_1.*
 
+/**
+ * Allows the user to select from the list of saved [com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO] objects.
+ */
 class WorkoutSetCreatorStep1Fragment : Fragment() {
 
     // TODO Not sure this is actually needed? Might be best to use nav arguments to pass data back and forth between these fragments...
@@ -82,6 +85,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
             workoutSetViewModel.selectedExerciseTypeId.value?.let {
                 workoutSetViewModel.setChosenExerciseTypeId(it)
                 findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_workoutSetCreator)
+                return@setOnClickListener
             }
 
             Snackbar.make(view!!, R.string.select_exercise_type, Snackbar.LENGTH_SHORT).show()

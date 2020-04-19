@@ -2,6 +2,7 @@ package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 
@@ -18,7 +19,7 @@ class SelectableRecyclerView @JvmOverloads constructor(
 
     init {
         this.adapter = ExerciseTypePickerListAdapter()
-        addItemDecoration(GridListDecoration(context))
+        addItemDecoration(GridListDecoration(context, (this.layoutManager as GridLayoutManager).spanCount))
     }
 
     override fun getAdapter(): ExerciseTypePickerListAdapter {

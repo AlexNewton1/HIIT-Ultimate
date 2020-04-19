@@ -6,11 +6,10 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
 
-class GridListDecoration(context: Context) : RecyclerView.ItemDecoration() {
+class GridListDecoration(context: Context, private val numColumns: Int) :
+    RecyclerView.ItemDecoration() {
 
     private var gridSpacingPx: Int = 0
-    private var numColumns = 3
-
     private var needsLeftSpacing = false
 
     init {
@@ -42,8 +41,8 @@ class GridListDecoration(context: Context) : RecyclerView.ItemDecoration() {
             outRect.right = 0
             outRect.left = padding
         } else if (needsLeftSpacing) {
-            needsLeftSpacing = false;
-            outRect.left = gridSpacingPx - padding;
+            needsLeftSpacing = false
+            outRect.left = gridSpacingPx - padding
             if ((itemPosition + 2) % numColumns == 0)
                 outRect.right = gridSpacingPx - padding
             else

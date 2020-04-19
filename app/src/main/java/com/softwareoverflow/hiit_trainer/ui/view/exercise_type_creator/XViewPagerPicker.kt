@@ -11,19 +11,12 @@ import com.softwareoverflow.hiit_trainer.ui.getColorId
 import com.softwareoverflow.hiit_trainer.ui.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator.ExerciseTypeCreatorPagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class XViewPagerPicker @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : ConstraintLayout(context, attrs, defStyle) {
-
-    private var job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     init {
         inflate(context, R.layout.x_view_pager_picker, this)
@@ -86,10 +79,8 @@ class XViewPagerPicker @JvmOverloads constructor(
         adapter.moveItemToCenter(iconId)
         adapter.notifyDataSetChanged()
 
-        uiScope.launch {
-            // Set the current item to half way through now the required item has been centered.
-            iconViewPager.currentItem = adapter.itemCount / 2
-        }
+        // Set the current item to half way through now the required item has been centered.
+        iconViewPager.currentItem = adapter.itemCount / 2
     }
 
     // TODO - investigate the issues caused by swiping too quickly when the view is already scrolling to the inital position
@@ -103,9 +94,7 @@ class XViewPagerPicker @JvmOverloads constructor(
             adapter.notifyDataSetChanged()
         }
 
-        uiScope.launch {
-            colorViewPager.currentItem = adapter.itemCount / 2
-        }
+        colorViewPager.currentItem = adapter.itemCount / 2
     }
 
     fun getColorId(): Int {

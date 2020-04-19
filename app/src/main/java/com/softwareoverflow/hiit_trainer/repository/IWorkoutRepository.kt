@@ -17,6 +17,8 @@ interface IWorkoutRepository {
      * Load the workout for a given id
      */
     fun getWorkoutById(workoutId: Long) : LiveData<WorkoutDTO>
+
+    suspend fun createOrUpdateWorkout(dto: WorkoutDTO)
     //endregion
 
 
