@@ -33,15 +33,6 @@
         app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
         tools:text="This is the exercise type name" />
 
-    <ImageView
-        android:id="@+id/overflowMenu"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="4dp"
-        android:src="@drawable/icon_overflow_menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/et_selected_frame"
         android:layout_width="0dp"

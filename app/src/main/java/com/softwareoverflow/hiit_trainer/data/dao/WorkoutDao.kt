@@ -1,22 +1,34 @@
 package com.softwareoverflow.hiit_trainer.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.softwareoverflow.hiit_trainer.data.Workout
 import com.softwareoverflow.hiit_trainer.data.entity.WorkoutEntity
+import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 
 @Dao
 interface WorkoutDao :
     BaseDao<WorkoutEntity> {
 
     @Query("SELECT * FROM Workout WHERE id = :workoutId")
-    fun getWorkoutById(workoutId: Long) : LiveData<Workout>
+    suspend fun getWorkoutById(workoutId: Long) : Workout
 
     @Query("SELECT * FROM Workout")
     fun getAllWorkouts(): LiveData<List<Workout>>
 
-    @Insert
-    suspend fun createOrUpdate(workout: Workout): Long
+    @Transaction
+    suspend fun createOrUpdate(workout: WorkoutEntity, workoutSets: List<WorkoutSetEntity>): Long {
+        val id = createOrUpdate(workout)
+
+        workoutSets.forEach {
+            it.workoutId = id
+        }
+
+        createOrUpdateWorkoutSets(workoutSets)
+
+        return id
+    }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createOrUpdateWorkoutSets(workoutSets: List<WorkoutSetEntity>)
 }

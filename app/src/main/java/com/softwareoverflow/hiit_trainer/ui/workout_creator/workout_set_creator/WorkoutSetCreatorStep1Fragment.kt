@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
 import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
-import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker.IListAdapterEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.ISelectableEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_workout_set_creator_step_1.*
@@ -41,6 +41,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
             inflater, R.layout.fragment_workout_set_creator_step_1, container, false
         )
         binding.lifecycleOwner = this
+        binding.viewModel = workoutSetViewModel
 
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
             it?.let{
@@ -48,7 +49,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
             }
         })
 
-        binding.exerciseTypePickerList.setAdapterListener(object: IListAdapterEventListener {
+        binding.exerciseTypePickerList.setAdapterListener(object: ISelectableEditableListEventListener {
             override fun onItemSelected(selected: Long?) {
                 workoutSetViewModel.selectedExerciseTypeId.postValue(selected)
             }

@@ -6,6 +6,9 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import com.softwareoverflow.hiit_trainer.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO come back to this and work out how to handle saving / loading from databases....
 object LoadingSpinner {
@@ -17,25 +20,28 @@ object LoadingSpinner {
     private var pendingCancellation = false
 
     fun showLoadingIcon() {
-        icon.isVisible = true
+        CoroutineScope(Dispatchers.Main).launch {
+            icon.isVisible = true
 
-        // Set the animation to non-cancellable. This will be unset when the animation finishes and
-        // ensures the animation is present on screen long enough to avoid flashing up on screen
-        canCancelAnimation = false
-        icon.actionView.animation =
-            animation
-        icon.actionView.animation.startNow()
-
+            // Set the animation to non-cancellable. This will be unset when the animation finishes and
+            // ensures the animation is present on screen long enough to avoid flashing up on screen
+            canCancelAnimation = false
+            icon.actionView.animation =
+                animation
+            icon.actionView.animation.startNow()
+        }
     }
 
     fun hideLoadingIcon() {
-        icon.actionView.animation?.cancel()
-        icon.isVisible = false
+        CoroutineScope(Dispatchers.Main).launch{
+            icon.actionView.animation?.cancel()
+            icon.isVisible = false
 
-        if(canCancelAnimation)
-            icon.actionView.clearAnimation()
-        else
-            pendingCancellation = true
+            if(canCancelAnimation)
+                icon.actionView.clearAnimation()
+            else
+                pendingCancellation = true
+        }
     }
 
     fun initialise(icon: MenuItem, context: Context) {

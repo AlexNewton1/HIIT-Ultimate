@@ -4,14 +4,10 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.softwareoverflow.hiit_trainer.data.Workout
 import com.softwareoverflow.hiit_trainer.data.WorkoutDatabase
-import com.softwareoverflow.hiit_trainer.data.mapper.toDTO
-import com.softwareoverflow.hiit_trainer.data.mapper.toEntity
-import com.softwareoverflow.hiit_trainer.data.mapper.toExerciseTypeDTO
+import com.softwareoverflow.hiit_trainer.data.mapper.*
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
-import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -19,30 +15,17 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
     private val database = WorkoutDatabase.getInstance(context.applicationContext)
     private val workoutDao = database.workoutDao
-    private val workoutSetDao = database.workoutSetDao
     private val exerciseTypeDao = database.exerciseTypeDao
 
-    override fun getWorkoutById(workoutId: Long): LiveData<WorkoutDTO> {
-        val liveData = MutableLiveData<WorkoutDTO>()
-
-        Transformations.map(workoutDao.getWorkoutById(workoutId)) { workout: Workout ->
-            liveData.value = workout.toDTO()
-        }
-
-        return liveData
+    override suspend fun getWorkoutById(workoutId: Long): WorkoutDTO {
+        return workoutDao.getWorkoutById(workoutId).toDTO()
     }
 
-    override suspend fun createOrUpdateWorkout(dto: WorkoutDTO) {
-        return workoutDao.createOrUpdate(dto.toEntity())
-    }
+    override suspend fun createOrUpdateWorkout(dto: WorkoutDTO) : Long {
+        val workoutEntity = dto.toWorkoutEntity()
+        val workoutSetEntityList = dto.workoutSets.toWorkoutSetEntity()
 
-    override fun getWorkoutSetById(workoutSetId: Long?): LiveData<WorkoutSetDTO> {
-        if (workoutSetId == null)
-            return MutableLiveData(WorkoutSetDTO())
-
-        return Transformations.switchMap(workoutSetDao.getWorkoutSetById(workoutSetId)) {
-            MutableLiveData(it.toDTO())
-        }
+        return workoutDao.createOrUpdate(workoutEntity, workoutSetEntityList)
     }
 
     // TODO maybe have a separate Repository object for exercise types if this one becomes cluttered

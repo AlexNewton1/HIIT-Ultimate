@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep2Binding
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 /**
  * Allows user to input values for the [com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO] (e.g. work time, rest time etc)
@@ -34,6 +36,9 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
 
+        workoutSetViewModel.selectedExerciseTypeId.observe(viewLifecycleOwner, Observer {
+            Timber.d("SelectedExerciseTypeId changed to $it")
+        })
 
         return binding.root
     }

@@ -3,11 +3,14 @@ package com.softwareoverflow.hiit_trainer.ui.workout_creator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -24,22 +27,58 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
         get() = _workout
 
     private val _workoutSet: MutableLiveData<WorkoutSetDTO> = MutableLiveData()
-    var workoutSet: WorkoutSetDTO = WorkoutSetDTO()
-        get() {
-            val dto = _workoutSet.value ?: WorkoutSetDTO()
-            Timber.d("Workout workoutSet from MutableLiveData is $dto")
-            return dto
-        }
-        private set
+    val workoutSet: WorkoutSetDTO
+        get() = _workoutSet.value ?: WorkoutSetDTO()
 
     init {
-        if (id == null)
-            _workout.value = WorkoutDTO()
-        else
-            _workout.value = repo.getWorkoutById(id).value
+        viewModelScope.launch {
+            LoadingSpinner.showLoadingIcon()
+
+            if (id == null)
+                _workout.value = WorkoutDTO()
+            else
+                _workout.value = repo.getWorkoutById(id)
+
+            LoadingSpinner.hideLoadingIcon()
+
+            delay(1000)
+            Timber.d("Workout: ${_workout.value}")
+        }
     }
 
-    // TODO - 2 way bind the workout name edit text
+    fun removeWorkoutSetFromWorkout(position: Int){
+        val workoutSets = _workout.value!!.workoutSets
+        val dto =workoutSets.single { it.orderInWorkout == position }
+       workoutSets.remove(dto)
+
+        workoutSets.forEach {
+            if(it.orderInWorkout!! > position)
+                it.orderInWorkout = it.orderInWorkout!!-1
+        }
+
+        _workout.postValue(_workout.value) // Reassign the current value as the change is not automatically observed via LiveData
+    }
+
+    fun changeWorkoutSetOrder(fromPosition: Int, toPosition: Int){
+        val currentWorkout = _workout.value!!.copy()
+
+        val fromDTO = currentWorkout.workoutSets.single { it.orderInWorkout == fromPosition }
+        val toDTO = currentWorkout.workoutSets.single { it.orderInWorkout == toPosition }
+
+        val oldOrder = fromDTO.orderInWorkout
+        fromDTO.orderInWorkout = toDTO.orderInWorkout
+        toDTO.orderInWorkout = oldOrder
+
+        _workout.postValue(currentWorkout)
+    }
+
+    fun setWorkoutSetToEdit(position: Int){
+        _workoutSet.value = _workout.value!!.workoutSets.single { it.orderInWorkout == position }
+    }
+
+    fun setWorkoutName(name: String){
+        _workout.value!!.name = name
+    }
 
     /**
      * If the workoutSet has an id already present in the list, that entry will be updated.
@@ -51,15 +90,15 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
         val currentWorkout = _workout.value!!.copy()
 
         Timber.d("Workout addOrUpdate set, currently we have ${currentWorkout.workoutSets}")
-// TODO fix issue where the dto will get overwritten if you try and 2 workoutSet objects which are the same. Also need to think about how to track the workout set ordering within a workout when saving.
         // TODO might need to have some form of "workoutOrderIndex" to track the order...
-        val index = currentWorkout.workoutSets.indexOf(dto)
+        val index = currentWorkout.workoutSets.indexOfFirst {it.orderInWorkout == dto.orderInWorkout}
         if (index >= 0) {
             val workoutSets = currentWorkout.workoutSets.toCollection(mutableListOf())
             workoutSets.removeAt(index)
             workoutSets.add(index, dto)
             currentWorkout.workoutSets = workoutSets
         } else {
+            dto.orderInWorkout = currentWorkout.workoutSets.size
             currentWorkout.workoutSets.add(dto)
         }
 
@@ -68,9 +107,12 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
         _workout.postValue(currentWorkout)
     }
 
-    fun createOrUpdateWorkout() {
+    fun createOrUpdateWorkout(onSave: () -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
+            LoadingSpinner.showLoadingIcon()
             repo.createOrUpdateWorkout(_workout.value!!)
+            onSave()
+            LoadingSpinner.hideLoadingIcon()
         }
     }
 }

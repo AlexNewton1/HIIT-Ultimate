@@ -3,6 +3,8 @@ package com.softwareoverflow.hiit_trainer.data.mapper
 import com.softwareoverflow.hiit_trainer.data.Workout
 import com.softwareoverflow.hiit_trainer.data.WorkoutSet
 import com.softwareoverflow.hiit_trainer.data.entity.ExerciseTypeEntity
+import com.softwareoverflow.hiit_trainer.data.entity.WorkoutEntity
+import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
@@ -16,8 +18,23 @@ fun Workout.toDTO(): WorkoutDTO {
     )
 }
 
-fun WorkoutDTO.toEntity(): Workout {
-    
+fun WorkoutDTO.toWorkoutEntity(): WorkoutEntity {
+    return WorkoutEntity(this.id, this.name)
+}
+
+fun List<WorkoutSetDTO>.toWorkoutSetEntity(): List<WorkoutSetEntity> {
+    return this.map {
+        WorkoutSetEntity(
+            it.id,
+            null,
+            it.exerciseTypeDTO!!.id,
+            it.workTime!!,
+            it.restTime!!,
+            it.numReps!!,
+            it.recoverTime!!,
+            it.orderInWorkout!!
+        )
+    }
 }
 
 fun List<WorkoutSet>.toWorkoutSetDTO(): MutableList<WorkoutSetDTO> {
@@ -34,7 +51,8 @@ fun WorkoutSet.toDTO(): WorkoutSetDTO {
         workoutSet.workTime,
         workoutSet.restTime,
         workoutSet.numReps,
-        workoutSet.recoverTime
+        workoutSet.recoverTime,
+        workoutSet.orderInWorkout
     )
 
 }

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
+import com.softwareoverflow.hiit_trainer.ui.view.ISelectableEditableListEventListener
 
 /**
  * RecyclerView which supports item selection and contains [selectedItemId]
@@ -26,11 +27,15 @@ class SelectableRecyclerView @JvmOverloads constructor(
         return super.getAdapter() as ExerciseTypePickerListAdapter
     }
 
-    fun setAdapterListener(eventListener: IListAdapterEventListener){
+    fun setAdapterListener(eventListener: ISelectableEditableListEventListener){
         adapter.setEventListener(eventListener)
     }
 
     fun submitList(items: List<ExerciseTypeDTO>) {
         adapter.submitList(items.toMutableList())
+    }
+
+    fun setSelectedItem(id: Long){
+        adapter.notifyItemSelected(id)
     }
 }

@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.view.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker.GridListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.workout_set.WorkoutSetListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,12 +20,11 @@ import timber.log.Timber
 
 class WorkoutCreatorStep1Fragment : Fragment() {
 
-    // TODO probably need to use this viewmodel so that it is created in time for the other fragments which (might) use it. Can acheive by using data bidning and assigning bidning.viewModel = viewModel
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
         Timber.d("Workout creating WorkoutCreatorViewModel")
         WorkoutCreatorViewModelFactory(
             activity!!,
-            null
+            1
         )
     }
 
@@ -36,8 +37,30 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         view.listWorkoutSets.adapter = WorkoutSetListAdapter()
         view.listWorkoutSets.addItemDecoration(GridListDecoration(context!!, 1))
 
+        (view.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object: IEditableOrderedListEventListener{
+
+            /** (Effectively) swaps the WorkoutSet at position [fromPosition] and [toPosition] */
+            override fun triggerItemChangePosition(fromPosition: Int, toPosition: Int) {
+                viewModel.changeWorkoutSetOrder(fromPosition, toPosition)
+            }
+
+            /** Triggers deletion of the item at position [id] */
+            override fun triggerItemDeletion(id: Long) {
+                viewModel.removeWorkoutSetFromWorkout(id.toInt())
+            }
+
+            /** Triggers the edit of the item at the position [id] */
+            override fun triggerItemEdit(id: Long) {
+                viewModel.setWorkoutSetToEdit(id.toInt())
+                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
+
+            }
+        })
+
         viewModel.workout.observe(viewLifecycleOwner, Observer {
-            (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets)
+            it?.let {
+                (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets)
+            }
         })
 
         view.createNewWorkoutSetButton.setOnClickListener {
@@ -54,7 +77,10 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         activity?.mainActivityFAB?.show()
         activity?.mainActivityFAB?.setImageResource(R.drawable.icon_arrow_right)
         activity?.mainActivityFAB?.setOnClickListener {
-            viewModel.createOrUpdateWorkout()
+            if(viewModel.workout.value!!.workoutSets.isEmpty())
+                Snackbar.make(view!!, "Please add at least one Workout Set to your Workout", Snackbar.LENGTH_SHORT).show()
+            else
+                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_workoutCreatorStep2Fragment)
         }
     }
 

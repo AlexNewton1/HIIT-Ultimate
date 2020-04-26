@@ -6,5 +6,6 @@ data class WorkoutSetDTO(
     var workTime: Int? = 25,
     var restTime: Int? = 5,
     var numReps: Int? = 6,
-    var recoverTime: Int? = 120
+    var recoverTime: Int? = 120,
+    var orderInWorkout: Int? = null
 )

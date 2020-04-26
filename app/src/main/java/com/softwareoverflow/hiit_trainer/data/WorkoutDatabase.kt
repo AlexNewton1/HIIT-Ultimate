@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.softwareoverflow.hiit_trainer.data.dao.ExerciseTypeDao
 import com.softwareoverflow.hiit_trainer.data.dao.WorkoutDao
-import com.softwareoverflow.hiit_trainer.data.dao.WorkoutSetDao
 import com.softwareoverflow.hiit_trainer.data.entity.ExerciseTypeEntity
 import com.softwareoverflow.hiit_trainer.data.entity.WorkoutEntity
 import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
@@ -27,8 +26,6 @@ abstract class WorkoutDatabase : RoomDatabase() {
      * DAO to access data related to exercise types"
      */
     abstract val exerciseTypeDao: ExerciseTypeDao
-
-    abstract val workoutSetDao: WorkoutSetDao
 
     companion object {
 

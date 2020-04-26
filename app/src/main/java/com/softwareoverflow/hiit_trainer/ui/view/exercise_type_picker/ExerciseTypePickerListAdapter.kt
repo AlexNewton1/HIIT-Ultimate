@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+import com.softwareoverflow.hiit_trainer.ui.view.ISelectableEditableListEventListener
 
 class ExerciseTypePickerListAdapter :
     ListAdapter<ExerciseTypeDTO, ExerciseTypePickerListAdapter.ViewHolder>(
@@ -25,7 +25,7 @@ class ExerciseTypePickerListAdapter :
     var selectedItemId: Long = -1
         private set
 
-    private var eventEventListener: IListAdapterEventListener? = null
+    private var eventEventListener: ISelectableEditableListEventListener? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -43,7 +43,7 @@ class ExerciseTypePickerListAdapter :
         return ViewHolder(view)
     }
 
-    private fun notifyItemSelected(newId: Long) {
+    fun notifyItemSelected(newId: Long) {
         if (selectedItemId != newId) {
             val previouslySelectedId =
                 selectedItemId
@@ -60,7 +60,7 @@ class ExerciseTypePickerListAdapter :
         }
     }
 
-    fun setEventListener(listAdapterEventListener: IListAdapterEventListener) {
+    fun setEventListener(listAdapterEventListener: ISelectableEditableListEventListener) {
         eventEventListener = listAdapterEventListener
     }
 
@@ -77,7 +77,6 @@ class ExerciseTypePickerListAdapter :
         private val exerciseTypeIcon: CircularIconImageView =
             itemView.findViewById(R.id.exerciseTypeIcon)
 
-        private val overflowMenuIcon: ImageView = itemView.findViewById(R.id.overflowMenu)
 
         fun bind(item: ExerciseTypeDTO) {
             _exerciseTypeId = item.id
@@ -95,12 +94,13 @@ class ExerciseTypePickerListAdapter :
                 if (_exerciseTypeId == selectedItemId) View.VISIBLE
                 else View.GONE
 
-            overflowMenuIcon.setOnClickListener {
+            itemView.setOnLongClickListener {
                 PopupMenu(context, it).apply {
                     setOnMenuItemClickListener(this@ViewHolder)
                     inflate(R.menu.et_actions)
                     show()
                 }
+                return@setOnLongClickListener true
             }
         }
 

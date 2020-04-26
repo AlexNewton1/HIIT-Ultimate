@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5e94b4ec0469edf7ab3a645b1c486c0d",
+    "identityHash": "b4d7899d4e48c0d35bb5bab9d5c7842d",
     "entities": [
       {
         "tableName": "Workout",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "WorkoutSet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workoutId` INTEGER, `exerciseTypeId` INTEGER, `workTime` INTEGER NOT NULL, `restTime` INTEGER NOT NULL, `numReps` INTEGER NOT NULL, `recoverTime` INTEGER NOT NULL, FOREIGN KEY(`workoutId`) REFERENCES `Workout`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`exerciseTypeId`) REFERENCES `ExerciseType`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workoutId` INTEGER, `exerciseTypeId` INTEGER, `workTime` INTEGER NOT NULL, `restTime` INTEGER NOT NULL, `numReps` INTEGER NOT NULL, `recoverTime` INTEGER NOT NULL, `orderInWorkout` INTEGER NOT NULL, FOREIGN KEY(`workoutId`) REFERENCES `Workout`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`exerciseTypeId`) REFERENCES `ExerciseType`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -73,6 +73,12 @@
           {
             "fieldPath": "recoverTime",
             "columnName": "recoverTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderInWorkout",
+            "columnName": "orderInWorkout",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -151,7 +157,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5e94b4ec0469edf7ab3a645b1c486c0d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b4d7899d4e48c0d35bb5bab9d5c7842d')"
     ]
   }
 }

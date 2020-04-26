@@ -30,5 +30,6 @@ class WorkoutSetEntity(
     var workTime: Int,
     var restTime: Int,
     var numReps: Int,
-    var recoverTime: Int
+    var recoverTime: Int,
+    var orderInWorkout: Int
 )

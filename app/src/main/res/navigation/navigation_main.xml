@@ -68,7 +68,7 @@
         <fragment
             android:id="@+id/workoutCreatorStep2Fragment"
             android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorStep2Fragment"
-            android:label="fragment_workout_creator_step_2"
+            android:label="Save Your Workout"
             tools:layout="@layout/fragment_workout_creator_step_2" />
     </navigation>
 </navigation>
