@@ -32,10 +32,12 @@
 
     <ImageView
         android:id="@+id/workTimeIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/icon_fire"
         app:layout_constraintBottom_toTopOf="@+id/numRepsIcon"
+        app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintEnd_toStartOf="@+id/restTimeIcon"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
@@ -57,11 +59,13 @@
 
     <ImageView
         android:id="@+id/restTimeIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/icon_rest"
         app:layout_constraintBottom_toTopOf="@+id/recoverTimeIconIcon"
+        app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
@@ -84,15 +88,15 @@
 
     <ImageView
         android:id="@+id/numRepsIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:foregroundGravity="left"
         android:src="@drawable/icon_repeat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/exerciseTypeIcon"
+        app:layout_constraintEnd_toEndOf="@+id/workTimeIcon"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
+        app:layout_constraintStart_toStartOf="@+id/workTimeIcon"
         app:layout_constraintTop_toBottomOf="@+id/workTimeIcon" />
 
     <TextView
@@ -111,15 +115,14 @@
 
     <ImageView
         android:id="@+id/recoverTimeIconIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:src="@drawable/icon_recover"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/exerciseTypeIcon"
+        app:layout_constraintEnd_toEndOf="@+id/restTimeIcon"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
+        app:layout_constraintStart_toStartOf="@+id/restTimeIcon"
         app:layout_constraintTop_toBottomOf="@+id/restTimeIcon"
         tools:srcCompat="@drawable/icon_recover" />
 
