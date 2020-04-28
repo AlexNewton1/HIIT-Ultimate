@@ -1,11 +1,11 @@
 package com.softwareoverflow.hiit_trainer.ui
 
-import android.content.res.Resources
-import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 
-
-fun WorkoutDTO.getFormattedDuration(res: Resources) : String {
+/**
+ * Gets the duration of the workout, in seconds
+ */
+fun WorkoutDTO.getDuration() : Int {
     var totalTime = 0
 
     for(i in 0 until  workoutSets.size){
@@ -18,5 +18,5 @@ fun WorkoutDTO.getFormattedDuration(res: Resources) : String {
             totalTime += workoutSet.recoverTime!!
     }
 
-    return res.getString(R.string.min_sec_time_format, totalTime / 60, totalTime % 60)
+    return totalTime
 }

@@ -10,7 +10,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -40,9 +39,6 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
                 _workout.value = repo.getWorkoutById(id)
 
             LoadingSpinner.hideLoadingIcon()
-
-            delay(1000)
-            Timber.d("Workout: ${_workout.value}")
         }
     }
 
