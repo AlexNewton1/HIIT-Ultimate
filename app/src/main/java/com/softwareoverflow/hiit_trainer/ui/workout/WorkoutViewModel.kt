@@ -21,8 +21,9 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
     var currentRepFormatted =
         Transformations.map(_currentRep) { "$it/${_currentWorkoutSet.value?.numReps}" }
 
-    private val _repTimeRemaining = MutableLiveData<Int?>()
-    val repTimeRemaining: LiveData<Int?>
+    // TODO - probably have this 5 value not hard coded - perhaps a user setting
+    private val _repTimeRemaining = MutableLiveData(5)
+    val repTimeRemaining: LiveData<Int>
         get() = _repTimeRemaining
 
     private val _upNextExerciseType = MutableLiveData<ExerciseTypeDTO?>()
@@ -33,10 +34,9 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
     val label: LiveData<String?>
         get() = _label
 
-    private val _workoutTimeRemaining = MutableLiveData<Int?>()
-    val workoutTimeRemaining: LiveData<Int?>
+    private val _workoutTimeRemaining = MutableLiveData(0)
+    val workoutTimeRemaining: LiveData<Int>
         get() = _workoutTimeRemaining
-
 
     init {
         viewModelScope.launch {
@@ -51,4 +51,13 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
         }
     }
 
+    fun onRepCompleted(){
+
+    }
+
+    /** Decrements the main on-screen timer and the remaining time**/
+    fun decrementTimers(){
+        _repTimeRemaining.value = _repTimeRemaining.value!! - 1
+        _workoutTimeRemaining.value = _workoutTimeRemaining.value!! - 1
+    }
 }
