@@ -11,7 +11,6 @@ import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * ViewModel for creating / editing workouts.
@@ -69,7 +68,7 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
     }
 
     fun setWorkoutSetToEdit(position: Int){
-        _workoutSet.value = _workout.value!!.workoutSets.single { it.orderInWorkout == position }
+        _workoutSet.value = _workout.value!!.workoutSets.single { it.orderInWorkout == position }.copy()
     }
 
     fun setWorkoutName(name: String){
@@ -81,12 +80,8 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
      * If the workoutSet has an id not already in the list, the item will be appended to the list
      */
     fun addOrUpdateWorkoutSet(dto: WorkoutSetDTO) {
-        Timber.d("Workout addOrUpdate set with dto $dto")
-
         val currentWorkout = _workout.value!!.copy()
 
-        Timber.d("Workout addOrUpdate set, currently we have ${currentWorkout.workoutSets}")
-        // TODO might need to have some form of "workoutOrderIndex" to track the order...
         val index = currentWorkout.workoutSets.indexOfFirst {it.orderInWorkout == dto.orderInWorkout}
         if (index >= 0) {
             val workoutSets = currentWorkout.workoutSets.toCollection(mutableListOf())
@@ -97,8 +92,6 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
             dto.orderInWorkout = currentWorkout.workoutSets.size
             currentWorkout.workoutSets.add(dto)
         }
-
-        Timber.d("Workout addOrUpdate set, now we have ${currentWorkout.workoutSets}")
 
         _workout.postValue(currentWorkout)
     }

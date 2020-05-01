@@ -13,7 +13,11 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_workoutCreatorHomeFragment"
             app:destination="@id/nav_workout_creator" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_workoutFragment"
+            app:destination="@id/workoutFragment" />
     </fragment>
+    <!-- TODO  Make all the labels use string resources -->
 
     <fragment
         android:id="@+id/aboutFragment"
@@ -71,4 +75,8 @@
             android:label="Save Your Workout"
             tools:layout="@layout/fragment_workout_creator_step_2" />
     </navigation>
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutFragment"
+        android:label="Workout" />
 </navigation>

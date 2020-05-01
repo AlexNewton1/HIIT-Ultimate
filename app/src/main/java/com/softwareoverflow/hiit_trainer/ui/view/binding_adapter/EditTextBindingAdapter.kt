@@ -32,3 +32,13 @@ fun EditText.intTextAttrChanged(listener: InverseBindingListener){
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     })
 }
+
+@BindingAdapter("text")
+fun EditText.setNullTextToEmpty(value: String?){
+    this.setText(value ?: "")
+}
+
+@BindingAdapter("text")
+fun EditText.setNonNullableIntText(value: Int){
+    this.setIntText(value)
+}

@@ -23,8 +23,8 @@ class WorkoutCreatorStep1Fragment : Fragment() {
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
         Timber.d("Workout creating WorkoutCreatorViewModel")
         WorkoutCreatorViewModelFactory(
-            activity!!,
-            1
+            requireActivity(),
+            null
         )
     }
 
@@ -35,7 +35,7 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_workout_creator_step_1, container, false)
 
         view.listWorkoutSets.adapter = WorkoutSetListAdapter()
-        view.listWorkoutSets.addItemDecoration(GridListDecoration(context!!, 1))
+        view.listWorkoutSets.addItemDecoration(GridListDecoration(requireContext(), 1))
 
         (view.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object: IEditableOrderedListEventListener{
 
@@ -78,7 +78,7 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         activity?.mainActivityFAB?.setImageResource(R.drawable.icon_arrow_right)
         activity?.mainActivityFAB?.setOnClickListener {
             if(viewModel.workout.value!!.workoutSets.isEmpty())
-                Snackbar.make(view!!, "Please add at least one Workout Set to your Workout", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Please add at least one Workout Set to your Workout", Snackbar.LENGTH_SHORT).show()
             else
                 findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_workoutCreatorStep2Fragment)
         }

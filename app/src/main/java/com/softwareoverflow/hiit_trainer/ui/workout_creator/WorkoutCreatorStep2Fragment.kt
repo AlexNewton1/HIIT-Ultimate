@@ -37,11 +37,11 @@ class WorkoutCreatorStep2Fragment : Fragment() {
         binding.saveWorkoutButton.setOnClickListener {
             val name = workoutNameET.text.toString()
             if(name.isBlank()) {
-                Snackbar.make(view!!, "Please enter a workout name before saving", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Please enter a workout name before saving", Snackbar.LENGTH_SHORT).show()
             } else {
                 viewModel.setWorkoutName(name)
                 viewModel.createOrUpdateWorkout {
-                    Snackbar.make(view!!, "Workout '$name' Saved!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(), "Workout '$name' Saved!", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }

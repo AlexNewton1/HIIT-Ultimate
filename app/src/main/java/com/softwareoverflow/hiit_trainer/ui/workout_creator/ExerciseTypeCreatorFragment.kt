@@ -41,7 +41,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
         val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
         val viewModelFactory = ExerciseTypeViewModelFactory(
-            activity!!,
+            requireActivity(),
             workoutSetViewModel.selectedExerciseTypeId.value,
             workoutSetViewModel
         )
@@ -51,7 +51,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         binding.lifecycleOwner = this
 
         // TODO - fix this issue
-        val etNameMaxLength = activity!!.resources.getInteger(R.integer.et_name_length_max)
+        val etNameMaxLength = requireActivity().resources.getInteger(R.integer.et_name_length_max)
         binding.etExerciseTypeName.apply {
             doBeforeTextChanged { text, start, count, after ->
                 if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
@@ -68,7 +68,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         if (snackbar == null) {
             snackbar = Snackbar.make(
                 etExerciseTypeName,
-                activity!!.applicationContext.getString(
+                requireActivity().applicationContext.getString(
                     R.string.char_limit_exceeded,
                     context?.resources?.getInteger(R.integer.et_name_length_max)
                 ),
@@ -78,8 +78,8 @@ class ExerciseTypeCreatorFragment : Fragment() {
             }
         }
 
-        activity!!.mainActivityFAB.setImageResource(R.drawable.icon_tick)
-        activity!!.mainActivityFAB.show()
+        requireActivity().mainActivityFAB.setImageResource(R.drawable.icon_tick)
+        requireActivity().mainActivityFAB.show()
         activity?.mainActivityFAB?.setOnClickListener {
             if (etExerciseTypeName.text.toString().isBlank()) {
                 Snackbar.make(
@@ -89,7 +89,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
                 ).show()
             } else {
                 viewModel.createOrUpdateExerciseType(
-                    activity!!,
+                    requireActivity(),
                     etExerciseTypeName.text.toString(),
                     etViewPagerPicker.getIconId(),
                     etViewPagerPicker.getColorId()

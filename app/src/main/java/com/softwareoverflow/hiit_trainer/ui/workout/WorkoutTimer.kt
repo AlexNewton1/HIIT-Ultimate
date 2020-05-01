@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 
+// TODO retrofit a preparation timer in....
 class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) {
 
     private lateinit var timer: CountDownTimer
@@ -20,20 +21,23 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
     init {
         createTimer(millisecondsRemaining)
         timer.start()
+
+        observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
     /** Skips the current section of the workout **/
     fun skip() {
         millisecondsRemaining -= millisRemainingInSection
-        millisecondsRemaining = ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
+        millisecondsRemaining =
+            ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
-        if(workoutSets.hasNext())
+        if (workoutSets.hasNext())
             startNextWorkoutSection()
 
         // Cancel and recreate the timer
         timer.cancel()
 
-        if(!isPaused){
+        if (!isPaused) {
             createTimer(millisecondsRemaining)
             timer.start()
         }
@@ -60,26 +64,33 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
             }
 
             override fun onTick(millisUntilFinished: Long) {
-                millisRemainingInSection -= tickInterval
-
-                if(millisUntilFinished % 1000 == 0L){
-                    millisecondsRemaining = millisUntilFinished
-                    observer.onTimerTick(millisRemainingInSection, millisecondsRemaining)
+                if (millisecondsRemaining % 1000 == 0L) {
+                    observer.onTimerTick(
+                        (millisecondsRemaining / 1000).toInt(),
+                        (millisRemainingInSection / 1000).toInt()
+                    )
                 }
 
-                if(millisRemainingInSection <= 0 && workoutSets.hasNext())
+                millisRemainingInSection -= tickInterval
+                millisecondsRemaining -= tickInterval
+
+                if (millisRemainingInSection <= 0)
                     startNextWorkoutSection()
             }
         }
     }
 
-    private fun startNextWorkoutSection(){
-        if(currentRep == currentSet.numReps){
-            if(currentSection == WorkoutSection.RECOVER){
+    private fun startNextWorkoutSection() {
+        if (currentRep == currentSet.numReps) {
+            if (currentSection == WorkoutSection.RECOVER) {
                 // Start the new workout set
                 currentRep = 1
                 currentSection = WorkoutSection.WORK
-                currentSet = workoutSets.next()
+
+                if(workoutSets.hasNext())
+                    currentSet = workoutSets.next()
+
+                millisRemainingInSection = getCurrentSetWorkTime()
                 currentSetIndex++
 
             } else {
@@ -88,8 +99,8 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
                 millisRemainingInSection = getCurrentSetRecoverTime()
             }
         } else {
-            if(currentSection == WorkoutSection.WORK){
-                // Transition to rest period
+            if (currentSection == WorkoutSection.WORK) {
+                // Start the rest period
                 currentSection = WorkoutSection.REST
                 millisRemainingInSection = getCurrentSetRestTime()
 
@@ -101,12 +112,16 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
             }
         }
 
-        observer.onWorkoutSectionChange(currentSection, currentRep, currentSetIndex)
+        observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
-    private fun getCurrentSetWorkTime(): Long = currentSet.workTime!! * 1000L
-    private fun getCurrentSetRestTime(): Long = currentSet.restTime!! * 1000L
-    private fun getCurrentSetRecoverTime(): Long = currentSet.recoverTime!! * 1000L
+    fun cancel(){
+        timer.cancel()
+    }
+
+    private fun getCurrentSetWorkTime() = currentSet.workTime!! * 1000L
+    private fun getCurrentSetRestTime() = currentSet.restTime!! * 1000L
+    private fun getCurrentSetRecoverTime() = currentSet.recoverTime!! * 1000L
 }
 
 enum class WorkoutSection {

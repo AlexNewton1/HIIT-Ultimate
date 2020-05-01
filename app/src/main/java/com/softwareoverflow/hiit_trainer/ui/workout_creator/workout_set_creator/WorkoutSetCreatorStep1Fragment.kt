@@ -30,7 +30,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
     private val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
     {
         // TODO pass in the correct ID - this should probably come through the args?
-        WorkoutSetCreatorViewModelFactory(workoutViewModel.workoutSet, context!!)
+        WorkoutSetCreatorViewModelFactory(workoutViewModel.workoutSet, requireContext())
     }
 
     override fun onCreateView(
@@ -79,8 +79,8 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity!!.mainActivityFAB.setImageResource(R.drawable.icon_arrow_right)
-        activity!!.mainActivityFAB.show()
+        requireActivity().mainActivityFAB.setImageResource(R.drawable.icon_arrow_right)
+        requireActivity().mainActivityFAB.show()
         activity?.mainActivityFAB?.setOnClickListener {
 
             workoutSetViewModel.selectedExerciseTypeId.value?.let {
@@ -89,11 +89,11 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
                 return@setOnClickListener
             }
 
-            Snackbar.make(view!!, R.string.select_exercise_type, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), R.string.select_exercise_type, Snackbar.LENGTH_SHORT).show()
 
             // TODO handle animation of button
         }
 
-        hideKeyboard(activity!!)
+        hideKeyboard(requireActivity())
     }
 }

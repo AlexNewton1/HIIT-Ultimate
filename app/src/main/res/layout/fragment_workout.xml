@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.workout.WorkoutFragment">
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/circularIconImageView2"
+            android:layout_width="@dimen/icon_size_large"
+            android:layout_height="@dimen/icon_size_large"
+            app:colorHex="@{viewModel.currentWorkoutSet.exerciseTypeDTO.colorHex}"
+            app:iconName="@{viewModel.currentWorkoutSet.exerciseTypeDTO.iconName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{viewModel.currentWorkoutSet.exerciseTypeDTO.name}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView2"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/circularIconImageView2"
+            app:layout_constraintTop_toTopOf="@+id/circularIconImageView2"
+            tools:text="Press Ups" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/icon_size_large"
+            android:layout_height="@dimen/icon_size_large"
+            android:src="@drawable/icon_repeat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="@dimen/icon_size_large"
+            android:layout_height="@dimen/icon_size_large"
+            android:gravity="center"
+            android:text="@{viewModel.currentRepFormatted}"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView"
+            tools:text="2/6" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src='@{(viewModel.currentSection == "WORK") ? @drawable/icon_fire : ((viewModel.currentSection == "REST") ? @drawable/icon_rest : @drawable/icon_recover )}'
+            app:layout_constraintBottom_toTopOf="@+id/workoutSectionLabelText"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            tools:src="@drawable/icon_fire" />
+
+        <TextView
+            android:id="@+id/workoutSectionLabelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:alpha="0.0"
+            android:text="@{viewModel.currentSection}"
+            android:textColor='@{(viewModel.currentSection == "WORK") ? @color/work : ((viewModel.currentSection == "REST") ? @color/rest : @color/recover )}'
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:alpha="1f"
+            tools:text="Work"
+            tools:textColor="@color/work" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@{viewModel.sectionTimeRemaining}"
+            android:textSize="100sp"
+            app:layout_constraintBottom_toTopOf="@+id/view4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="01:23" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remaining Time:"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/view4"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{viewModel.workoutTimeRemainingFormatted}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/view4"
+            app:layout_constraintStart_toEndOf="@+id/textView6" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fab_size_small"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="@dimen/fab_size_small"
+            android:layout_height="@dimen/fab_size_small"
+            android:onClick="@{() -> viewModel.toggleSound()}"
+            android:padding="8dp"
+            android:src="@{viewModel.soundOn ? @drawable/icon_sound_on : @drawable/icon_sound_off}"
+            app:layout_constraintBottom_toBottomOf="@+id/view4"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:src="@drawable/icon_sound_on" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/fab_size_small"
+            android:layout_height="@dimen/fab_size_small"
+            android:onClick="@{() -> viewModel.togglePause()}"
+            android:padding="8dp"
+            android:src="@{viewModel.isPaused ? @android:drawable/ic_media_play : @android:drawable/ic_media_pause}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            tools:src="@android:drawable/ic_media_pause" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="@dimen/fab_size_small"
+            android:layout_height="@dimen/fab_size_small"
+            android:onClick="@{() -> viewModel.skipSection()}"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_media_ff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/view4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageView2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

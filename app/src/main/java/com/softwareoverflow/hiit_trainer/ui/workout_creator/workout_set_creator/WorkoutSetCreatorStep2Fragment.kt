@@ -47,9 +47,9 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        activity!!.mainActivityFAB.show()
+        requireActivity().mainActivityFAB.show()
         activity?.mainActivityFAB?.setImageResource(R.drawable.icon_tick)
-        activity!!.mainActivityFAB.setOnClickListener {
+        requireActivity().mainActivityFAB.setOnClickListener {
             // At the point we try and add this workout set to the workout, it should not be null. Throw NPE if it is ever null
             workoutCreatorViewModel.addOrUpdateWorkoutSet(workoutSetViewModel.workoutSet.value!!)
             findNavController().popBackStack(R.id.workoutCreatorHomeFragment, false)
