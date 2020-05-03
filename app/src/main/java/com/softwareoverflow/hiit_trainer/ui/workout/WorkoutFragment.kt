@@ -1,11 +1,13 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,18 +16,20 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.view.animation.MoveAndScaleAnimationFactory
 import kotlinx.android.synthetic.main.fragment_workout.*
 
 class WorkoutFragment : Fragment(), IWorkoutObserver {
 
     // TODO need to correctly handle getting the id from the safeArgs
     private val viewModel: WorkoutViewModel by viewModels() {
-        WorkoutViewModelFactory(requireContext(), 1)
+        WorkoutViewModelFactory(requireActivity().application, requireContext(), 1)
     }
 
     private var timer: WorkoutTimer? = null
 
     private lateinit var currentSectionLabelAnimation: ObjectAnimator
+    private lateinit var scaleAndMoveAnimation: ValueAnimator
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +76,26 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             interpolator = AccelerateDecelerateInterpolator()
         }
 
+        viewModel.animateUpNextExerciseType.observe(viewLifecycleOwner, Observer {
+            if(it){
+                scaleAndMoveAnimation.start()
+            }
+        })
+
+        // TODO come up with a nicer way of handling all the animations and prevent the flashing.
+        // TODO also need a way of passing the anim time in for cases when recover time is less than 3s (otherwise animation jumps part way through to end)
+        binding.root.doOnLayout {
+            scaleAndMoveAnimation = MoveAndScaleAnimationFactory().apply {
+                setDuration(3000L)
+                setTextViewToScale(binding.upNextExerciseTypeName)
+                setViewToScale(binding.upNextExerciseTypeView)
+                setMoveY(binding.upNextExerciseTypeView.y, binding.currentExerciseTypeIcon.y)
+                setScaleHeight(binding.upNextExerciseTypeView.height, binding.currentExerciseTypeIcon.height)
+                setScaleText(binding.upNextExerciseTypeName.textSize, binding.currentExerciseTypeName.textSize)
+                setAlphaAnimation(binding.currentExerciseTypeView, 1f, 0f)
+            }.create(null)
+        }
+
         return binding.root
     }
 
@@ -86,10 +110,8 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     ) {
         viewModel.updateValues(section, currentSet, currentRep)
 
-        workoutSectionLabelText.alpha = 1f
+        workoutSectionLabelText?.alpha = 1f
         currentSectionLabelAnimation.start()
-
-
     }
 
     override fun onFinish() {

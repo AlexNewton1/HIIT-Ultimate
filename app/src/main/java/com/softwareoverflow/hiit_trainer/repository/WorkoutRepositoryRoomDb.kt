@@ -10,7 +10,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
@@ -20,7 +19,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
     override suspend fun getWorkoutById(workoutId: Long): WorkoutDTO {
         val workout = workoutDao.getWorkoutById(workoutId)
-        Timber.d("Workout: id = $workoutId, workout = $workout")
         return workout.toDTO()
     }
 

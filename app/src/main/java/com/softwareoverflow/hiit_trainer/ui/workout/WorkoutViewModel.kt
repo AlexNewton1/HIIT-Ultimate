@@ -1,16 +1,19 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
+import android.app.Application
 import android.text.format.DateUtils
 import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
+import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
+import com.softwareoverflow.hiit_trainer.ui.getWorkoutCompleteExerciseType
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
-class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() {
+class WorkoutViewModel(application: Application, workoutId: Long, repo: IWorkoutRepository) :
+    AndroidViewModel(application) {
 
     private val _workout = MutableLiveData<WorkoutDTO>()
     val workout: LiveData<WorkoutDTO>
@@ -25,26 +28,29 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
         Transformations.map(_currentRep) { "$it/${_currentWorkoutSet.value?.numReps}" }
 
     private val _sectionTimeRemaining = MutableLiveData(5)
-    val sectionTimeRemaining = Transformations.map(_sectionTimeRemaining) { DateUtils.formatElapsedTime(it.toLong()) }
+    val sectionTimeRemaining =
+        Transformations.map(_sectionTimeRemaining) { DateUtils.formatElapsedTime(it.toLong()) }
 
     private val _workoutTimeRemaining = MutableLiveData(0)
     val workoutTimeRemainingFormatted = Transformations.map(_workoutTimeRemaining) {
         DateUtils.formatElapsedTime(it.toLong())
     }
 
-    private val _currentSection: MutableLiveData<WorkoutSection> = MutableLiveData(WorkoutSection.WORK)
-    val currentSection = Transformations.map(_currentSection){ it.toString() }
-    val currentSectionIcon = Transformations.map(_currentSection){
-        when (it) {
-            WorkoutSection.WORK -> "icon_fire"
-            WorkoutSection.REST -> "icon_rest"
-            WorkoutSection.RECOVER -> "icon_recover"
-            else -> {
-                Timber.w("Unable to find icon for WorkoutSection $it")
-                return@map ""
-            }
-        }
-    }
+    private val _currentSection: MutableLiveData<WorkoutSection> =
+        MutableLiveData(WorkoutSection.WORK)
+    val currentSection = Transformations.map(_currentSection) { it.toString() }
+
+    private val _upNextExerciseType = MutableLiveData<ExerciseTypeDTO?>(null)
+    val upNextExerciseType: LiveData<ExerciseTypeDTO?>
+        get() = _upNextExerciseType
+
+    private val _showUpNextLabel = MutableLiveData(false)
+    val showUpNextLabel: LiveData<Boolean>
+        get() = _showUpNextLabel
+
+    private val _animateUpNextExerciseType = MutableLiveData(false)
+    val animateUpNextExerciseType: LiveData<Boolean>
+        get() = _animateUpNextExerciseType
 
     // region user controls
     private val _soundOn = MutableLiveData(true)
@@ -77,27 +83,49 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
     }
 
     fun updateValues(section: WorkoutSection, set: WorkoutSetDTO, currentRep: Int) {
-        if(_currentSection.value != section)
+        if (_currentSection.value != section)
             _currentSection.value = section
 
-        if (_currentWorkoutSet.value != set)
+        if (_currentWorkoutSet.value != set) {
             _currentWorkoutSet.value = set
+
+            // Reset the up next icon as the set has just changed
+            _upNextExerciseType.value = null
+            _showUpNextLabel.value = false
+            _animateUpNextExerciseType.value = false
+        }
 
         if (_currentRep.value != currentRep)
             _currentRep.value = currentRep
-
-        // Show the "up next" exercise type information
-        if(_currentSection.value == WorkoutSection.RECOVER){
-            // TODO
-        }
     }
 
     /** Decrements the main on-screen timer and the remaining time**/
     fun updateTimers(workoutTimeRemaining: Int, sectionTimeRemaining: Int) {
         _workoutTimeRemaining.value = workoutTimeRemaining
         _sectionTimeRemaining.value = sectionTimeRemaining
+
+        // Show the upcoming exercise type
+        val workoutSets = _workout.value?.workoutSets!!
+        val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
+        if (_currentSection.value == WorkoutSection.RECOVER && sectionTimeRemaining <= 10) {
+            if (_upNextExerciseType.value == null) {
+                if (currentWorkoutSetIndex != workoutSets.size) {
+                    _upNextExerciseType.value = workoutSets[currentWorkoutSetIndex].exerciseTypeDTO
+                    _showUpNextLabel.value = true
+                }
+            }
+
+            if (sectionTimeRemaining <= 3 && _animateUpNextExerciseType.value == false) {
+                _animateUpNextExerciseType.value = true
+                _showUpNextLabel.value = false
+            }
+        } else if (currentWorkoutSetIndex == workoutSets.size && _currentRep.value == _currentWorkoutSet.value!!.numReps) {
+            _showUpNextLabel.value = true
+            _upNextExerciseType.value = getWorkoutCompleteExerciseType(getApplication())
+        }
     }
 
+    // region user controlled buttons
     fun toggleSound() {
         _soundOn.apply {
             value = !value!!
@@ -118,4 +146,5 @@ class WorkoutViewModel(workoutId: Long, repo: IWorkoutRepository) : ViewModel() 
     fun onSectionSkipped() {
         _skipSection.value = false
     }
+    //endregion
 }

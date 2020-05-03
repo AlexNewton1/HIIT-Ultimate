@@ -1,11 +1,13 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryRoomDb
 
 class WorkoutViewModelFactory(
+    private val application: Application,
     private val context: Context,
     private val id: Long
 ) :
@@ -15,7 +17,7 @@ class WorkoutViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WorkoutViewModel::class.java)) {
             val repo = WorkoutRepositoryRoomDb(context)
-            return WorkoutViewModel(id, repo) as T
+            return WorkoutViewModel(application, id, repo) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

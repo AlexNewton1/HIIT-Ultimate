@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutViewModel" />
@@ -15,28 +17,39 @@
         android:layout_height="match_parent"
         tools:context=".ui.workout.WorkoutFragment">
 
-        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-            android:id="@+id/circularIconImageView2"
-            android:layout_width="@dimen/icon_size_large"
-            android:layout_height="@dimen/icon_size_large"
-            app:colorHex="@{viewModel.currentWorkoutSet.exerciseTypeDTO.colorHex}"
-            app:iconName="@{viewModel.currentWorkoutSet.exerciseTypeDTO.iconName}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView5"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/currentExerciseTypeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{viewModel.currentWorkoutSet.exerciseTypeDTO.name}"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView2"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/circularIconImageView2"
-            app:layout_constraintTop_toTopOf="@+id/circularIconImageView2"
-            tools:text="Press Ups" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+                android:id="@+id/currentExerciseTypeIcon"
+                android:layout_width="@dimen/icon_size_large"
+                android:layout_height="@dimen/icon_size_large"
+                app:colorHex="@{viewModel.currentWorkoutSet.exerciseTypeDTO.colorHex}"
+                app:iconName="@{viewModel.currentWorkoutSet.exerciseTypeDTO.iconName}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/currentExerciseTypeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{viewModel.currentWorkoutSet.exerciseTypeDTO.name}"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/currentExerciseTypeIcon"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/currentExerciseTypeIcon"
+                app:layout_constraintTop_toTopOf="@+id/currentExerciseTypeIcon"
+                tools:text="Press Ups" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/imageView"
@@ -52,10 +65,54 @@
             android:gravity="center"
             android:text="@{viewModel.currentRepFormatted}"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView2"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView"
             tools:text="2/6" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Up Next:"
+            android:textSize="18sp"
+            android:visibility="@{viewModel.showUpNextLabel ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/currentExerciseTypeView" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/upNextExerciseTypeView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fab_size"
+            android:visibility="@{viewModel.upNextExerciseType != null ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+            <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+                android:id="@+id/upNextExerciseTypeIcon"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:colorHex="@{viewModel.upNextExerciseType.colorHex}"
+                app:iconName="@{viewModel.upNextExerciseType.iconName}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="W,1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/upNextExerciseTypeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{viewModel.upNextExerciseType.name}"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/upNextExerciseTypeIcon"
+                app:layout_constraintStart_toEndOf="@+id/upNextExerciseTypeIcon"
+                app:layout_constraintTop_toTopOf="@+id/upNextExerciseTypeIcon"
+                tools:text="Weighted Pull-ups" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/imageView5"

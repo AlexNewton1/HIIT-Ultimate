@@ -2,19 +2,14 @@ package com.softwareoverflow.hiit_trainer.ui
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.inputmethod.InputMethodManager
+import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import kotlin.math.abs
 
-
-fun dpToPx(value: Int): Int {
-    return (value * Resources.getSystem().displayMetrics.density).toInt()
-}
-
-fun pxToDp(context: Context, value: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, context.resources.displayMetrics)
+fun getWorkoutCompleteExerciseType(context: Context): ExerciseTypeDTO {
+    return ExerciseTypeDTO(null, context.getString(R.string.workout_complete), "icon_trophy", "#FF000000")
 }
 
 fun String.getDrawableId(context: Context): Int {

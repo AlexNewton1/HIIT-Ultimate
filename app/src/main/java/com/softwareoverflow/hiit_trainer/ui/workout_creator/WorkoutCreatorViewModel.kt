@@ -94,6 +94,7 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
         }
 
         _workout.postValue(currentWorkout)
+        _workoutSet.value = null
     }
 
     fun createOrUpdateWorkout(onSave: () -> Unit) {

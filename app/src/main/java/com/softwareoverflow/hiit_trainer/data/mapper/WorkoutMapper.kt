@@ -40,11 +40,10 @@ fun List<WorkoutSetDTO>.toWorkoutSetEntity(): List<WorkoutSetEntity> {
 fun List<WorkoutSet>.toWorkoutSetDTO(): MutableList<WorkoutSetDTO> {
     val dtoList = ArrayList<WorkoutSetDTO>()
     forEach { dtoList.add(it.toDTO()) }
-    return dtoList
+    return dtoList.sortedBy { it.orderInWorkout }.toMutableList()
 }
 
 fun WorkoutSet.toDTO(): WorkoutSetDTO {
-
     return WorkoutSetDTO(
         workoutSet.id,
         exerciseType.toDTO(),

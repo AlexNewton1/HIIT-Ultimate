@@ -24,7 +24,7 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         Timber.d("Workout creating WorkoutCreatorViewModel")
         WorkoutCreatorViewModelFactory(
             requireActivity(),
-            null
+            1
         )
     }
 
