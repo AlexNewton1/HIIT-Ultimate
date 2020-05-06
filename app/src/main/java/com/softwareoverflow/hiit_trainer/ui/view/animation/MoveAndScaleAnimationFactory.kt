@@ -7,7 +7,6 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -58,11 +57,6 @@ class MoveAndScaleAnimationFactory {
                     ?: height)
         }
 
-        /*textViewToScale?.setTextSize(
-            TypedValue.COMPLEX_UNIT_PX,
-            getIntermediateValue(fromTextSize, toTextSize, fraction) ?: textViewToScale!!.textSize
-        )*/
-
         textViewToScale?.pivotY = 0f
         textViewToScale?.pivotX = 0f
         textViewToScale?.scaleX = getIntermediateValue(1f, 1.1f, fraction) ?: textViewToScale!!.scaleX
@@ -111,13 +105,13 @@ class MoveAndScaleAnimationFactory {
         this.toAlpha = toAlpha
     }
 
+    // TODO update the issue with the flash at the end of the animation
     fun create(doOnEndAction: (() -> Unit)?): ValueAnimator = _animator.apply{
         doOnEnd {
             doOnEndAction?.invoke()
             CoroutineScope(Dispatchers.Main).launch {
                 // Delay the resetting of values to allow the custom end action to complete
                 //viewToAlpha?.alpha = 1f
-                delay(500)
                 updateValues(0f)
             }
         }

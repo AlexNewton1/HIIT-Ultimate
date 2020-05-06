@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
@@ -20,11 +21,13 @@ import timber.log.Timber
 
 class WorkoutCreatorStep1Fragment : Fragment() {
 
+    private val args: WorkoutCreatorStep1FragmentArgs by navArgs()
+
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
         Timber.d("Workout creating WorkoutCreatorViewModel")
         WorkoutCreatorViewModelFactory(
             requireActivity(),
-            1
+            args.workoutCreatorWorkoutId
         )
     }
 

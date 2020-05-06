@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
@@ -21,9 +22,10 @@ import kotlinx.android.synthetic.main.fragment_workout.*
 
 class WorkoutFragment : Fragment(), IWorkoutObserver {
 
-    // TODO need to correctly handle getting the id from the safeArgs
+    private val args: WorkoutFragmentArgs by navArgs()
+
     private val viewModel: WorkoutViewModel by viewModels() {
-        WorkoutViewModelFactory(requireActivity().application, requireContext(), 1)
+        WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId)
     }
 
     private var timer: WorkoutTimer? = null
@@ -56,7 +58,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         })
 
         viewModel.skipSection.observe(viewLifecycleOwner, Observer {
-            if(it){
+            if (it) {
                 timer?.skip()
                 viewModel.onSectionSkipped() // Notify the viewModel the section has been skipped
             }
@@ -70,14 +72,15 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             timer?.togglePause(it)
         })
 
-        currentSectionLabelAnimation =  ObjectAnimator.ofFloat(binding.workoutSectionLabelText, "alpha", 1f, 0f).apply {
-            duration = 1250
-            startDelay = 750
-            interpolator = AccelerateDecelerateInterpolator()
-        }
+        currentSectionLabelAnimation =
+            ObjectAnimator.ofFloat(binding.workoutSectionLabelText, "alpha", 1f, 0f).apply {
+                duration = 1250
+                startDelay = 750
+                interpolator = AccelerateDecelerateInterpolator()
+            }
 
         viewModel.animateUpNextExerciseType.observe(viewLifecycleOwner, Observer {
-            if(it){
+            if (it) {
                 scaleAndMoveAnimation.start()
             }
         })
@@ -90,8 +93,14 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
                 setTextViewToScale(binding.upNextExerciseTypeName)
                 setViewToScale(binding.upNextExerciseTypeView)
                 setMoveY(binding.upNextExerciseTypeView.y, binding.currentExerciseTypeIcon.y)
-                setScaleHeight(binding.upNextExerciseTypeView.height, binding.currentExerciseTypeIcon.height)
-                setScaleText(binding.upNextExerciseTypeName.textSize, binding.currentExerciseTypeName.textSize)
+                setScaleHeight(
+                    binding.upNextExerciseTypeView.height,
+                    binding.currentExerciseTypeIcon.height
+                )
+                setScaleText(
+                    binding.upNextExerciseTypeName.textSize,
+                    binding.currentExerciseTypeName.textSize
+                )
                 setAlphaAnimation(binding.currentExerciseTypeView, 1f, 0f)
             }.create(null)
         }
