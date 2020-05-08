@@ -1,6 +1,7 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type
 
 import androidx.viewpager2.widget.ViewPager2
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeCreatorPagerAdapter
 
 class InfiniteScrollPageChangeListener(private val viewPager: ViewPager2) :
     ViewPager2.OnPageChangeCallback() {

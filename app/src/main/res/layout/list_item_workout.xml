@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+        <import type="com.softwareoverflow.hiit_trainer.ui._WorkoutDTOKt" />
+
+        <variable
+            name="dto"
+            type="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fab_size"
+        android:background="@drawable/bg_rounded_lozenge">
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/circularIconImageView2"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:colorHex='@{"#43A047"}'
+            app:iconName='@{"icon_heart_pulse"}'/>
+
+        <TextView
+            android:id="@+id/workoutNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/circularIconImageView2"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{dto.name}"
+            tools:text="Workout name goes here..." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{_WorkoutDTOKt.getFormattedDuration(dto)}"
+            tools:text="06:25" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/workoutSetIcon1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_marginStart="8dp"
+            app:colorHex="@{dto.workoutSets.get(0).exerciseTypeDTO.colorHex}"
+            app:iconName="@{dto.workoutSets.get(0).exerciseTypeDTO.iconName}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toEndOf="@+id/circularIconImageView2"
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/workoutSetIcon2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:visibility='@{dto.workoutSets.size() > 1 ? View.VISIBLE : View.GONE}'
+            app:colorHex='@{ dto.workoutSets.size() > 1 ? dto.workoutSets.get(1).exerciseTypeDTO.colorHex : null}'
+            app:iconName='@{dto.workoutSets.size() > 1 ? dto.workoutSets.get(1).exerciseTypeDTO.iconName : null}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toEndOf="@+id/workoutSetIcon1"
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/workoutSetIcon3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:visibility='@{dto.workoutSets.size() > 2 ? View.VISIBLE : View.GONE}'
+            app:colorHex='@{ dto.workoutSets.size() > 2 ? dto.workoutSets.get(2).exerciseTypeDTO.colorHex : null}'
+            app:iconName='@{dto.workoutSets.size() > 2 ? dto.workoutSets.get(2).exerciseTypeDTO.iconName : null}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toEndOf="@+id/workoutSetIcon2"
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/workoutSetIcon4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:visibility='@{dto.workoutSets.size() > 3 ? View.VISIBLE : View.GONE}'
+            app:colorHex='@{ dto.workoutSets.size() > 3 ? dto.workoutSets.get(3).exerciseTypeDTO.colorHex : null}'
+            app:iconName='@{dto.workoutSets.size() > 3 ? dto.workoutSets.get(3).exerciseTypeDTO.iconName : null}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toEndOf="@+id/workoutSetIcon3"
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/workoutSetIcon5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:visibility='@{dto.workoutSets.size() > 4 ? View.VISIBLE : View.GONE}'
+            app:colorHex='@{ dto.workoutSets.size() > 4 ? dto.workoutSets.get(4).exerciseTypeDTO.colorHex : null}'
+            app:iconName='@{dto.workoutSets.size() > 4 ? dto.workoutSets.get(4).exerciseTypeDTO.iconName : null}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toEndOf="@+id/workoutSetIcon4"
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameTV"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/workoutSetsOverflow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="..."
+            android:textSize="20sp"
+            android:visibility='@{dto.workoutSets.size() > 5 ? View.VISIBLE : View.GONE}'
+            app:layout_constraintBottom_toBottomOf="@+id/workoutSetIcon5"
+            app:layout_constraintStart_toEndOf="@+id/workoutSetIcon5"
+            app:layout_constraintTop_toTopOf="@+id/workoutSetIcon5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

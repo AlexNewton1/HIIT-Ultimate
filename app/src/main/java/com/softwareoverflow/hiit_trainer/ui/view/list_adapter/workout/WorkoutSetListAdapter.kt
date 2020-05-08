@@ -1,5 +1,7 @@
-package com.softwareoverflow.hiit_trainer.ui.view.workout_set
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,8 +16,7 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getColorId
 import com.softwareoverflow.hiit_trainer.ui.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-import com.softwareoverflow.hiit_trainer.ui.view.IEditableOrderedListEventListener
-import timber.log.Timber
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 
 class WorkoutSetListAdapter :
     ListAdapter<WorkoutSetDTO, WorkoutSetListAdapter.ViewHolder>(
@@ -49,6 +50,7 @@ class WorkoutSetListAdapter :
         return ViewHolder(view)
     }
 
+    // TODO convert all of this to use the newer way of binding with the base adapter (once it's working!)
     inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView),
         PopupMenu.OnMenuItemClickListener {
         private val exerciseTypeIcon: CircularIconImageView =
@@ -60,10 +62,12 @@ class WorkoutSetListAdapter :
         private val recoverTime: TextView = itemView.findViewById(R.id.recoverTime)
 
         fun bind(dto: WorkoutSetDTO) {
-            Timber.d("Workout binding workout set : $dto")
+            val color = dto.exerciseTypeDTO!!.colorHex!!.getColorId()
+            itemView.background.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
+            itemView.background.alpha = 75
 
             exerciseTypeIcon.setBackground(dto.exerciseTypeDTO!!.iconName!!.getDrawableId(itemView.context))
-            exerciseTypeIcon.setColor(dto.exerciseTypeDTO!!.colorHex!!.getColorId())
+            exerciseTypeIcon.setColor(color)
             exerciseTypeName.text = dto.exerciseTypeDTO!!.name
             workTime.text = dto.workTime.toString()
             restTime.text = dto.restTime.toString()
@@ -84,8 +88,6 @@ class WorkoutSetListAdapter :
             }
         }
 
-
-        // TODO - create an event listener
         override fun onMenuItemClick(item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.workout_set_menu_move_down -> {

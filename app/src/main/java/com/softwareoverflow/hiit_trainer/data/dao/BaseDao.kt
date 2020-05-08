@@ -12,5 +12,5 @@ interface BaseDao<T> {
     suspend fun createOrUpdate(obj: T) : Long
 
     @Delete
-    fun delete(obj: T)
+    suspend fun delete(obj: T)
 }

@@ -19,6 +19,7 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.animation.MoveAndScaleAnimationFactory
 import kotlinx.android.synthetic.main.fragment_workout.*
+import timber.log.Timber
 
 class WorkoutFragment : Fragment(), IWorkoutObserver {
 
@@ -59,7 +60,9 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
 
         viewModel.skipSection.observe(viewLifecycleOwner, Observer {
             if (it) {
+                Timber.d("Timer: Trying to skip")
                 timer?.skip()
+                Timber.d("Timer: Skipped")
                 viewModel.onSectionSkipped() // Notify the viewModel the section has been skipped
             }
         })

@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.getColorId
 import com.softwareoverflow.hiit_trainer.ui.getDrawableId
-import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator.ExerciseTypeCreatorPagerAdapter.Companion
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeCreatorPagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
 
 class XViewPagerPicker @JvmOverloads constructor(
@@ -33,7 +33,11 @@ class XViewPagerPicker @JvmOverloads constructor(
             it.getColorId()
         }.toMutableList()
 
-        val colorAdapter = ExerciseTypeCreatorPagerAdapter(Companion.ExerciseTypeAdapter.COLOR, ids)
+        val colorAdapter =
+            ExerciseTypeCreatorPagerAdapter(
+                Companion.ExerciseTypeAdapter.COLOR,
+                ids
+            )
 
         // TODO change this if it works for iconAdapter
         setupPager(colorViewPager, colorAdapter)
@@ -50,7 +54,11 @@ class XViewPagerPicker @JvmOverloads constructor(
             icons.recycle()
         }
 
-        val iconAdapter = ExerciseTypeCreatorPagerAdapter(Companion.ExerciseTypeAdapter.ICON, ids)
+        val iconAdapter =
+            ExerciseTypeCreatorPagerAdapter(
+                Companion.ExerciseTypeAdapter.ICON,
+                ids
+            )
 
         setupPager(iconViewPager, iconAdapter)
     }
@@ -68,7 +76,11 @@ class XViewPagerPicker @JvmOverloads constructor(
             offscreenPageLimit = 4
 
             setPageTransformer(MultipleVisiblePagesTransformer())
-            registerOnPageChangeCallback(InfiniteScrollPageChangeListener(this))
+            registerOnPageChangeCallback(
+                InfiniteScrollPageChangeListener(
+                    this
+                )
+            )
         }
     }
 

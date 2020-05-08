@@ -11,20 +11,19 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.view.IEditableOrderedListEventListener
-import com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker.GridListDecoration
-import com.softwareoverflow.hiit_trainer.ui.view.workout_set.WorkoutSetListAdapter
+import com.softwareoverflow.hiit_trainer.ui.MainActivity
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.*
 import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.view.*
-import timber.log.Timber
 
 class WorkoutCreatorStep1Fragment : Fragment() {
 
     private val args: WorkoutCreatorStep1FragmentArgs by navArgs()
 
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
-        Timber.d("Workout creating WorkoutCreatorViewModel")
         WorkoutCreatorViewModelFactory(
             requireActivity(),
             args.workoutCreatorWorkoutId
@@ -35,12 +34,19 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_workout_creator_step_1, container, false)
 
-        view.listWorkoutSets.adapter = WorkoutSetListAdapter()
-        view.listWorkoutSets.addItemDecoration(GridListDecoration(requireContext(), 1))
+        view.listWorkoutSets.adapter =
+            WorkoutSetListAdapter()
+        view.listWorkoutSets.addItemDecoration(
+            SpacedListDecoration(
+                requireContext()
+            )
+        )
 
-        (view.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object: IEditableOrderedListEventListener{
+        (view.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object :
+            IEditableOrderedListEventListener {
 
             /** (Effectively) swaps the WorkoutSet at position [fromPosition] and [toPosition] */
             override fun triggerItemChangePosition(fromPosition: Int, toPosition: Int) {
@@ -63,6 +69,12 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         viewModel.workout.observe(viewLifecycleOwner, Observer {
             it?.let {
                 (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets)
+
+                (requireActivity() as MainActivity).supportActionBar?.title =
+                    if (it.name.isBlank())
+                        "Create Your Workout"
+                    else
+                        "Edit Workout '${it.name}'"
             }
         })
 
@@ -80,8 +92,12 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         activity?.mainActivityFAB?.show()
         activity?.mainActivityFAB?.setImageResource(R.drawable.icon_arrow_right)
         activity?.mainActivityFAB?.setOnClickListener {
-            if(viewModel.workout.value!!.workoutSets.isEmpty())
-                Snackbar.make(requireView(), "Please add at least one Workout Set to your Workout", Snackbar.LENGTH_SHORT).show()
+            if (viewModel.workout.value!!.workoutSets.isEmpty())
+                Snackbar.make(
+                    requireView(),
+                    "Please add at least one Workout Set to your Workout",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             else
                 findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_workoutCreatorStep2Fragment)
         }

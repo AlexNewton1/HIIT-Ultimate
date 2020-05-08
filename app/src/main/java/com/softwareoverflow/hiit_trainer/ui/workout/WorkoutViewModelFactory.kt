@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryRoomDb
+import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryFactory
 
 class WorkoutViewModelFactory(
     private val application: Application,
@@ -16,7 +16,7 @@ class WorkoutViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WorkoutViewModel::class.java)) {
-            val repo = WorkoutRepositoryRoomDb(context)
+            val repo = WorkoutRepositoryFactory.getInstance(context)
             return WorkoutViewModel(application, id, repo) as T
         }
 

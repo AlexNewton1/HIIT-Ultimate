@@ -20,7 +20,7 @@
     <array name="et_icons">
         <item>@drawable/et_icon_flash</item>
         <item>@drawable/et_icon_heart</item>
-        <item>@drawable/et_icon_heart_pulse</item>
+        <item>@drawable/icon_heart_pulse</item>
         <item>@drawable/et_icon_dumbbell</item>
         <item>@drawable/et_icon_weight_lift</item>
         <item>@drawable/et_icon_run</item>

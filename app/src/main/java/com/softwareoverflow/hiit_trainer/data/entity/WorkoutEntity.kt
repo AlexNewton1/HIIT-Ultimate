@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Workout")
 class WorkoutEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long? = null,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
+
     var name: String = ""
 )

@@ -10,6 +10,7 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
@@ -17,8 +18,20 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     private val workoutDao = database.workoutDao
     private val exerciseTypeDao = database.exerciseTypeDao
 
+    override fun getAllWorkouts(): LiveData<List<WorkoutDTO>> {
+        return Transformations.switchMap(workoutDao.getAllWorkouts()) {
+            MutableLiveData(it.toDTO())
+        }
+    }
+
+    override suspend fun deleteWorkoutById(workoutId: Long) {
+        val entity = getWorkoutById(workoutId).toWorkoutEntity()
+        workoutDao.delete(entity)
+    }
+
     override suspend fun getWorkoutById(workoutId: Long): WorkoutDTO {
         val workout = workoutDao.getWorkoutById(workoutId)
+        Timber.d("getWorkoutById: id $workoutId, $workout")
         return workout.toDTO()
     }
 

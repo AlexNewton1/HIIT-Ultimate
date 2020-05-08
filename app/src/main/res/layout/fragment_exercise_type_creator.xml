@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator.XViewPagerPicker
+        <com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.XViewPagerPicker
             android:id="@+id/etViewPagerPicker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker.SelectableRecyclerView
+        <com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.SelectableRecyclerView
             android:id="@+id/exerciseTypePickerList"
             android:layout_width="0dp"
             android:layout_height="0dp"

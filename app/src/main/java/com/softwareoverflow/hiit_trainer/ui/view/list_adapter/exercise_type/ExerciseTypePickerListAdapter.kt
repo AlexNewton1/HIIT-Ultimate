@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-import com.softwareoverflow.hiit_trainer.ui.view.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 
 class ExerciseTypePickerListAdapter :
     ListAdapter<ExerciseTypeDTO, ExerciseTypePickerListAdapter.ViewHolder>(

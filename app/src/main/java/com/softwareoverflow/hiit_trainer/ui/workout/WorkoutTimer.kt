@@ -31,8 +31,7 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
         millisecondsRemaining =
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
-        if (workoutSets.hasNext())
-            startNextWorkoutSection()
+        startNextWorkoutSection()
 
         // Cancel and recreate the timer
         timer.cancel()

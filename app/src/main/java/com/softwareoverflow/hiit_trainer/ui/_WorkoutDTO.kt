@@ -1,5 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui
 
+import android.text.format.DateUtils
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 
 /**
@@ -20,3 +21,5 @@ fun WorkoutDTO.getDuration() : Int {
 
     return totalTime
 }
+
+fun WorkoutDTO.getFormattedDuration() = DateUtils.formatElapsedTime(this.getDuration().toLong())

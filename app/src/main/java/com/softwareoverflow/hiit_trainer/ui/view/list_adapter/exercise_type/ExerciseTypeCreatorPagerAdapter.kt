@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type
 
 import android.view.LayoutInflater
 import android.view.View

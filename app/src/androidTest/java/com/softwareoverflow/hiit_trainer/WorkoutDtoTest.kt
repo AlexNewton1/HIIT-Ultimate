@@ -29,7 +29,7 @@ class WorkoutDtoTest {
         dto.workoutSets.addAll(0, arrayListOf(set1, set2, set3, set4))
 
         // Act
-        val durationString = dto.getFormattedDuration(context.resources)
+        val durationString = dto.getFormattedDuration()
 
         // Assert
         assertEquals("04:12", durationString)

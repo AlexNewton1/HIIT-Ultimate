@@ -6,32 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".ui.HomeScreenFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SUP BRUV, this is the home fragment!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/createNewWorkoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GO MAKE WORKOUT!"
+        android:text="Create New Workout"
+        app:layout_constraintBottom_toTopOf="@+id/editWorkout1Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/editWorkout1Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Workout #1!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/startWorkoutButton"
+        android:id="@+id/startWorkout1Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Workout #1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createNewWorkoutButton" />
+        app:layout_constraintTop_toBottomOf="@+id/editWorkout1Button" />
+
+    <Button
+        android:id="@+id/loadSavedWorkoutsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Load Workouts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startWorkout1Button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

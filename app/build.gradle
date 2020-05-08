@@ -75,6 +75,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     kapt "androidx.room:room-compiler:$room_version"
+    kapt "com.android.databinding:compiler:3.1.4"
 
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'

@@ -1,5 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_creator
 
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeCreatorPagerAdapter
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -11,10 +12,11 @@ class ExerciseTypeCreatorPagerAdapterTest {
 
     @Before
     fun init() {
-        adapterCreator = ExerciseTypeCreatorPagerAdapter(
-            ExerciseTypeCreatorPagerAdapter.Companion.ExerciseTypeAdapter.ICON,
-            adapterList
-        )
+        adapterCreator =
+            ExerciseTypeCreatorPagerAdapter(
+                ExerciseTypeCreatorPagerAdapter.Companion.ExerciseTypeAdapter.ICON,
+                adapterList
+            )
     }
 
     @Test

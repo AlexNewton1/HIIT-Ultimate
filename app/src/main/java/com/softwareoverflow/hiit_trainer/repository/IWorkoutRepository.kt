@@ -12,6 +12,10 @@ interface IWorkoutRepository {
     // TODO consider making these suspend functions to prevent long running tasks blocking the UI thread. See the PERSISTANCE example code
 
     //region Workout
+    fun getAllWorkouts() : LiveData<List<WorkoutDTO>>
+
+    suspend fun deleteWorkoutById(workoutId: Long)
+
     /**
      * Load the workout for a given id
      */

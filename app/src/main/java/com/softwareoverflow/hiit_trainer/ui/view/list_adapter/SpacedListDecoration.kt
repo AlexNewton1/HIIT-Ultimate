@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter
 
 import android.content.Context
 import android.graphics.Rect
@@ -6,7 +6,13 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
 
-class GridListDecoration(context: Context, private val numColumns: Int) :
+/**
+ * Spaces items recycler view items. Works for a single list or an item grid by specifying
+ * the numColumns parameter.
+ * @param context The context
+ * @param numColumns The number of columns in the RecyclerView. Defaults to 1.
+ */
+class SpacedListDecoration(context: Context, private val numColumns: Int = 1) :
     RecyclerView.ItemDecoration() {
 
     private var gridSpacingPx: Int = 0

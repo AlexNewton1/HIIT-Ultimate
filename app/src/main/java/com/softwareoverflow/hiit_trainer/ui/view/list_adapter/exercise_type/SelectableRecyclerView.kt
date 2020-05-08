@@ -1,11 +1,12 @@
-package com.softwareoverflow.hiit_trainer.ui.view.exercise_type_picker
+package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
-import com.softwareoverflow.hiit_trainer.ui.view.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 
 /**
  * RecyclerView which supports item selection and contains [selectedItemId]
@@ -19,8 +20,14 @@ class SelectableRecyclerView @JvmOverloads constructor(
     // TODO do something with the adapter and use an interface to avoid having the casting. Also remove casting from the binding adapters
 
     init {
-        this.adapter = ExerciseTypePickerListAdapter()
-        addItemDecoration(GridListDecoration(context, (this.layoutManager as GridLayoutManager).spanCount))
+        this.adapter =
+            ExerciseTypePickerListAdapter()
+        addItemDecoration(
+            SpacedListDecoration(
+                context,
+                (this.layoutManager as GridLayoutManager).spanCount
+            )
+        )
     }
 
     override fun getAdapter(): ExerciseTypePickerListAdapter {

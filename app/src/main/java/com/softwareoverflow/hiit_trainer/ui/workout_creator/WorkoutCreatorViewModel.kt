@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  * @param repo the repository to use for loading the workout
  * @param id the Id of the workout to load, or null if creating new
  */
-class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) : ViewModel() {
+class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : ViewModel() {
 
     private var _workout: MutableLiveData<WorkoutDTO> = MutableLiveData()
     val workout: LiveData<WorkoutDTO>
@@ -32,10 +32,10 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long?) :
         viewModelScope.launch {
             LoadingSpinner.showLoadingIcon()
 
-            if (id == null)
-                _workout.value = WorkoutDTO()
-            else
+            if (id > 0L)
                 _workout.value = repo.getWorkoutById(id)
+            else
+                _workout.value = WorkoutDTO()
 
             LoadingSpinner.hideLoadingIcon()
         }

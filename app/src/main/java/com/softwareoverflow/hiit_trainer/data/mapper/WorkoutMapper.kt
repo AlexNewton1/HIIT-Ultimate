@@ -18,6 +18,8 @@ fun Workout.toDTO(): WorkoutDTO {
     )
 }
 
+fun List<Workout>.toDTO() = this.map{ it.toDTO() }
+
 fun WorkoutDTO.toWorkoutEntity(): WorkoutEntity {
     return WorkoutEntity(this.id, this.name)
 }
