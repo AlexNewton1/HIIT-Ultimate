@@ -41,10 +41,9 @@ abstract class DataBindingAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: DataBindingViewHolder<T>, position: Int) {
-        Timber.d("LoadWorkout: onBindViewHolder called for position $position")
         val item = getItem(position)
         val color = getColorHexForItem(item)
-        holder.bind(item, color.getColorId())
+        holder.bind(item, color.getColorId(), position == currentList.size - 1)
     }
 
     abstract fun getColorHexForItem(item: T): String
@@ -57,7 +56,7 @@ abstract class DataBindingAdapter<T>(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: T, fadeColor: Int) {
+        fun bind(item: T, fadeColor: Int, isLastItem: Boolean) {
             // Fade the background
             binding.root.background.colorFilter =
                 PorterDuffColorFilter(fadeColor, PorterDuff.Mode.SRC_IN)
@@ -65,7 +64,7 @@ abstract class DataBindingAdapter<T>(
 
             longClickListener?.let {
                 binding.root.setOnLongClickListener{
-                    longClickListener.onLongClick(binding.root, item, adapterPosition)
+                    longClickListener.onLongClick(binding.root, item, adapterPosition, isLastItem)
                     return@setOnLongClickListener true
                 }
             }

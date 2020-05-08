@@ -1,140 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/fab_size"
-    android:background="@drawable/bg_rounded_lozenge">
+<layout>
 
-    <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-        android:id="@+id/exerciseTypeIcon"
-        android:layout_width="@dimen/fab_size"
+    <data>
+        <variable
+            name="dto"
+            type="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/fab_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/et_icon_dumbbell" />
+        android:background="@drawable/bg_rounded_lozenge">
 
-    <TextView
-        android:id="@+id/exerciseTypeName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:maxLines="2"
-        android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="This is a thirty character name" />
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/exerciseTypeIcon"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:iconName="@{dto.exerciseTypeDTO.iconName}"
+            app:colorHex="@{dto.exerciseTypeDTO.colorHex}"
+            tools:src="@drawable/et_icon_dumbbell" />
 
-    <ImageView
-        android:id="@+id/workTimeIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="4dp"
-        android:src="@drawable/icon_fire"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="W,1:1"
-        app:layout_constraintEnd_toStartOf="@+id/restTimeIcon"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
+        <TextView
+            android:id="@+id/exerciseTypeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{dto.exerciseTypeDTO.name}"
+            tools:text="This is a thirty character name" />
 
-    <TextView
-        android:id="@+id/workTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxEms="3"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/workTimeIcon"
-        app:layout_constraintStart_toEndOf="@id/workTimeIcon"
-        app:layout_constraintTop_toTopOf="@id/workTimeIcon"
-        tools:text="15" />
+        <ImageView
+            android:id="@+id/workTimeIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="4dp"
+            android:src="@drawable/icon_fire"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/restTimeIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
 
-    <ImageView
-        android:id="@+id/restTimeIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="W,1:1"
-        android:src="@drawable/icon_rest"
-        android:padding="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/numRepsIcon"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
+        <TextView
+            android:id="@+id/workTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxEms="3"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/workTimeIcon"
+            app:layout_constraintStart_toEndOf="@id/workTimeIcon"
+            app:layout_constraintTop_toTopOf="@id/workTimeIcon"
+            android:text="@{dto.workTime.toString()}"
+            tools:text="15" />
 
-    <TextView
-        android:id="@+id/restTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxEms="3"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
-        app:layout_constraintStart_toEndOf="@+id/restTimeIcon"
-        app:layout_constraintTop_toTopOf="@+id/restTimeIcon"
-        tools:text="5" />
+        <ImageView
+            android:id="@+id/restTimeIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="4dp"
+            android:src="@drawable/icon_rest"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/numRepsIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
 
+        <TextView
+            android:id="@+id/restTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxEms="3"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
+            app:layout_constraintStart_toEndOf="@+id/restTimeIcon"
+            app:layout_constraintTop_toTopOf="@+id/restTimeIcon"
+            android:text="@{dto.restTime.toString()}"
+            tools:text="5" />
 
-    <ImageView
-        android:id="@+id/numRepsIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="W,1:1"
-        android:foregroundGravity="left"
-        android:src="@drawable/icon_repeat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/restTimeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
+        <ImageView
+            android:id="@+id/numRepsIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:foregroundGravity="left"
+            android:padding="4dp"
+            android:src="@drawable/icon_repeat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/restTimeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName" />
 
-    <TextView
-        android:id="@+id/numReps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxEms="3"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
-        app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
-        app:layout_constraintTop_toTopOf="@+id/numRepsIcon"
-        tools:text="6" />
+        <TextView
+            android:id="@+id/numReps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxEms="3"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
+            app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
+            app:layout_constraintTop_toTopOf="@+id/numRepsIcon"
+            android:text="@{dto.numReps.toString()}"
+            tools:text="6" />
 
-    <ImageView
-        android:id="@+id/recoverTimeIconIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="28dp"
-        android:padding="4dp"
-        android:src="@drawable/icon_recover"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="W,1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName"
-        tools:srcCompat="@drawable/icon_recover" />
+        <ImageView
+            android:id="@+id/recoverTimeIconIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="28dp"
+            android:padding="4dp"
+            android:src="@drawable/icon_recover"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeName"
+            tools:srcCompat="@drawable/icon_recover" />
 
-    <TextView
-        android:id="@+id/recoverTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxEms="3"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
-        app:layout_constraintStart_toEndOf="@+id/recoverTimeIconIcon"
-        app:layout_constraintTop_toTopOf="@+id/recoverTimeIconIcon"
-        tools:text="120" />
+        <TextView
+            android:text="@{dto.recoverTime.toString()}"
+            android:id="@+id/recoverTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxEms="3"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintStart_toEndOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintTop_toTopOf="@+id/recoverTimeIconIcon"
+            tools:text="120" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -5,9 +5,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.BasicDiffCallback
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
@@ -15,7 +15,7 @@ import timber.log.Timber
 
 class SavedWorkoutListAdapter(private val context: Context) :
     DataBindingAdapter<WorkoutDTO>(
-        DiffCallback(),
+        BasicDiffCallback(),
         AdapterLongClickListener()
     ) {
 
@@ -44,7 +44,7 @@ class SavedWorkoutListAdapter(private val context: Context) :
 
         private lateinit var clickedItem: WorkoutDTO
 
-        override fun onLongClick(view: View,  item: WorkoutDTO, position: Int) {
+        override fun onLongClick(view: View,  item: WorkoutDTO, position: Int, isLastItem: Boolean) {
             clickedItem = item
 
             PopupMenu(view.context, view).apply {
@@ -71,16 +71,6 @@ class SavedWorkoutListAdapter(private val context: Context) :
                 }
                 else -> false
             }
-        }
-    }
-
-    class DiffCallback : DiffUtil.ItemCallback<WorkoutDTO>() {
-        override fun areItemsTheSame(oldItem: WorkoutDTO, newItem: WorkoutDTO): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: WorkoutDTO, newItem: WorkoutDTO): Boolean {
-            return oldItem == newItem
         }
     }
 }
