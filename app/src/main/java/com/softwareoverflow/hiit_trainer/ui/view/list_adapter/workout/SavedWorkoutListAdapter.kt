@@ -7,15 +7,15 @@ import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.BasicDiffCallback
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 import timber.log.Timber
 
 class SavedWorkoutListAdapter(private val context: Context) :
     DataBindingAdapter<WorkoutDTO>(
-        BasicDiffCallback(),
+        DiffCallbackBase(),
         AdapterLongClickListener()
     ) {
 
@@ -28,29 +28,33 @@ class SavedWorkoutListAdapter(private val context: Context) :
         "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
 
     fun setEventListener(listener: ISelectableEditableListEventListener) {
-        AdapterLongClickListener.setEventListener(
-            listener
-        )
+        AdapterLongClickListener.setEventListener(listener)
     }
 
-    class AdapterLongClickListener : IAdapterOnLongClickListener<WorkoutDTO>, PopupMenu.OnMenuItemClickListener {
+    // TODO work out how to handle play button clicks on the item
+    class AdapterLongClickListener : IAdapterOnLongClickListener<WorkoutDTO>,
+        PopupMenu.OnMenuItemClickListener {
         companion object {
             private var eventListener: ISelectableEditableListEventListener? = null
 
-            fun setEventListener(listener: ISelectableEditableListEventListener){
+            fun setEventListener(listener: ISelectableEditableListEventListener) {
                 eventListener = listener
             }
         }
 
         private lateinit var clickedItem: WorkoutDTO
 
-        override fun onLongClick(view: View,  item: WorkoutDTO, position: Int, isLastItem: Boolean) {
-            clickedItem = item
+        override fun onLongClick(view: View, item: WorkoutDTO, position: Int, isLongClick: Boolean){
 
-            PopupMenu(view.context, view).apply {
-                setOnMenuItemClickListener(this@AdapterLongClickListener)
-                inflate(R.menu.workout_actions)
-                show()
+            if(isLongClick){
+                clickedItem = item
+                PopupMenu(view.context, view).apply {
+                    setOnMenuItemClickListener(this@AdapterLongClickListener)
+                    inflate(R.menu.workout_actions)
+                    show()
+                }
+            } else {
+                eventListener?.onItemSelected(item.id)
             }
         }
 

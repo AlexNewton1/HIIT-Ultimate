@@ -5,15 +5,15 @@ import android.view.View
 import android.widget.PopupMenu
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.BasicDiffCallback
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 
 class WorkoutSetListAdapter :
     DataBindingAdapter<WorkoutSetDTO>(
-        BasicDiffCallback(),
-        AdapterLongClickListener()
+        DiffCallbackBase(),
+        AdapterClickListener()
     ) {
 
     override fun submitList(list: MutableList<WorkoutSetDTO>?) {
@@ -24,39 +24,13 @@ class WorkoutSetListAdapter :
         super.submitList(list?.sortedBy { it.orderInWorkout }, commitCallback)
     }
 
-    fun setEventListener(listener: IEditableOrderedListEventListener) = AdapterLongClickListener.setEventListener(listener)
+    fun setEventListener(listener: IEditableOrderedListEventListener) = AdapterClickListener.setEventListener(listener)
 
     override fun getItemViewType(position: Int) = R.layout.list_item_workout_set
 
     override fun getColorHexForItem(item: WorkoutSetDTO) =  item.exerciseTypeDTO!!.colorHex!!
 
-    // TODO convert all of this to use the newer way of binding with the base adapter (once it's working!)
-    /*inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView),
-    PopupMenu.OnMenuItemClickListener {
-    private val exerciseTypeIcon: CircularIconImageView =
-        itemView.findViewById(R.id.exerciseTypeIcon)
-    private val exerciseTypeName: TextView = itemView.findViewById(R.id.exerciseTypeName)
-    private val workTime: TextView = itemView.findViewById(R.id.workTime)
-    private val restTime: TextView = itemView.findViewById(R.id.restTime)
-    private val numReps: TextView = itemView.findViewById(R.id.numReps)
-    private val recoverTime: TextView = itemView.findViewById(R.id.recoverTime)
-
-    fun bind(dto: WorkoutSetDTO) {
-        val color = dto.exerciseTypeDTO!!.colorHex!!.getColorId()
-        itemView.background.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
-        itemView.background.alpha = 75
-
-        exerciseTypeIcon.setBackground(dto.exerciseTypeDTO!!.iconName!!.getDrawableId(itemView.context))
-        exerciseTypeIcon.setColor(color)
-        exerciseTypeName.text = dto.exerciseTypeDTO!!.name
-        workTime.text = dto.workTime.toString()
-        restTime.text = dto.restTime.toString()
-        numReps.text = dto.numReps.toString()
-        recoverTime.text = dto.recoverTime.toString()
-    }
-}*/
-
-    class AdapterLongClickListener : IAdapterOnLongClickListener<WorkoutSetDTO>,
+    class AdapterClickListener : IAdapterOnLongClickListener<WorkoutSetDTO>,
         PopupMenu.OnMenuItemClickListener {
 
         companion object {
@@ -69,14 +43,19 @@ class WorkoutSetListAdapter :
 
         private var clickedPosition: Int = -1
 
-        override fun onLongClick(view: View, item: WorkoutSetDTO, position: Int, isLastItem: Boolean) {
+        override fun onLongClick(view: View, item: WorkoutSetDTO, position: Int, isLongClick: Boolean) {
+            if(!isLongClick) return
+
             clickedPosition = position
 
+            /* TODO possible future version, find a way of enabling / disabling the move up / move down menu items based on position.
+                This was attempted by changing the interface, although the viewHolders aren't recreated so passing static values to them
+                at creation is not feasible. Will need to think up a solution to this. For now, this all options are allowed and the logic
+                is in the view model to prevent any indexing errors.
+            */
             PopupMenu(view.context, view).apply {
-                setOnMenuItemClickListener(this@AdapterLongClickListener)
+                setOnMenuItemClickListener(this@AdapterClickListener)
                 inflate(R.menu.workout_set_actions)
-                menu.findItem(R.id.workout_set_menu_move_up).isEnabled = (position > 0)
-                menu.findItem(R.id.workout_set_menu_move_down).isEnabled = !isLastItem
                 show()
             }
         }

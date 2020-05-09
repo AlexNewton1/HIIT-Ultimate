@@ -2,7 +2,7 @@ package com.softwareoverflow.hiit_trainer.ui.view.list_adapter
 
 import androidx.recyclerview.widget.DiffUtil
 
-class BasicDiffCallback<T> : DiffUtil.ItemCallback<T>() {
+open class DiffCallbackBase<T> : DiffUtil.ItemCallback<T>() {
     override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
         return oldItem == newItem
     }

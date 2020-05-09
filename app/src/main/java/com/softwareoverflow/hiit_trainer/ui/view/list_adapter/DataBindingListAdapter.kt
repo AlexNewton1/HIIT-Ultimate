@@ -1,36 +1,33 @@
 package com.softwareoverflow.hiit_trainer.ui.view.list_adapter
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.getColorId
 import timber.log.Timber
 
 /**
  * Helper class to help with the boilerplate code for using data binding in a [ListAdapter] with [DiffUtil]
  * NOTE - to use this class the layout provided by [getItemViewType] MUST contain a data binding variable named "dto"
+ * A [View.OnLongClickListener] will automatically be added for long clicks on any row.
+ * A [View.OnClickListener] will automatically be added on a view with id "selectOnClick" within the view.
  */
 abstract class DataBindingAdapter<T>(
     diffCallback: DiffUtil.ItemCallback<T>,
     private val longClickListener: IAdapterOnLongClickListener<T>?
 ) :
-    ListAdapter<T, DataBindingAdapter.DataBindingViewHolder<T>>(diffCallback) {
+    ListAdapter<T, DataBindingViewHolderBase<T>>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBindingViewHolder<T> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBindingViewHolderBase<T> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
-        return DataBindingViewHolder(
-            binding,
-            longClickListener
-        )
+        return DataBindingViewHolderBase(binding)
     }
 
     override fun submitList(list: MutableList<T>?) {
@@ -40,40 +37,22 @@ abstract class DataBindingAdapter<T>(
         }
     }
 
-    override fun onBindViewHolder(holder: DataBindingViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: DataBindingViewHolderBase<T>, position: Int) {
         val item = getItem(position)
+
+        holder.itemView.findViewById<View>(R.id.selectOnClick)?.setOnClickListener {
+            longClickListener?.onLongClick(it, item, position, false)
+        }
+        holder.itemView.setOnLongClickListener {
+            longClickListener?.onLongClick(it, item, position, true)
+            return@setOnLongClickListener true
+        }
+
         val color = getColorHexForItem(item)
-        holder.bind(item, color.getColorId(), position == currentList.size - 1)
+        holder.bind(item, color.getColorId())
     }
 
     abstract fun getColorHexForItem(item: T): String
 
     abstract override fun getItemViewType(position: Int): Int
-
-    class DataBindingViewHolder<T>(
-        private val binding: ViewDataBinding,
-        private val longClickListener: IAdapterOnLongClickListener<T>?
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: T, fadeColor: Int, isLastItem: Boolean) {
-            // Fade the background
-            binding.root.background.colorFilter =
-                PorterDuffColorFilter(fadeColor, PorterDuff.Mode.SRC_IN)
-            binding.root.background.alpha = 75
-
-            longClickListener?.let {
-                binding.root.setOnLongClickListener{
-                    longClickListener.onLongClick(binding.root, item, adapterPosition, isLastItem)
-                    return@setOnLongClickListener true
-                }
-            }
-
-            // set the binding value
-            binding.setVariable(BR.dto, item)
-            binding.executePendingBindings()
-
-            binding
-        }
-    }
 }

@@ -1,109 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/darker_gray">
+<layout>
 
-    <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-        android:id="@+id/exerciseTypeIcon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        app:layout_constraintDimensionRatio="H,1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/icon_fire" />
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="dto"
+            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeDomainObject" />
+    </data>
 
-    <TextView
-        android:id="@+id/exerciseTypeName"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/selectOnClick"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:breakStrategy="high_quality"
-        android:gravity="center"
-        android:maxLength="@integer/et_name_length_max"
-        android:padding="@dimen/fragment_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/exerciseTypeIcon"
-        app:layout_constraintStart_toStartOf="@+id/exerciseTypeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
-        tools:text="This is the exercise type name" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/et_selected_frame"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_green_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="4dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_green_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@android:color/holo_green_dark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view3"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@android:color/holo_green_dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/view2" />
+        android:background="@drawable/bg_rounded_lozenge">
 
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
-            android:id="@+id/circularIconImageView"
-            android:layout_width="@dimen/fab_size_padded"
-            android:layout_height="@dimen/fab_size_padded"
-            android:adjustViewBounds="true"
-            android:alpha="0.5"
-            android:background="@android:color/holo_green_dark"
-            android:scaleType="fitXY"
-            android:translationX="-8dp"
-            android:translationY="-8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <ImageView
+            android:id="@+id/exerciseTypeIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            android:src="@drawable/icon_tick"
+            android:layout_margin="16dp"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:colorHex="@{dto.dto.colorHex}"
+            app:iconName="@{dto.dto.iconName}"
+            tools:src="@drawable/icon_fire" />
+
+        <TextView
+            android:id="@+id/exerciseTypeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:breakStrategy="high_quality"
+            android:gravity="center"
+            android:maxLength="@integer/et_name_length_max"
+            android:padding="@dimen/fragment_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/exerciseTypeIcon"
+            app:layout_constraintStart_toStartOf="@+id/exerciseTypeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
+            android:text="@{dto.dto.name}"
+            tools:text="This is the exercise type name" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/et_selected_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{dto.selected ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/circularIconImageView"
-            app:layout_constraintTop_toTopOf="@+id/circularIconImageView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@android:color/holo_green_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/view2" />
+
+            <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+                android:id="@+id/circularIconImageView"
+                android:layout_width="@dimen/fab_size_padded"
+                android:layout_height="@dimen/fab_size_padded"
+                android:adjustViewBounds="true"
+                android:alpha="0.5"
+                android:background="@android:color/holo_green_dark"
+                android:scaleType="fitXY"
+                android:translationX="-8dp"
+                android:translationY="-8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_tick"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/circularIconImageView"
+                app:layout_constraintTop_toTopOf="@+id/circularIconImageView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

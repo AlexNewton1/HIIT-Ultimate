@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
 import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypePickerListAdapter
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_workout_set_creator_step_1.*
@@ -43,28 +46,49 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
 
+        binding.exerciseTypePickerList.apply {
+            adapter = ExerciseTypePickerListAdapter(object:
+                ISelectableEditableListEventListener {
+                override fun onItemSelected(selected: Long?) {
+                    workoutSetViewModel.selectedExerciseTypeId.value  = selected
+                }
+
+                override fun triggerItemDeletion(id: Long) {
+                    workoutSetViewModel.selectedExerciseTypeId.value = null
+                    workoutSetViewModel.deleteExerciseTypeById(id)
+                }
+
+                override fun triggerItemEdit(id: Long) {
+                    workoutSetViewModel.selectedExerciseTypeId.value = id
+                    createOrEditExerciseType()
+                }
+            })
+
+            addItemDecoration(
+                SpacedListDecoration(
+                    context,
+                    (this.layoutManager as GridLayoutManager).spanCount
+                )
+            )
+        }
+
+        workoutSetViewModel.selectedExerciseTypeId.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                (exerciseTypePickerList.adapter as ExerciseTypePickerListAdapter).notifyItemSelected(it)
+            }
+        })
+
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
             it?.let{
-                exerciseTypePickerList.submitList(it)
+                val adapter = (exerciseTypePickerList.adapter as ExerciseTypePickerListAdapter)
+                adapter.submitDTOs(it){
+                    workoutSetViewModel.selectedExerciseTypeId.value?.let {
+                        adapter.notifyItemSelected(it)
+                    }
+                }
             }
         })
 
-        binding.exerciseTypePickerList.setAdapterListener(object:
-            ISelectableEditableListEventListener {
-            override fun onItemSelected(selected: Long?) {
-                workoutSetViewModel.selectedExerciseTypeId.postValue(selected)
-            }
-
-            override fun triggerItemDeletion(id: Long) {
-                workoutSetViewModel.selectedExerciseTypeId.value = null
-                workoutSetViewModel.deleteExerciseTypeById(id)
-            }
-
-            override fun triggerItemEdit(id: Long) {
-                workoutSetViewModel.selectedExerciseTypeId.value = id
-                createOrEditExerciseType()
-            }
-        })
 
         binding.createNewExerciseTypeFAB.setOnClickListener {
             workoutSetViewModel.selectedExerciseTypeId.value = null

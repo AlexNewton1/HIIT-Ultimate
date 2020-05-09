@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.SelectableRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exerciseTypePickerList"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -34,7 +34,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView"
-            app:selectedItem="@{viewModel.selectedExerciseTypeId}"
             app:spanCount="3" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -41,21 +41,27 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
         }
     }
 
-    fun removeWorkoutSetFromWorkout(position: Int){
+    fun removeWorkoutSetFromWorkout(position: Int) {
         val workoutSets = _workout.value!!.workoutSets
-        val dto =workoutSets.single { it.orderInWorkout == position }
-       workoutSets.remove(dto)
+        val dto = workoutSets.single { it.orderInWorkout == position }
+        workoutSets.remove(dto)
 
         workoutSets.forEach {
-            if(it.orderInWorkout!! > position)
-                it.orderInWorkout = it.orderInWorkout!!-1
+            if (it.orderInWorkout!! > position)
+                it.orderInWorkout = it.orderInWorkout!! - 1
         }
 
         _workout.postValue(_workout.value) // Reassign the current value as the change is not automatically observed via LiveData
     }
 
-    fun changeWorkoutSetOrder(fromPosition: Int, toPosition: Int){
+    fun changeWorkoutSetOrder(fromPosition: Int, toPosition: Int) {
         val currentWorkout = _workout.value!!.copy()
+
+        if (fromPosition < 0 || toPosition < 0 ||
+            fromPosition >= currentWorkout.workoutSets.size || toPosition >= currentWorkout.workoutSets.size
+        )
+            return // Just ignore any attempts to reorder items in an impossible fashion. See the [WorkoutSetListAdapter] for a to-do to stop this options being enabled.
+
 
         val fromDTO = currentWorkout.workoutSets.single { it.orderInWorkout == fromPosition }
         val toDTO = currentWorkout.workoutSets.single { it.orderInWorkout == toPosition }
@@ -67,11 +73,12 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
         _workout.postValue(currentWorkout)
     }
 
-    fun setWorkoutSetToEdit(position: Int){
-        _workoutSet.value = _workout.value!!.workoutSets.single { it.orderInWorkout == position }.copy()
+    fun setWorkoutSetToEdit(position: Int) {
+        _workoutSet.value =
+            _workout.value!!.workoutSets.single { it.orderInWorkout == position }.copy()
     }
 
-    fun setWorkoutName(name: String){
+    fun setWorkoutName(name: String) {
         _workout.value!!.name = name
     }
 
@@ -82,7 +89,8 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
     fun addOrUpdateWorkoutSet(dto: WorkoutSetDTO) {
         val currentWorkout = _workout.value!!.copy()
 
-        val index = currentWorkout.workoutSets.indexOfFirst {it.orderInWorkout == dto.orderInWorkout}
+        val index =
+            currentWorkout.workoutSets.indexOfFirst { it.orderInWorkout == dto.orderInWorkout }
         if (index >= 0) {
             val workoutSets = currentWorkout.workoutSets.toCollection(mutableListOf())
             workoutSets.removeAt(index)
