@@ -10,7 +10,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
@@ -31,13 +30,12 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
 
     override suspend fun getWorkoutById(workoutId: Long): WorkoutDTO {
         val workout = workoutDao.getWorkoutById(workoutId)
-        Timber.d("getWorkoutById: id $workoutId, $workout")
         return workout.toDTO()
     }
 
     override suspend fun createOrUpdateWorkout(dto: WorkoutDTO) : Long {
         val workoutEntity = dto.toWorkoutEntity()
-        val workoutSetEntityList = dto.workoutSets.toWorkoutSetEntity()
+        val workoutSetEntityList = dto.workoutSets.toWorkoutSetEntity(dto.id ?: -1L) // If the workout doesn't yet have an id, this will get populated later
 
         return workoutDao.createOrUpdate(workoutEntity, workoutSetEntityList)
     }
@@ -64,8 +62,13 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
        return exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
     }
 
+    @Throws(IllegalStateException::class)
     override suspend fun deleteExerciseType(dto: ExerciseTypeDTO) {
         withContext(Dispatchers.IO){
+            val count = workoutDao.getExerciseTypeUsageCount(dto.id!!)
+            if(count > 0) // TODO convert to string resource
+                throw IllegalArgumentException("The exercise type is used by $count workout sets. Please delete any usages from your saved workouts before trying again")
+
             exerciseTypeDao.delete(dto.toEntity())
         }
     }

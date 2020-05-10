@@ -30,8 +30,13 @@ class WorkoutSetCreatorViewModel(
             LoadingSpinner.showLoadingIcon()
 
             val exerciseType = allExerciseTypes.value!!.first { it.id == id }
-            repo.deleteExerciseType(exerciseType)
-            LoadingSpinner.hideLoadingIcon()
+            try {
+                repo.deleteExerciseType(exerciseType)
+            } catch (ex: IllegalStateException) {
+
+            } finally {
+                LoadingSpinner.hideLoadingIcon()
+            }
         }
     }
 }

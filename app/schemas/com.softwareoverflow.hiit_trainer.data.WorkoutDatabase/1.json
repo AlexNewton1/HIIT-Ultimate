@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b4d7899d4e48c0d35bb5bab9d5c7842d",
+    "identityHash": "6817deacf6b1ec359ce235db3c3fdebb",
     "entities": [
       {
         "tableName": "Workout",
@@ -32,19 +32,19 @@
       },
       {
         "tableName": "WorkoutSet",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `workoutId` INTEGER, `exerciseTypeId` INTEGER, `workTime` INTEGER NOT NULL, `restTime` INTEGER NOT NULL, `numReps` INTEGER NOT NULL, `recoverTime` INTEGER NOT NULL, `orderInWorkout` INTEGER NOT NULL, FOREIGN KEY(`workoutId`) REFERENCES `Workout`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`exerciseTypeId`) REFERENCES `ExerciseType`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`workoutId` INTEGER NOT NULL, `orderInWorkout` INTEGER NOT NULL, `exerciseTypeId` INTEGER, `workTime` INTEGER NOT NULL, `restTime` INTEGER NOT NULL, `numReps` INTEGER NOT NULL, `recoverTime` INTEGER NOT NULL, PRIMARY KEY(`workoutId`, `orderInWorkout`), FOREIGN KEY(`workoutId`) REFERENCES `Workout`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`exerciseTypeId`) REFERENCES `ExerciseType`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
           {
             "fieldPath": "workoutId",
             "columnName": "workoutId",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
+          },
+          {
+            "fieldPath": "orderInWorkout",
+            "columnName": "orderInWorkout",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "exerciseTypeId",
@@ -75,19 +75,14 @@
             "columnName": "recoverTime",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "orderInWorkout",
-            "columnName": "orderInWorkout",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "workoutId",
+            "orderInWorkout"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": [
@@ -157,7 +152,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b4d7899d4e48c0d35bb5bab9d5c7842d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6817deacf6b1ec359ce235db3c3fdebb')"
     ]
   }
 }

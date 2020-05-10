@@ -1,7 +1,6 @@
 package com.softwareoverflow.hiit_trainer.repository.dto
 
 data class WorkoutSetDTO(
-    val id: Long? = null,
     var exerciseTypeDTO: ExerciseTypeDTO? = null,
     var workTime: Int? = 25,
     var restTime: Int? = 5,

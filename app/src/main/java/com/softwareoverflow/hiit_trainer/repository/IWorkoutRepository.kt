@@ -40,6 +40,7 @@ interface IWorkoutRepository {
      */
     suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO) :Long
 
+    @Throws(IllegalStateException::class)
     suspend fun deleteExerciseType(dto: ExerciseTypeDTO)
     //endregion
 }

@@ -68,8 +68,9 @@ class WorkoutCreatorStep1Fragment : Fragment() {
 
         viewModel.workout.observe(viewLifecycleOwner, Observer {
             it?.let {
-                (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets)
+                (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets.toMutableList()) // Call toMutableList as otherwise the list does not update when only the order of elements has changed
 
+                // TODO string resource these
                 (requireActivity() as MainActivity).supportActionBar?.title =
                     if (it.name.isBlank())
                         "Create Your Workout"
@@ -79,6 +80,7 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         })
 
         view.createNewWorkoutSetButton.setOnClickListener {
+            viewModel.setWorkoutSetToEdit(null)
             // TODO fix this breaking if going back to home fragment and then trying to create workout again
             findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
         }
@@ -95,6 +97,7 @@ class WorkoutCreatorStep1Fragment : Fragment() {
             if (viewModel.workout.value!!.workoutSets.isEmpty())
                 Snackbar.make(
                     requireView(),
+                    // TODO string resource
                     "Please add at least one Workout Set to your Workout",
                     Snackbar.LENGTH_SHORT
                 ).show()

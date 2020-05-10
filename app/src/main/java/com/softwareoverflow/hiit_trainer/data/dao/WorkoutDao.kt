@@ -31,4 +31,7 @@ interface WorkoutDao :
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createOrUpdateWorkoutSets(workoutSets: List<WorkoutSetEntity>)
+
+    @Query("SELECT COUNT(*) FROM WorkoutSet WHERE exerciseTypeId = :exerciseTypeId")
+    fun getExerciseTypeUsageCount(exerciseTypeId: Long) : Int
 }

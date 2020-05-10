@@ -179,7 +179,7 @@
         <View
             android:id="@+id/view4"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/fab_size_small"
+            android:layout_height="@dimen/bottom_bar_height"
             android:background="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -187,8 +187,8 @@
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="@dimen/fab_size_small"
-            android:layout_height="@dimen/fab_size_small"
+            android:layout_width="@dimen/bottom_bar_height"
+            android:layout_height="@dimen/bottom_bar_height"
             android:onClick="@{() -> viewModel.toggleSound()}"
             android:padding="8dp"
             android:src="@{viewModel.soundOn ? @drawable/icon_sound_on : @drawable/icon_sound_off}"
@@ -200,8 +200,8 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="@dimen/fab_size_small"
-            android:layout_height="@dimen/fab_size_small"
+            android:layout_width="@dimen/bottom_bar_height"
+            android:layout_height="@dimen/bottom_bar_height"
             android:onClick="@{() -> viewModel.togglePause()}"
             android:padding="8dp"
             android:src="@{viewModel.isPaused ? @android:drawable/ic_media_play : @android:drawable/ic_media_pause}"
@@ -213,8 +213,8 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            android:layout_width="@dimen/fab_size_small"
-            android:layout_height="@dimen/fab_size_small"
+            android:layout_width="@dimen/bottom_bar_height"
+            android:layout_height="@dimen/bottom_bar_height"
             android:onClick="@{() -> viewModel.skipSection()}"
             android:padding="8dp"
             android:src="@android:drawable/ic_media_ff"

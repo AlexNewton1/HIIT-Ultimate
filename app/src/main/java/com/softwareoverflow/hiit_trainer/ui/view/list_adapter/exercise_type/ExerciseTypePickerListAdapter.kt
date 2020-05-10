@@ -48,7 +48,6 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
 
     private fun getPositionFromId(id: Long): Int = currentList.indexOfFirst { it.dto.id == id }
 
-
     class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :
         IAdapterOnLongClickListener<ExerciseTypeDomainObject>,
         PopupMenu.OnMenuItemClickListener {
@@ -89,7 +88,6 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
         }
     }
 
-    
     class DiffCallback : DiffUtil.ItemCallback<ExerciseTypeDomainObject>() {
         override fun areItemsTheSame(
             oldItem: ExerciseTypeDomainObject,
@@ -102,7 +100,7 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
             oldItem: ExerciseTypeDomainObject,
             newItem: ExerciseTypeDomainObject
         ): Boolean {
-            return oldItem.dto == newItem.dto && oldItem.isSelected == newItem.isSelected
+            return oldItem == newItem
         }
     }
 }

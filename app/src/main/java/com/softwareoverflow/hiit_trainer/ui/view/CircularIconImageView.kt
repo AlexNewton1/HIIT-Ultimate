@@ -31,7 +31,7 @@ class CircularIconImageView : AppCompatImageView {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        //We want the image to always be fully contained within the circle
+        // We want the image to always be fully contained within the circle
         val paddingPx = (min(w, h) /2f) * (1 - 1/sqrt(2f))
         val padding = paddingPx.toInt()
 

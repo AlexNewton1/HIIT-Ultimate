@@ -2,10 +2,10 @@ package com.softwareoverflow.hiit_trainer.data.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "WorkoutSet",
+    primaryKeys = ["workoutId", "orderInWorkout"],
     foreignKeys = [
         ForeignKey(
             entity = WorkoutEntity::class,
@@ -19,17 +19,18 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["exerciseTypeId"],
             onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE // TODO see todo below and work out FK constraints....
+            onUpdate = ForeignKey.CASCADE
         )
     ]
 )
 class WorkoutSetEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long? = null,
-    var workoutId: Long? = null,
-    var exerciseTypeId: Long? = null, // TODO work out if it's worth linking this to Exercise Type table, or just simply repeat the values? Seems dirty but makes handling exercise types completely separate
+    // The composite primary key is comprised on workoutId and orderInWorkout as no 2 entities can be related to the same workout and have the same position in said workout
+    var workoutId: Long,
+    var orderInWorkout: Int,
+
+    var exerciseTypeId: Long? = null, // TODO think about the case of deleting exercise types... That probably
     var workTime: Int,
     var restTime: Int,
     var numReps: Int,
-    var recoverTime: Int,
-    var orderInWorkout: Int
+    var recoverTime: Int
 )

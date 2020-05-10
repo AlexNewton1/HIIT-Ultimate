@@ -24,17 +24,16 @@ fun WorkoutDTO.toWorkoutEntity(): WorkoutEntity {
     return WorkoutEntity(this.id, this.name)
 }
 
-fun List<WorkoutSetDTO>.toWorkoutSetEntity(): List<WorkoutSetEntity> {
+fun List<WorkoutSetDTO>.toWorkoutSetEntity(workoutId: Long): List<WorkoutSetEntity> {
     return this.map {
         WorkoutSetEntity(
-            it.id,
-            null,
+            workoutId, // This will be updated later
+            it.orderInWorkout!!,
             it.exerciseTypeDTO!!.id,
             it.workTime!!,
             it.restTime!!,
             it.numReps!!,
-            it.recoverTime!!,
-            it.orderInWorkout!!
+            it.recoverTime!!
         )
     }
 }
@@ -47,7 +46,6 @@ fun List<WorkoutSet>.toWorkoutSetDTO(): MutableList<WorkoutSetDTO> {
 
 fun WorkoutSet.toDTO(): WorkoutSetDTO {
     return WorkoutSetDTO(
-        workoutSet.id,
         exerciseType.toDTO(),
         workoutSet.workTime,
         workoutSet.restTime,

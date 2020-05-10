@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.getColorId
-import timber.log.Timber
 
 /**
  * Helper class to help with the boilerplate code for using data binding in a [ListAdapter] with [DiffUtil]
- * NOTE - to use this class the layout provided by [getItemViewType] MUST contain a data binding variable named "dto"
+ * NOTE - to use this class the layout provided by [getItemViewType] must contain a data binding variable named "dto"
  * A [View.OnLongClickListener] will automatically be added for long clicks on any row.
- * A [View.OnClickListener] will automatically be added on a view with id "selectOnClick" within the view.
+ * A [View.OnClickListener] will automatically be added on a view with id "selectOnClick" within the layout returned from [getItemViewType].
  */
 abstract class DataBindingAdapter<T>(
     diffCallback: DiffUtil.ItemCallback<T>,
@@ -30,21 +29,17 @@ abstract class DataBindingAdapter<T>(
         return DataBindingViewHolderBase(binding)
     }
 
-    override fun submitList(list: MutableList<T>?) {
-        Timber.d("LoadWorkout: submitList called in DataBindingAdapter: $list")
-        super.submitList(list) {
-            Timber.d("LoadWorkout: submit list completed!")
-        }
-    }
+    private fun getPositionForItem(dto: T) =
+        currentList.indexOf(dto)
 
     override fun onBindViewHolder(holder: DataBindingViewHolderBase<T>, position: Int) {
         val item = getItem(position)
 
         holder.itemView.findViewById<View>(R.id.selectOnClick)?.setOnClickListener {
-            longClickListener?.onLongClick(it, item, position, false)
+            longClickListener?.onLongClick(it, item, getPositionForItem(item), false)
         }
         holder.itemView.setOnLongClickListener {
-            longClickListener?.onLongClick(it, item, position, true)
+            longClickListener?.onLongClick(it, item, getPositionForItem(item), true)
             return@setOnLongClickListener true
         }
 
@@ -52,7 +47,13 @@ abstract class DataBindingAdapter<T>(
         holder.bind(item, color.getColorId())
     }
 
+    /**
+     * Get the hex color string to use for this item in the list
+     */
     abstract fun getColorHexForItem(item: T): String
 
+    /**
+     * gets the layout id for the layout to be used for the item at this position
+     */
     abstract override fun getItemViewType(position: Int): Int
 }
