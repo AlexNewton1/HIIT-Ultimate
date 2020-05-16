@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/save_new"
+        android:icon="@drawable/icon_save_new"
+        android:title="Save As..." />
+
+    <item android:id="@+id/save_overwrite"
+        android:icon="@drawable/icon_save_overwrite"
+        android:title="Overwrite Existing" />
+
+</menu>

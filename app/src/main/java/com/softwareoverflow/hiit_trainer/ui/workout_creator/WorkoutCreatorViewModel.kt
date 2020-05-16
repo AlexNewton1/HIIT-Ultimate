@@ -46,14 +46,8 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
 
     fun removeWorkoutSetFromWorkout(position: Int) {
         val workoutSets = _workout.value!!.workoutSets
-        /*val dto = workoutSets.single { it.orderInWorkout == position }*/
         val dto = workoutSets[position]
         workoutSets.remove(dto)
-
-        /*workoutSets.forEach {
-            if (it.orderInWorkout!! > position)
-                it.orderInWorkout = it.orderInWorkout!! - 1
-        }*/
 
         _workout.postValue(_workout.value) // Reassign the current value as the change is not automatically observed via LiveData
     }
@@ -69,14 +63,6 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
         val workoutSets = currentWorkout.workoutSets
         val dto = workoutSets.removeAt(fromPosition)
         workoutSets.add(toPosition, dto)
-
-        /*val fromDTO = currentWorkout.workoutSets.single { it.orderInWorkout == fromPosition }
-        val toDTO = currentWorkout.workoutSets.single { it.orderInWorkout == toPosition }*/
-
-
-        /*val oldOrder = fromDTO.orderInWorkout
-        fromDTO.orderInWorkout = toDTO.orderInWorkout
-        toDTO.orderInWorkout = oldOrder*/
 
         _workout.value = currentWorkout
     }

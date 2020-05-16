@@ -22,4 +22,5 @@
     <string name="start_workout">Start Workout</string>
     <string name="up_next">Up Next:</string>
     <string name="workout_complete">Workout Complete!</string>
+    <string name="exercise_type_name">Exercise Type Name...</string>
 </resources>

@@ -21,6 +21,7 @@
             android:id="@+id/workTimeIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:padding="16dp"
             android:src="@drawable/icon_fire"
             app:layout_constraintBottom_toTopOf="@+id/numRepsIcon"
@@ -64,6 +65,7 @@
             android:id="@+id/restTimeIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:padding="16dp"
             android:src="@drawable/icon_rest"
             app:layout_constraintBottom_toTopOf="@+id/recoverTimeIconIcon"
@@ -106,10 +108,10 @@
             android:id="@+id/numRepsIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/fab_size_padded"
+            android:layout_marginBottom="8dp"
             android:padding="16dp"
             android:src="@drawable/icon_repeat"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/createWorkoutSetButton"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
             app:layout_constraintHorizontal_bias="0.5"
@@ -149,10 +151,10 @@
             android:id="@+id/recoverTimeIconIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/fab_size_padded"
+            android:layout_marginBottom="8dp"
             android:padding="16dp"
             android:src="@drawable/icon_recover"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/createWorkoutSetButton"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -192,6 +194,8 @@
             android:id="@+id/exerciseTypeIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/bg_circle"
             app:colorHex="@{viewModel.workoutSet.exerciseTypeDTO.colorHex}"
             app:iconName="@{viewModel.workoutSet.exerciseTypeDTO.iconName}"
@@ -212,6 +216,16 @@
             app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
             app:layout_constraintTop_toTopOf="@+id/exerciseTypeIcon"
             tools:text="Lunges" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createWorkoutSetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/icon_tick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

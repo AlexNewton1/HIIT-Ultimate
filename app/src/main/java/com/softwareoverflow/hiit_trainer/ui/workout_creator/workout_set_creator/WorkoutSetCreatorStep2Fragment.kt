@@ -13,7 +13,6 @@ import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep2Binding
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 /**
@@ -40,22 +39,13 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
             Timber.d("SelectedExerciseTypeId changed to $it")
         })
 
-        return binding.root
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-
-        requireActivity().mainActivityFAB.show()
-        activity?.mainActivityFAB?.setImageResource(R.drawable.icon_tick)
-        requireActivity().mainActivityFAB.setOnClickListener {
+        binding.createWorkoutSetButton.setOnClickListener {
             // At the point we try and add this workout set to the workout, it should not be null. Throw NPE if it is ever null
             workoutCreatorViewModel.addOrUpdateWorkoutSet(workoutSetViewModel.workoutSet.value!!)
-            findNavController().popBackStack(R.id.workoutCreatorHomeFragment, false)
+            findNavController().popBackStack(R.id.workoutCreatorFragment, false)
         }
+
+        return binding.root
     }
-
-
 }
  

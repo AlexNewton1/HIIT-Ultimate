@@ -15,13 +15,12 @@ import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.*
 import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.view.*
 
-class WorkoutCreatorStep1Fragment : Fragment() {
+class WorkoutCreatorFragment : Fragment() {
 
-    private val args: WorkoutCreatorStep1FragmentArgs by navArgs()
+    private val args: WorkoutCreatorFragmentArgs by navArgs()
 
     private val viewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator) {
         WorkoutCreatorViewModelFactory(
@@ -30,12 +29,19 @@ class WorkoutCreatorStep1Fragment : Fragment() {
         )
     }
 
+    private lateinit var noSetsSnackbar: Snackbar
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_workout_creator_step_1, container, false)
+
+        // region create the speedDial
+        // TODO fix the speeddial (maybe look for a different library?). Size is wrong, need text to be on the right
+
+        // endregion
 
         view.listWorkoutSets.adapter =
             WorkoutSetListAdapter()
@@ -70,6 +76,11 @@ class WorkoutCreatorStep1Fragment : Fragment() {
             it?.let {
                 (listWorkoutSets.adapter as WorkoutSetListAdapter).submitList(it.workoutSets.toMutableList()) // Call toMutableList as otherwise the list does not update when only the order of elements has changed
 
+                if (it.workoutSets.isEmpty())
+                    noSetsTextHint.visibility = View.VISIBLE
+                else
+                    noSetsTextHint.visibility = View.GONE
+
                 // TODO string resource these
                 (requireActivity() as MainActivity).supportActionBar?.title =
                     if (it.name.isBlank())
@@ -85,31 +96,25 @@ class WorkoutCreatorStep1Fragment : Fragment() {
             findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
         }
 
+        view.startWorkoutButton.setOnClickListener {
+            if (viewModel.workout.value!!.workoutSets.isEmpty())
+                noSetsSnackbar.show()
+            // TODO - pass the workout to the workout
+            /*else
+                findNavController().navigate(R.id.action_workout)*/
+        }
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
 
-        activity?.mainActivityFAB?.show()
-        activity?.mainActivityFAB?.setImageResource(R.drawable.icon_arrow_right)
-        activity?.mainActivityFAB?.setOnClickListener {
-            if (viewModel.workout.value!!.workoutSets.isEmpty())
-                Snackbar.make(
-                    requireView(),
-                    // TODO string resource
-                    "Please add at least one Workout Set to your Workout",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            else
-                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_workoutCreatorStep2Fragment)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        // TODO work out if this is needed, as it seems to happen after the listener gets set in the next fragment :o
-        //activity?.mainActivityFAB?.setOnClickListener(null)
+        noSetsSnackbar = Snackbar.make(
+            requireView(),
+            // TODO string resource
+            "Please add at least one Workout Set to your Workout",
+            Snackbar.LENGTH_SHORT
+        )
     }
 }

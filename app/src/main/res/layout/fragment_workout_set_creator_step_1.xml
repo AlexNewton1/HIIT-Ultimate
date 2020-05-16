@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.softwareoverflow.hiit_trainer.ui.SortOrder" />
+
         <variable
             name="viewModel"
             type="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel" />
@@ -14,14 +17,34 @@
         android:layout_height="match_parent"
         tools:context=".ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep1Fragment">
 
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/nameSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <SearchView
-            android:id="@+id/searchView"
+            android:id="@+id/nameSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:queryHint="Search..."
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/sortButton"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/sortButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            android:src="@{(viewModel.sortOrder == SortOrder.ASC) ? @drawable/icon_sort_alph_asc : @drawable/icon_sort_alph_desc }"
+            app:layout_constraintBottom_toBottomOf="@+id/view2"
+            tools:src="@drawable/icon_sort_alph_desc"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -33,13 +56,15 @@
             app:layout_constraintBottom_toTopOf="@+id/createNewExerciseTypeFAB"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            app:layout_constraintTop_toBottomOf="@+id/nameSearch"
             app:spanCount="3" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/createNewExerciseTypeFAB"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
             android:padding="@dimen/fragment_padding"
             android:src="@drawable/icon_plus"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,6 +80,16 @@
             app:layout_constraintBottom_toBottomOf="@+id/createNewExerciseTypeFAB"
             app:layout_constraintStart_toEndOf="@id/createNewExerciseTypeFAB"
             app:layout_constraintTop_toTopOf="@+id/createNewExerciseTypeFAB" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/workoutSetCreatorGoToStep2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/icon_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

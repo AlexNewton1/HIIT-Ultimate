@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypeCreatorBinding
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_exercise_type_creator.*
 
 // TODO - move this out of workout_creator package. Not really directly related to creating a workout
@@ -59,6 +58,25 @@ class ExerciseTypeCreatorFragment : Fragment() {
             }
         }
 
+        binding.createOrUpdateExerciseTypeButton.setOnClickListener {
+            if (etExerciseTypeName.text.toString().isBlank()) {
+                Snackbar.make(
+                    etExerciseTypeName,
+                    R.string.error_exercise_type_name_required,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            } else {
+                viewModel.createOrUpdateExerciseType(
+                    requireActivity(),
+                    etExerciseTypeName.text.toString(),
+                    etViewPagerPicker.getIconId(),
+                    etViewPagerPicker.getColorId()
+                )
+
+                findNavController().navigateUp()
+            }
+        }
+
         return binding.root
     }
 
@@ -75,28 +93,6 @@ class ExerciseTypeCreatorFragment : Fragment() {
                 Snackbar.LENGTH_SHORT
             ).setAction(R.string.dismiss) {
                 snackbar?.dismiss()
-            }
-        }
-
-        requireActivity().mainActivityFAB.setImageResource(R.drawable.icon_tick)
-        requireActivity().mainActivityFAB.show()
-        activity?.mainActivityFAB?.setOnClickListener {
-            if (etExerciseTypeName.text.toString().isBlank()) {
-                Snackbar.make(
-                    etExerciseTypeName,
-                    R.string.error_exercise_type_name_required,
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            } else {
-                viewModel.createOrUpdateExerciseType(
-                    requireActivity(),
-                    etExerciseTypeName.text.toString(),
-                    etViewPagerPicker.getIconId(),
-                    etViewPagerPicker.getColorId()
-                )
-
-                findNavController().navigateUp()
-                // TODO handle animation of button and pass the Id of the created ID back up
             }
         }
     }
