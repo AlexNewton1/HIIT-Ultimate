@@ -2,6 +2,6 @@
     android:shape="rectangle">
 
     <solid
-        android:color="@color/colorPrimaryDark" />
+        android:color="@color/colorPrimary" />
     <corners android:radius="@dimen/half_fab_size" />
 </shape>

@@ -41,7 +41,7 @@
         <fragment
             android:id="@+id/workoutCreatorFragment"
             android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorFragment"
-            tools:layout="@layout/fragment_workout_creator_step_1">
+            tools:layout="@layout/fragment_workout_creator">
             <action
                 android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
                 app:destination="@id/nav_workout_set_creator" />
@@ -49,6 +49,9 @@
                 android:name="workoutCreatorWorkoutId"
                 android:defaultValue="0L"
                 app:argType="long" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_saveNewWorkoutDialog"
+                app:destination="@id/saveNewWorkoutDialog" />
         </fragment>
         <navigation
             android:id="@+id/nav_workout_set_creator"
@@ -80,6 +83,10 @@
                     app:destination="@id/workoutCreatorFragment" />
             </fragment>
         </navigation>
+        <dialog
+            android:id="@+id/saveNewWorkoutDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
+            android:label="SaveNewWorkoutDialog" />
     </navigation>
     <fragment
         android:id="@+id/workoutFragment"

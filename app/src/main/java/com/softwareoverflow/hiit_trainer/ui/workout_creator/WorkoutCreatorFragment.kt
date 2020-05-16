@@ -2,6 +2,7 @@ package com.softwareoverflow.hiit_trainer.ui.workout_creator
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -15,8 +16,9 @@ import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
-import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.*
-import kotlinx.android.synthetic.main.fragment_workout_creator_step_1.view.*
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
+import kotlinx.android.synthetic.main.fragment_workout_creator.*
+import kotlinx.android.synthetic.main.fragment_workout_creator.view.*
 
 class WorkoutCreatorFragment : Fragment() {
 
@@ -36,12 +38,7 @@ class WorkoutCreatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_workout_creator_step_1, container, false)
-
-        // region create the speedDial
-        // TODO fix the speeddial (maybe look for a different library?). Size is wrong, need text to be on the right
-
-        // endregion
+        val view = inflater.inflate(R.layout.fragment_workout_creator, container, false)
 
         view.listWorkoutSets.adapter =
             WorkoutSetListAdapter()
@@ -103,6 +100,22 @@ class WorkoutCreatorFragment : Fragment() {
             /*else
                 findNavController().navigate(R.id.action_workout)*/
         }
+
+        view.saveSpeedDial.setMenuListener(object: SimpleMenuListenerAdapter() {
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if(menuItem.title == requireContext().getString(R.string.save_as)) {
+                    if(viewModel.workout.value!!.workoutSets.isEmpty())
+                        noSetsSnackbar.show()
+                    else
+                        findNavController().navigate(R.id.action_workoutCreatorFragment_to_saveNewWorkoutDialog)
+                }
+                /*else if (menuItem.itemId == R.id.menu_save_overwrite)
+                    findNavController().navigate()*/
+
+                return false
+            }
+        }
+        )
 
         return view
     }

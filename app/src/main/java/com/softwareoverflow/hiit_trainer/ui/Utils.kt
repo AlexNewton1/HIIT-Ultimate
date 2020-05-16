@@ -2,11 +2,18 @@ package com.softwareoverflow.hiit_trainer.ui
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.inputmethod.InputMethodManager
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import kotlin.math.abs
+
+val Int.pxToDp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.dpToPx: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun getWorkoutCompleteExerciseType(context: Context): ExerciseTypeDTO {
     return ExerciseTypeDTO(null, context.getString(R.string.workout_complete), "icon_trophy", "#FF000000")

@@ -10,21 +10,15 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 
-class CircularIconImageView : AppCompatImageView {
+class CircularIconImageView  @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : AppCompatImageView(context, attrs, defStyle) {
 
-    constructor(context: Context) : super(context) {
-        initialize(context)
-    }
+    private var color: Int = 0
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initialize(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        initialize(context)
-    }
-
-    private fun initialize(context: Context){
+    init {
         background = context.resources.getDrawable(R.drawable.bg_circle, context.theme)
     }
 
@@ -38,10 +32,13 @@ class CircularIconImageView : AppCompatImageView {
         setPadding(padding, padding, padding, padding)
     }
 
+    fun getColor() = color
+
     fun setColor(color: Int?){
         if(color == null)
             return
 
+        this.color = color
         background.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
     }
 

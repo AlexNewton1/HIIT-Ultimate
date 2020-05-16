@@ -8,8 +8,6 @@ import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -77,10 +75,6 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
         }
     }
 
-    fun setWorkoutName(name: String) {
-        _workout.value!!.name = name
-    }
-
     /**
      * If the workoutSet has an id already present in the list, that entry will be updated.
      * If the workoutSet has an id not already in the list, the item will be appended to the list
@@ -104,21 +98,5 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
 
         _workoutSetIndex = null
         _workoutSet.value = null
-    }
-
-    fun createOrUpdateWorkout(onSave: () -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            LoadingSpinner.showLoadingIcon()
-
-            // Set the order in workout
-            val workoutSets = _workout.value!!.workoutSets
-            for (i in 0 until workoutSets.size) {
-                workoutSets[i].orderInWorkout = i
-            }
-
-            repo.createOrUpdateWorkout(_workout.value!!)
-            onSave()
-            LoadingSpinner.hideLoadingIcon()
-        }
     }
 }
