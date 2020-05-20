@@ -25,4 +25,5 @@
     <string name="exercise_type_name">Exercise Type Name…</string>
 
     <string name="save_as">Save As…</string>
+    <string name="overwrite_existing">Overwrite Existing</string>
 </resources>

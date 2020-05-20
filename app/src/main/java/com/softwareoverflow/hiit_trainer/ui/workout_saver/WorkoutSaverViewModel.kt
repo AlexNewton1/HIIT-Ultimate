@@ -9,28 +9,28 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
 
-class WorkoutSaverViewModel(val repo: IWorkoutRepository, val workout: WorkoutDTO) : ViewModel() {
 
-    val workoutName = MutableLiveData(workout.name)
+open class WorkoutSaverViewModel(val repo: IWorkoutRepository, val workout: WorkoutDTO) : ViewModel() {
+
+    val newWorkoutName = MutableLiveData(workout.name)
 
     private val _emptyNameWarning = MutableLiveData(false)
     val emptyNameWarning: LiveData<Boolean>
         get() = _emptyNameWarning
 
-    private val _workoutSaved= MutableLiveData(false)
+    private val _workoutSaved = MutableLiveData(false)
     val workoutSaved: LiveData<Boolean>
         get() = _workoutSaved
 
-    fun emptyNameWarningShown(){
+    fun emptyNameWarningShown() {
         _emptyNameWarning.value = false
     }
 
-    fun saveWorkout() {
-        val name = workoutName.value
-        if(name.isNullOrBlank()) {
+    open fun saveWorkout() {
+        val name = newWorkoutName.value
+        if (name.isNullOrBlank()) {
             _emptyNameWarning.value = true
-        }
-        else {
+        } else {
             workout.name = name
             viewModelScope.launch {
                 LoadingSpinner.showLoadingIcon()

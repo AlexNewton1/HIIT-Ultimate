@@ -2,25 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.softwareoverflow.hiit_trainer.ui.workout_saver.WorkoutSaverViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/DialogTheme_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:background="@drawable/bg_rounded_lozenge">
 
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/circularIconImageView"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
-            app:colorHex='@{"#000000"}'
-            app:iconName='@{"icon_save_new"}'
+            app:colorHex='@{"#008577"}'
+            app:iconName='@{"icon_save_overwrite"}'
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,39 +20,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:maxLines="1"
-            android:text="Save New Workout"
+            android:text="Overwrite Existing Workout"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView"
             app:layout_constraintStart_toEndOf="@+id/circularIconImageView"
-            app:layout_constraintTop_toTopOf="@+id/circularIconImageView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:labelFor="@id/workoutNameET"
-            android:text="Workout Name:"
-            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/circularIconImageView" />
 
-        <EditText
-            android:id="@+id/workoutNameET"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@={viewModel.workoutName}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
         <Button
-            android:id="@+id/button"
+            android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -68,13 +50,13 @@
             android:background="@android:color/transparent"
             android:text="Cancel"
             android:textColor="@android:color/white"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/saveButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/workoutNameET" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -83,9 +65,8 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/button"
-            app:layout_constraintTop_toBottomOf="@+id/workoutNameET"
-            android:onClick="@{() -> viewModel.saveWorkout()}"/>
-
+            app:layout_constraintStart_toEndOf="@+id/cancelButton"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

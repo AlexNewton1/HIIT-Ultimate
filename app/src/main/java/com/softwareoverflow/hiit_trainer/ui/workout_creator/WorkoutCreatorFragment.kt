@@ -101,16 +101,17 @@ class WorkoutCreatorFragment : Fragment() {
                 findNavController().navigate(R.id.action_workout)*/
         }
 
-        view.saveSpeedDial.setMenuListener(object: SimpleMenuListenerAdapter() {
+        view.saveSpeedDial.setMenuListener(object : SimpleMenuListenerAdapter() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                if(menuItem.title == requireContext().getString(R.string.save_as)) {
-                    if(viewModel.workout.value!!.workoutSets.isEmpty())
-                        noSetsSnackbar.show()
-                    else
-                        findNavController().navigate(R.id.action_workoutCreatorFragment_to_saveNewWorkoutDialog)
+                if (viewModel.workout.value!!.workoutSets.isEmpty()) {
+                    noSetsSnackbar.show()
+                    return false
                 }
-                /*else if (menuItem.itemId == R.id.menu_save_overwrite)
-                    findNavController().navigate()*/
+
+                if (menuItem.title == requireContext().getString(R.string.save_as))
+                    findNavController().navigate(R.id.action_workoutCreatorFragment_to_saveNewWorkoutDialog)
+                 else if (menuItem.title == resources.getString(R.string.overwrite_existing))
+                    findNavController().navigate(R.id.action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog)
 
                 return false
             }

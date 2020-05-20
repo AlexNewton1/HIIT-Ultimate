@@ -7,7 +7,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 
 class WorkoutSetListAdapter :
@@ -24,7 +24,7 @@ class WorkoutSetListAdapter :
 
     override fun getColorHexForItem(item: WorkoutSetDTO) =  item.exerciseTypeDTO!!.colorHex!!
 
-    class AdapterClickListener : IAdapterOnLongClickListener<WorkoutSetDTO>,
+    class AdapterClickListener : IAdapterOnClickListener<WorkoutSetDTO>,
         PopupMenu.OnMenuItemClickListener {
 
         companion object {
@@ -37,7 +37,7 @@ class WorkoutSetListAdapter :
 
         private var clickedPosition: Int = -1
 
-        override fun onLongClick(view: View, item: WorkoutSetDTO, position: Int, isLongClick: Boolean) {
+        override fun onClick(view: View, item: WorkoutSetDTO, position: Int, isLongClick: Boolean) {
             if(!isLongClick) return
 
             clickedPosition = position

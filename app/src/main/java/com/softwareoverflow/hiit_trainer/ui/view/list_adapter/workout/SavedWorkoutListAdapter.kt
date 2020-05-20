@@ -9,14 +9,14 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 import timber.log.Timber
 
 class SavedWorkoutListAdapter(private val context: Context) :
     DataBindingAdapter<WorkoutDTO>(
         DiffCallbackBase(),
-        AdapterLongClickListener()
+        AdapterClickListener()
     ) {
 
     override fun getItemViewType(position: Int): Int {
@@ -28,11 +28,10 @@ class SavedWorkoutListAdapter(private val context: Context) :
         "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
 
     fun setEventListener(listener: ISelectableEditableListEventListener) {
-        AdapterLongClickListener.setEventListener(listener)
+        AdapterClickListener.setEventListener(listener)
     }
 
-    // TODO work out how to handle play button clicks on the item
-    class AdapterLongClickListener : IAdapterOnLongClickListener<WorkoutDTO>,
+    class AdapterClickListener : IAdapterOnClickListener<WorkoutDTO>,
         PopupMenu.OnMenuItemClickListener {
         companion object {
             private var eventListener: ISelectableEditableListEventListener? = null
@@ -44,12 +43,12 @@ class SavedWorkoutListAdapter(private val context: Context) :
 
         private lateinit var clickedItem: WorkoutDTO
 
-        override fun onLongClick(view: View, item: WorkoutDTO, position: Int, isLongClick: Boolean){
+        override fun onClick(view: View, item: WorkoutDTO, position: Int, isLongClick: Boolean){
 
             if(isLongClick){
                 clickedItem = item
                 PopupMenu(view.context, view).apply {
-                    setOnMenuItemClickListener(this@AdapterLongClickListener)
+                    setOnMenuItemClickListener(this@AdapterClickListener)
                     inflate(R.menu.workout_actions)
                     show()
                 }

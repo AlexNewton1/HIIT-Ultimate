@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.workout_creator.ExerciseTypeCreatorFragment">
+    tools:context=".ui.workout_creator.exercise_type_creator.ExerciseTypeCreatorFragment">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.softwareoverflow.hiit_trainer.ui.workout_creator.ExerciseTypeViewModel" />
+            type="com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator.ExerciseTypeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

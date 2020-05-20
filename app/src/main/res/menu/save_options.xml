@@ -7,6 +7,5 @@
 
     <item android:id="@+id/menu_save_overwrite"
         android:icon="@drawable/icon_save_overwrite"
-        android:title="Overwrite Existing" />
-
+        android:title="@string/overwrite_existing" />
 </menu>

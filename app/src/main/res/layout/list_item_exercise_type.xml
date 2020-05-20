@@ -7,7 +7,7 @@
         <import type="android.view.View" />
         <variable
             name="dto"
-            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeDomainObject" />
+            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeListDomainObject" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

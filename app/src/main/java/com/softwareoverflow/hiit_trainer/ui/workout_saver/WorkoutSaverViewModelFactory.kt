@@ -13,10 +13,12 @@ class WorkoutSaverViewModelFactory(private val context: Context, private val wor
         if(modelClass.isAssignableFrom(WorkoutSaverViewModel::class.java)) {
             val repo = WorkoutRepositoryFactory.getInstance(context)
 
-            if(saveAsNew)
+            return if(saveAsNew) {
                 workout.id = null
-
-            return WorkoutSaverViewModel(repo, workout) as T
+                WorkoutSaverViewModel(repo, workout) as T
+            } else {
+                OverwriteWorkoutViewModel(repo, workout) as T
+            }
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.workout_creator
+package com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -20,7 +20,11 @@ class ExerciseTypeViewModelFactory(
 
         if (modelClass.isAssignableFrom(ExerciseTypeViewModel::class.java)) {
             val repo = WorkoutRepositoryFactory.getInstance(context)
-            return ExerciseTypeViewModel(repo, id, workoutSetCreatorViewModel) as T
+            return ExerciseTypeViewModel(
+                repo,
+                id,
+                workoutSetCreatorViewModel
+            ) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

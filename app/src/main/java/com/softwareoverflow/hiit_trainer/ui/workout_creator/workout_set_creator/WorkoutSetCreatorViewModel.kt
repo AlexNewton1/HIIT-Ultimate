@@ -7,7 +7,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class WorkoutSetCreatorViewModel(
     workoutSetToEdit: WorkoutSetDTO,
@@ -29,21 +28,17 @@ class WorkoutSetCreatorViewModel(
 
     init {
         _allExerciseTypesOrdered.addSource(_allExerciseTypes) { exerciseTypes ->
-            Timber.d("allEt changing due to _allExerciseTypes")
-
             exerciseTypes?.let {
                 _allExerciseTypesOrdered.value = getExerciseTypesToDisplay(exerciseTypes)
             }
         }
 
         _allExerciseTypesOrdered.addSource(sortOrder) {
-            Timber.d("allEt changing due to currentOrder")
             _allExerciseTypesOrdered.value =
                 getExerciseTypesToDisplay(_allExerciseTypes.value ?: arrayListOf())
         }
 
         _allExerciseTypesOrdered.addSource(_searchFilter) {
-            Timber.d("allEt changing due to filter")
             _allExerciseTypesOrdered.value =
                 getExerciseTypesToDisplay(_allExerciseTypes.value ?: arrayListOf())
         }
@@ -77,7 +72,7 @@ class WorkoutSetCreatorViewModel(
     }
 
     fun setChosenExerciseTypeId(id: Long) {
-        val exerciseType = allExerciseTypes.value!!.first { it.id == id }
+        val exerciseType = _allExerciseTypes.value!!.first { it.id == id }
         workoutSet.value!!.exerciseTypeDTO = exerciseType
     }
 

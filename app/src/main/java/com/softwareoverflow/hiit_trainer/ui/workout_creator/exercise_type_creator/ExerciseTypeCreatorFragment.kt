@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.workout_creator
+package com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,11 +39,12 @@ class ExerciseTypeCreatorFragment : Fragment() {
         // TODO - pass in the correct Id
         // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
         val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
-        val viewModelFactory = ExerciseTypeViewModelFactory(
-            requireActivity(),
-            workoutSetViewModel.selectedExerciseTypeId.value,
-            workoutSetViewModel
-        )
+        val viewModelFactory =
+            ExerciseTypeViewModelFactory(
+                requireActivity(),
+                workoutSetViewModel.selectedExerciseTypeId.value,
+                workoutSetViewModel
+            )
         viewModel = ViewModelProvider(this, viewModelFactory).get(ExerciseTypeViewModel::class.java)
         binding.viewModel = viewModel
 

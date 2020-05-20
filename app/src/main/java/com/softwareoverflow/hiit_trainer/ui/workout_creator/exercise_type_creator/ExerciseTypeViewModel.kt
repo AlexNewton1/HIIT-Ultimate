@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui.workout_creator
+package com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator
 
 import android.content.Context
 import androidx.lifecycle.Transformations

@@ -18,28 +18,31 @@ import com.softwareoverflow.hiit_trainer.ui.getColorId
  */
 abstract class DataBindingAdapter<T>(
     diffCallback: DiffUtil.ItemCallback<T>,
-    private val longClickListener: IAdapterOnLongClickListener<T>?
+    internal val clickListener: IAdapterOnClickListener<T>?
 ) :
     ListAdapter<T, DataBindingViewHolderBase<T>>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBindingViewHolderBase<T> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DataBindingViewHolderBase<T> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
         return DataBindingViewHolderBase(binding)
     }
 
-    private fun getPositionForItem(dto: T) =
+    internal fun getPositionForItem(dto: T) =
         currentList.indexOf(dto)
 
     override fun onBindViewHolder(holder: DataBindingViewHolderBase<T>, position: Int) {
         val item = getItem(position)
 
         holder.itemView.findViewById<View>(R.id.selectOnClick)?.setOnClickListener {
-            longClickListener?.onLongClick(it, item, getPositionForItem(item), false)
+            clickListener?.onClick(it, item, getPositionForItem(item), false)
         }
         holder.itemView.setOnLongClickListener {
-            longClickListener?.onLongClick(it, item, getPositionForItem(item), true)
+            clickListener?.onClick(it, item, getPositionForItem(item), true)
             return@setOnLongClickListener true
         }
 

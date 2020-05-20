@@ -52,13 +52,16 @@
             <action
                 android:id="@+id/action_workoutCreatorFragment_to_saveNewWorkoutDialog"
                 app:destination="@id/saveNewWorkoutDialog" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog"
+                app:destination="@id/overwriteExistingWorkoutDialog" />
         </fragment>
         <navigation
             android:id="@+id/nav_workout_set_creator"
             app:startDestination="@id/exerciseTypePickerFragment">
             <fragment
                 android:id="@+id/exerciseTypeCreator"
-                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.ExerciseTypeCreatorFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator.ExerciseTypeCreatorFragment"
                 android:label="Create Exercise Type"
                 tools:layout="@layout/fragment_exercise_type_creator" />
             <fragment
@@ -86,7 +89,11 @@
         <dialog
             android:id="@+id/saveNewWorkoutDialog"
             android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
-            android:label="SaveNewWorkoutDialog" />
+            android:label="Save New Workout" />
+        <dialog
+            android:id="@+id/overwriteExistingWorkoutDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.OverwriteExistingWorkoutDialog"
+            android:label="Overwrite Existing Workout" />
     </navigation>
     <fragment
         android:id="@+id/workoutFragment"

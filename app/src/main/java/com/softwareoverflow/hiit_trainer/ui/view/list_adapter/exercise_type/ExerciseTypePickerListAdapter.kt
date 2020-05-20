@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnLongClickListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 
 class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventListener) :
-    DataBindingAdapter<ExerciseTypeDomainObject>(
+    DataBindingAdapter<ExerciseTypeListDomainObject>(
         DiffCallback(),
         AdapterClickListener(eventListener)
     ) {
@@ -22,12 +22,12 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
 
     fun submitDTOs(list: List<ExerciseTypeDTO>?, submitCompleteCallback: () -> Unit) {
         val domainObjList = list?.map {
-            ExerciseTypeDomainObject(it, it.id == selectedItemId)
+            ExerciseTypeListDomainObject(it, it.id == selectedItemId)
         }
         super.submitList(domainObjList?.toMutableList(), submitCompleteCallback)
     }
 
-    override fun getColorHexForItem(item: ExerciseTypeDomainObject) = item.dto.colorHex!!
+    override fun getColorHexForItem(item: ExerciseTypeListDomainObject) = item.dto.colorHex!!
 
     fun notifyItemSelected(newId: Long) {
         if (selectedItemId != newId) {
@@ -49,14 +49,14 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
     private fun getPositionFromId(id: Long): Int = currentList.indexOfFirst { it.dto.id == id }
 
     class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :
-        IAdapterOnLongClickListener<ExerciseTypeDomainObject>,
+        IAdapterOnClickListener<ExerciseTypeListDomainObject>,
         PopupMenu.OnMenuItemClickListener {
 
         private var selectedItemId: Long = -1L
 
-        override fun onLongClick(
+        override fun onClick(
             view: View,
-            item: ExerciseTypeDomainObject,
+            item: ExerciseTypeListDomainObject,
             position: Int,
             isLongClick: Boolean
         ) {
@@ -88,17 +88,17 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ExerciseTypeDomainObject>() {
+    class DiffCallback : DiffUtil.ItemCallback<ExerciseTypeListDomainObject>() {
         override fun areItemsTheSame(
-            oldItem: ExerciseTypeDomainObject,
-            newItem: ExerciseTypeDomainObject
+            oldItem: ExerciseTypeListDomainObject,
+            newItem: ExerciseTypeListDomainObject
         ): Boolean {
             return oldItem.dto.id == newItem.dto.id
         }
 
         override fun areContentsTheSame(
-            oldItem: ExerciseTypeDomainObject,
-            newItem: ExerciseTypeDomainObject
+            oldItem: ExerciseTypeListDomainObject,
+            newItem: ExerciseTypeListDomainObject
         ): Boolean {
             return oldItem == newItem
         }
