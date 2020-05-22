@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,15 +26,13 @@ import kotlinx.android.synthetic.main.fragment_workout_set_creator_step_1.*
 
 /**
  * Allows the user to select from the list of saved [com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO] objects.
+ * Also supports edit / deletion of Exercise Type objects
  */
 class WorkoutSetCreatorStep1Fragment : Fragment() {
 
-    // TODO Not sure this is actually needed? Might be best to use nav arguments to pass data back and forth between these fragments...
     private val workoutViewModel: WorkoutCreatorViewModel by navGraphViewModels(R.id.nav_workout_creator)
-
     private val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
     {
-        // TODO pass in the correct ID - this should probably come through the args?
         WorkoutSetCreatorViewModelFactory(workoutViewModel.workoutSet, requireContext())
     }
 
@@ -72,6 +71,16 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
                 )
             )
         }
+
+        workoutSetViewModel.unableToDeleteExerciseType.observe(viewLifecycleOwner, Observer {
+            if(!it.isNullOrBlank()) {
+                val snackbar = Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                (snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)).maxLines = 3
+                snackbar.show()
+
+                workoutSetViewModel.unableToDeleteExerciseTypeWarningShown()
+            }
+        })
 
         workoutSetViewModel.selectedExerciseTypeId.observe(viewLifecycleOwner, Observer {
             it?.let{

@@ -3,10 +3,11 @@ package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 import android.content.Context
 import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
+import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
@@ -47,11 +48,10 @@ class SavedWorkoutListAdapter(private val context: Context) :
 
             if(isLongClick){
                 clickedItem = item
-                PopupMenu(view.context, view).apply {
+                IconPopupMenuBuilder(view.context, view).apply {
                     setOnMenuItemClickListener(this@AdapterClickListener)
-                    inflate(R.menu.workout_actions)
-                    show()
-                }
+                    setMenuResource(R.menu.workout_actions)
+                }.build().show()
             } else {
                 eventListener?.onItemSelected(item.id)
             }

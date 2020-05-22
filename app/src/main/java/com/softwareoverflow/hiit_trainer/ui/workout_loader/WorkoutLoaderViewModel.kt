@@ -6,6 +6,7 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel() {
 
@@ -20,6 +21,10 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
 
     init {
         _workoutsSorted.addSource(_workouts) {
+            for(workout in it)
+                for(set in workout.workoutSets)
+                    Timber.d("Workout ${workout.id} et: ${set.exerciseTypeDTO!!.name}")
+
             _workoutsSorted.value = getWorkoutsToDisplay()
         }
 

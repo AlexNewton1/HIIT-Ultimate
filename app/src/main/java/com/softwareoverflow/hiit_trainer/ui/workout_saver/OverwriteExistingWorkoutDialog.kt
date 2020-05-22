@@ -64,24 +64,26 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
             }
 
             saveButton.setOnClickListener {
-
                 overwriteExistingViewModel.newWorkoutName.value =
                     (recyclerView.adapter as OverwriteWorkoutListAdapter).updatedName;
                 overwriteExistingViewModel.saveWorkout()
             }
 
             recyclerView.apply {
-               adapter = listAdapter
+                adapter = listAdapter
                 addItemDecoration(SpacedListDecoration(requireContext()))
+
+
             }
         }
-
         overwriteExistingViewModel.existingWorkouts.observe(
             viewLifecycleOwner,
             Observer {
                 it?.let {
                     (recyclerView.adapter as OverwriteWorkoutListAdapter).submitList(it.toMutableList()) {
-                        Timber.d("Overwrite: Submitted new list: $it")
+                        (recyclerView.adapter as OverwriteWorkoutListAdapter).notifyItemSelected(
+                            overwriteExistingViewModel.currentSelectedId.value
+                        )
                     }
                 }
             })

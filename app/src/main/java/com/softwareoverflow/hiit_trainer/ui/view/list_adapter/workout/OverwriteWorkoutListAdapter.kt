@@ -69,10 +69,11 @@ class OverwriteWorkoutListAdapter(
                 checkBox.isChecked = true
 
                 clickListener?.onClick(it, item, position, false)
+
+                updatedName = item.dto.name
             }
         }
 
-        // TODO come up with way of having keyboard shown
         editText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus && item.dto.id != currentlySelectedId) {
                 checkBox.isChecked = true
@@ -94,12 +95,19 @@ class OverwriteWorkoutListAdapter(
         currentlySelectedId = selected // Update the selection
 
         notifyForId(currentlySelectedId) // Perform any updates for the new selection
+
+        currentlySelectedId?.let {
+            if(it > 0L && getPositionForId(currentlySelectedId) >= 0) {
+                updatedName = getItem(getPositionForId(currentlySelectedId)).dto.name
+
+            }
+        }
     }
 
     private fun notifyForId(id: Long?) {
         val oldPosition = getPositionForId(id)
         if (oldPosition != -1)
-            notifyItemChanged(oldPosition)
+            try {notifyItemChanged(oldPosition)} catch (ex: IllegalStateException) {} // Swallow ex
     }
 
     class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :

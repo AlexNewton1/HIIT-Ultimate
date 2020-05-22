@@ -3,16 +3,19 @@
 
     <item
         android:id="@+id/workout_menu_start"
+        android:icon="@android:drawable/ic_media_play"
         android:title="@string/start_workout"
         android:visible="true" />
 
     <item
         android:id="@+id/workout_menu_edit"
         android:title="@string/edit"
+        android:icon="@android:drawable/ic_menu_edit"
         android:visible="true" />
 
     <item
         android:id="@+id/workout_menu_delete"
         android:title="@string/delete"
+        android:icon="@android:drawable/ic_menu_delete"
         android:visible="true" />
 </menu>

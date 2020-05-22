@@ -26,6 +26,10 @@ class WorkoutSetCreatorViewModel(
 
     var selectedExerciseTypeId = MutableLiveData<Long?>(workoutSetToEdit.exerciseTypeDTO?.id)
 
+    private val _unableToDeleteExerciseType = MutableLiveData("");
+    val unableToDeleteExerciseType : LiveData<String>
+        get() = _unableToDeleteExerciseType
+
     init {
         _allExerciseTypesOrdered.addSource(_allExerciseTypes) { exerciseTypes ->
             exerciseTypes?.let {
@@ -43,6 +47,8 @@ class WorkoutSetCreatorViewModel(
                 getExerciseTypesToDisplay(_allExerciseTypes.value ?: arrayListOf())
         }
     }
+
+    fun unableToDeleteExerciseTypeWarningShown(){ _unableToDeleteExerciseType.value = null }
 
     private fun getExerciseTypesToDisplay(_exerciseTypes: List<ExerciseTypeDTO>): List<ExerciseTypeDTO> {
         var exerciseTypes = _exerciseTypes
@@ -84,7 +90,7 @@ class WorkoutSetCreatorViewModel(
             try {
                 repo.deleteExerciseType(exerciseType)
             } catch (ex: IllegalStateException) {
-
+                _unableToDeleteExerciseType.value = ex.message
             } finally {
                 LoadingSpinner.hideLoadingIcon()
             }

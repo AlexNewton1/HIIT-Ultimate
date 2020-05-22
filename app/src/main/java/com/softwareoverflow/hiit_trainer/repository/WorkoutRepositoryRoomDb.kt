@@ -33,9 +33,11 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         return workout.toDTO()
     }
 
-    override suspend fun createOrUpdateWorkout(dto: WorkoutDTO) : Long {
+    override suspend fun createOrUpdateWorkout(dto: WorkoutDTO): Long {
         val workoutEntity = dto.toWorkoutEntity()
-        val workoutSetEntityList = dto.workoutSets.toWorkoutSetEntity(dto.id ?: -1L) // If the workout doesn't yet have an id, this will get populated later
+        val workoutSetEntityList = dto.workoutSets.toWorkoutSetEntity(
+            dto.id ?: -1L
+        ) // If the workout doesn't yet have an id, this will get populated later
 
         return workoutDao.createOrUpdate(workoutEntity, workoutSetEntityList)
     }
@@ -59,15 +61,27 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     }
 
     override suspend fun createOrUpdateExerciseType(exerciseTypeDTO: ExerciseTypeDTO): Long {
-       return exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
+        return exerciseTypeDao.createOrUpdate(exerciseTypeDTO.toEntity())
     }
 
     @Throws(IllegalStateException::class)
     override suspend fun deleteExerciseType(dto: ExerciseTypeDTO) {
-        withContext(Dispatchers.IO){
-            val count = workoutDao.getExerciseTypeUsageCount(dto.id!!)
-            if(count > 0) // TODO convert to string resource
-                throw IllegalArgumentException("The exercise type is used by $count workout sets. Please delete any usages from your saved workouts before trying again")
+        withContext(Dispatchers.IO) {
+            val workoutNames = workoutDao.getExerciseTypeWorkoutNames(dto.id!!);
+            if (workoutNames.any()) {
+                val error = workoutNames.toHashSet().joinToString(", ",
+                    "Cannot delete exercise type '${dto.name}'. It is used by workout ",
+                    limit = 2,
+                    truncated = " and others.",
+                    transform = { "'${it}'" },
+                postfix = " Please edit or delete those workouts first.")
+
+                // TODO resource string this stuff
+
+                throw IllegalStateException(error);
+            } else {
+                exerciseTypeDao.delete(dto.toEntity());
+            }
 
             exerciseTypeDao.delete(dto.toEntity())
         }

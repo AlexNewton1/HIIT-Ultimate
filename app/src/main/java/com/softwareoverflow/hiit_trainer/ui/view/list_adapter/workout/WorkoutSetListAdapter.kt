@@ -2,9 +2,10 @@ package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 
 import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
+import androidx.appcompat.widget.PopupMenu
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
@@ -47,11 +48,10 @@ class WorkoutSetListAdapter :
                 at creation is not feasible. Will need to think up a solution to this. For now, this all options are allowed and the logic
                 is in the view model to prevent any indexing errors.
             */
-            PopupMenu(view.context, view).apply {
+            IconPopupMenuBuilder(view.context, view).apply {
                 setOnMenuItemClickListener(this@AdapterClickListener)
-                inflate(R.menu.workout_set_actions)
-                show()
-            }
+                setMenuResource(R.menu.workout_set_actions)
+            }.build().show()
         }
 
         override fun onMenuItemClick(item: MenuItem): Boolean {

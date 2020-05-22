@@ -7,7 +7,7 @@ import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.RecyclerView
 
 class DataBindingViewHolderBase<T>(
-    private val binding: ViewDataBinding
+    val binding: ViewDataBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
 

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
+import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
@@ -63,11 +64,10 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
             selectedItemId = item.dto.id!!
 
             if (isLongClick) {
-                PopupMenu(view.context, view).apply {
+                IconPopupMenuBuilder(view.context, view).apply {
                     setOnMenuItemClickListener(this@AdapterClickListener)
-                    inflate(R.menu.et_actions)
-                    show()
-                }
+                    setMenuResource(R.menu.et_actions)
+                }.build().show()
             } else {
                 eventListener?.onItemSelected(selectedItemId)
             }
