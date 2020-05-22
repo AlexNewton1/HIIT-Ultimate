@@ -26,7 +26,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     private val args: WorkoutFragmentArgs by navArgs()
 
     private val viewModel: WorkoutViewModel by viewModels() {
-        WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId)
+        WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId, args.workoutDto)
     }
 
     private var timer: WorkoutTimer? = null

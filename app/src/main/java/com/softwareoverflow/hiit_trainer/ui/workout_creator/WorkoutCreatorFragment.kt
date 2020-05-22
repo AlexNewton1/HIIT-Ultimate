@@ -96,9 +96,11 @@ class WorkoutCreatorFragment : Fragment() {
         view.startWorkoutButton.setOnClickListener {
             if (viewModel.workout.value!!.workoutSets.isEmpty())
                 noSetsSnackbar.show()
-            // TODO - pass the workout to the workout
-            /*else
-                findNavController().navigate(R.id.action_workout)*/
+            else {
+                val action =
+                    WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToWorkoutFragment(workoutDto = viewModel.workout.value)
+                findNavController().navigate(action)
+            }
         }
 
         view.saveSpeedDial.setMenuListener(object : SimpleMenuListenerAdapter() {

@@ -1,5 +1,9 @@
 package com.softwareoverflow.hiit_trainer.repository.dto
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class WorkoutSetDTO(
     var exerciseTypeDTO: ExerciseTypeDTO? = null,
     var workTime: Int? = 25,
@@ -7,4 +11,4 @@ data class WorkoutSetDTO(
     var numReps: Int? = 6,
     var recoverTime: Int? = 120,
     var orderInWorkout: Int? = null
-)
+) : Parcelable

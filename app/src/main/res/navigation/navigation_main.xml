@@ -55,6 +55,9 @@
             <action
                 android:id="@+id/action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog"
                 app:destination="@id/overwriteExistingWorkoutDialog" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_workoutFragment"
+                app:destination="@id/workoutFragment" />
         </fragment>
         <navigation
             android:id="@+id/nav_workout_set_creator"
@@ -101,7 +104,13 @@
         android:label="Workout">
         <argument
             android:name="workoutId"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="workoutDto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/loadSavedWorkoutFragment"

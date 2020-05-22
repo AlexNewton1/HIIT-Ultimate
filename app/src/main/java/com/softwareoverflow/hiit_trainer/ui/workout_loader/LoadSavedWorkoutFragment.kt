@@ -46,7 +46,7 @@ class LoadSavedWorkoutFragment : Fragment() {
                 override fun onItemSelected(selected: Long?) {
                     val action =
                         LoadSavedWorkoutFragmentDirections.actionLoadSavedWorkoutFragmentToWorkoutFragment(
-                            selected!!
+                            workoutId = selected!!
                         )
                     findNavController().navigate(action)
                 }
@@ -84,11 +84,11 @@ class LoadSavedWorkoutFragment : Fragment() {
             viewModel.changeSortOrder();
         }
 
-        binding.nameSearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?) =  true
+        binding.nameSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let{
+                newText?.let {
                     viewModel.setFilterText(newText)
                 }
 

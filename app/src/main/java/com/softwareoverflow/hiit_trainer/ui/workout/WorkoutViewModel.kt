@@ -3,16 +3,14 @@ package com.softwareoverflow.hiit_trainer.ui.workout
 import android.app.Application
 import android.text.format.DateUtils
 import androidx.lifecycle.*
-import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 import com.softwareoverflow.hiit_trainer.ui.getWorkoutCompleteExerciseType
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
 
-class WorkoutViewModel(application: Application, workoutId: Long, repo: IWorkoutRepository) :
+class WorkoutViewModel(application: Application, workout: WorkoutDTO) :
     AndroidViewModel(application) {
 
     private val _workout = MutableLiveData<WorkoutDTO>()
@@ -69,16 +67,12 @@ class WorkoutViewModel(application: Application, workoutId: Long, repo: IWorkout
 
     init {
         viewModelScope.launch {
-            LoadingSpinner.showLoadingIcon()
-            _workout.value = repo.getWorkoutById(workoutId).apply {
+            _workout.value = workout.apply {
                 _currentWorkoutSet.value = this.workoutSets[0]
                 _currentRep.value = 1
                 _sectionTimeRemaining.value = _currentWorkoutSet.value!!.workTime
                 _workoutTimeRemaining.value = this.getDuration()
             }
-
-            LoadingSpinner.hideLoadingIcon()
-
         }
     }
 
