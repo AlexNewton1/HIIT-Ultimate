@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.softwareoverflow.hiit_trainer.ui.workout_saver.WorkoutSaverViewModel" />
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:maxLines="1"
-            android:text="Save New Workout"
+            android:text="@string/save_new_workout"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView"
@@ -43,7 +44,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:labelFor="@id/workoutNameET"
-            android:text="Workout Name:"
+            android:text="@string/workout_name"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/circularIconImageView" />
@@ -54,6 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:autofillHints="no"
+            android:inputType="text"
             android:text="@={viewModel.newWorkoutName}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,26 +69,27 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toStartOf="@+id/button2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/workoutNameET" />
 
+        <!-- TODO get click listener working -->
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:text="Save"
+            android:onClick="@{() -> viewModel.saveWorkout()}"
+            android:text="@string/save"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/cancelButton"
-            app:layout_constraintTop_toBottomOf="@+id/workoutNameET"
-            android:onClick="@{() -> viewModel.saveWorkout()}"/>
+            app:layout_constraintTop_toBottomOf="@+id/workoutNameET" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

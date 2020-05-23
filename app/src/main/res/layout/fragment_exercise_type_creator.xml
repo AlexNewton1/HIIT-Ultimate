@@ -19,12 +19,12 @@
             android:id="@+id/etViewPagerPicker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:colorHex="@{viewModel.colorHex}"
+            app:iconName="@{viewModel.iconName}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:iconName="@{viewModel.iconName}"
-            app:colorHex="@{viewModel.colorHex}"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view"
@@ -41,8 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
+            android:autofillHints="no"
             android:gravity="center"
             android:hint="@string/exercise_type_name"
+            android:inputType="text"
             android:maxLength="@integer/et_name_length_max"
             android:text="@{viewModel.exerciseTypeName}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -53,10 +55,10 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/createOrUpdateExerciseTypeButton"
-            android:src="@drawable/icon_tick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:src="@drawable/icon_tick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

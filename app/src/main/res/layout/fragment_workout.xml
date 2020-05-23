@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="Up Next:"
+            android:text="@string/up_next"
             android:textSize="18sp"
             android:visibility="@{viewModel.showUpNextLabel ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Remaining Time:"
+            android:text="@string/remaining_time"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/view4"
             app:layout_constraintStart_toStartOf="parent" />

@@ -37,7 +37,7 @@
         android:layout_marginTop="8dp"
         android:textSize="20sp"
         android:gravity="center"
-        android:text="No Workout sets found. Add some using the button above!"
+        android:text="@string/add_workout_set_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createNewWorkoutSetButton" />

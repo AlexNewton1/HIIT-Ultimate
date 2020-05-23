@@ -14,7 +14,6 @@ import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditabl
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.OverwriteWorkoutListAdapter
 import kotlinx.android.synthetic.main.dialog_overwrite_existing_workout.*
-import timber.log.Timber
 
 class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
 
@@ -34,10 +33,7 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
             requireContext(),
             object : ISelectableEditableListEventListener {
                 override fun onItemSelected(selected: Long?) {
-                    overwriteExistingViewModel.setCurrentlySelectedId(
-                        selected
-                    )
-                    Timber.d("Overwrite: onItemSelected in fragment $selected")
+                    overwriteExistingViewModel.setCurrentlySelectedId(selected)
                 }
 
                 // There is no option for deleting or editing at this stage.

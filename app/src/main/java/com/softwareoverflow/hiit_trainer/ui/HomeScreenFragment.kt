@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.databinding.FragmentHomeScreenBinding
 import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 
@@ -19,7 +20,10 @@ class HomeScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_screen, container, false)
+        val binding = DataBindingUtil.inflate<FragmentHomeScreenBinding>(inflater, R.layout.fragment_home_screen, container, false)
+        binding.lifecycleOwner = this
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,17 +34,6 @@ class HomeScreenFragment : Fragment() {
                 R.id.action_homeScreenFragment_to_workoutCreatorHomeFragment
             )
         )
-
-        editWorkout1Button.setOnClickListener {
-            val action =
-                HomeScreenFragmentDirections.actionHomeScreenFragmentToWorkoutCreatorHomeFragment(1L)
-            findNavController().navigate(action)
-        }
-
-        startWorkout1Button.setOnClickListener {
-            val action = HomeScreenFragmentDirections.actionHomeScreenFragmentToWorkoutFragment(1L)
-            findNavController().navigate(action)
-        }
 
         loadSavedWorkoutsButton.setOnClickListener(
             Navigation.createNavigateOnClickListener(

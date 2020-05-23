@@ -21,9 +21,6 @@
 
         </action>
         <action
-            android:id="@+id/action_homeScreenFragment_to_workoutFragment"
-            app:destination="@id/workoutFragment" />
-        <action
             android:id="@+id/action_homeScreenFragment_to_loadSavedWorkoutFragment"
             app:destination="@id/loadSavedWorkoutFragment" />
     </fragment>
@@ -41,6 +38,7 @@
         <fragment
             android:id="@+id/workoutCreatorFragment"
             android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorFragment"
+            android:label="@string/create_new_workout"
             tools:layout="@layout/fragment_workout_creator">
             <action
                 android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
@@ -111,6 +109,9 @@
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_workoutFragment_to_workoutCompleteFragment"
+            app:destination="@id/workoutCompleteFragment" />
     </fragment>
     <fragment
         android:id="@+id/loadSavedWorkoutFragment"
@@ -127,5 +128,13 @@
                 android:defaultValue="0L"
                 app:argType="long"/>
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/workoutCompleteFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutCompleteFragment"
+        android:label="WorkoutCompleteFragment" >
+        <argument
+            android:name="workoutDto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
     </fragment>
 </navigation>

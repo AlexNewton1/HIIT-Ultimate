@@ -63,7 +63,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
             if (etExerciseTypeName.text.toString().isBlank()) {
                 Snackbar.make(
                     etExerciseTypeName,
-                    R.string.error_exercise_type_name_required,
+                    R.string.error_name_required,
                     Snackbar.LENGTH_SHORT
                 ).show()
             } else {

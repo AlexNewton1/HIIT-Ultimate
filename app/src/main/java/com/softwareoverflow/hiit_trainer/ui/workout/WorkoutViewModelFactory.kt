@@ -33,7 +33,7 @@ class WorkoutViewModelFactory(
                     }
                 }
                 workout != null -> {
-                    return WorkoutViewModel(application, workout) as T;
+                    return WorkoutViewModel(application, workout) as T
                 }
                 else -> {
                     throw IllegalArgumentException("Cannot instantiate workout fragment without either an id or a dto.")

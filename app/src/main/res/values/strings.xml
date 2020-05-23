@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">HIIT-Trainer</string>
 
-    <string name="min_sec_time_format">%1$02d:%2$2d</string> <!-- e.g. 02:25 -->
-
     <string name="create_new_exercise_type">Create New Exercise Type</string>
-    <string name="error_exercise_type_name_required">Please enter a name.</string>
+    <string name="error_name_required">Please enter a name.</string>
     <string name="char_limit_exceeded">Maximum length %1$02d characters.</string>
     <string name="select_exercise_type">Please select an exercise type.</string>
 
@@ -16,14 +14,27 @@
     <string name="dismiss">Dismiss</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="add_workout_set">Add new workout set</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_workout_set_hint">No Workout sets found. Add some using the button above.</string>
+
+    <string name="start_workout">Start Workout</string>
+
+    <string name="exercise_type_name">Exercise Type Name…</string>
+    <string name="workout_name">Workout Name:</string>
 
     <string name="save">Save</string>
-    <string name="start_workout">Start Workout</string>
-    <string name="up_next">Up Next:</string>
-    <string name="workout_complete">Workout Complete!</string>
-    <string name="exercise_type_name">Exercise Type Name…</string>
-
     <string name="save_as">Save As…</string>
+    <string name="save_new_workout">Save New Workout</string>
     <string name="overwrite_existing">Overwrite Existing</string>
+    <string name="overwrite_existing_workout">Overwrite Existing Workout</string>
+    <string name="workout_saved">Workout \'%1$s\' saved.</string>
+
+    <string name="upgrade_to_pro">Upgrade To Pro!</string>
+    <string name="create_new_workout">Create New Workout</string>
+    <string name="load_saved_workout">Load Saved Workout</string>
+
+    <string name="up_next">Up Next:</string>
+    <string name="remaining_time">Remaining Time:</string>
+    <string name="workout_complete">Workout Complete!</string>
+
 </resources>

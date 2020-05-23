@@ -10,9 +10,10 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.doOnLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
@@ -25,7 +26,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
 
     private val args: WorkoutFragmentArgs by navArgs()
 
-    private val viewModel: WorkoutViewModel by viewModels() {
+    private val viewModel: WorkoutViewModel by navGraphViewModels(R.id.workoutFragment) {
         WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId, args.workoutDto)
     }
 
@@ -127,10 +128,10 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     }
 
     override fun onFinish() {
-        throw NotImplementedError()
+        val action = WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
+        findNavController().navigate(action)
     }
 
-    // TODO - Check this does handle cancelling the timer if the user navigates away from the page
     override fun onDestroy() {
         timer?.cancel()
         super.onDestroy()

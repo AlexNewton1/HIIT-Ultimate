@@ -46,10 +46,9 @@ abstract class SaveWorkoutDialog : DialogFragment() {
             PorterDuffColorFilter(fadeColor, PorterDuff.Mode.SRC_IN)
         binding.root.background.alpha = 100
 
-        // TODO string resource
         emptyNameWarning = Snackbar.make(
             parentFragment?.view ?: requireView(),
-            "Please enter a workout name",
+            R.string.error_name_required,
             Snackbar.LENGTH_SHORT
         )
 
@@ -64,7 +63,10 @@ abstract class SaveWorkoutDialog : DialogFragment() {
             if (it) {
                 Snackbar.make(
                     requireParentFragment().requireView(),
-                    "Workout '${viewModel.newWorkoutName.value}' saved.",
+                    requireActivity().applicationContext.getString(
+                        R.string.workout_saved,
+                        viewModel.newWorkoutName.value
+                    ),
                     Snackbar.LENGTH_SHORT
                 ).show()
                 findNavController().navigateUp()
