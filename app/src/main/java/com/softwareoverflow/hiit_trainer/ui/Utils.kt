@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.view.inputmethod.InputMethodManager
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
+import timber.log.Timber
 import kotlin.math.abs
 
 val Int.pxToDp: Int
@@ -24,6 +25,7 @@ fun String.getDrawableId(context: Context): Int {
 }
 
 fun String.getColorId(): Int {
+    Timber.d("Loading: color: $this")
     return Color.parseColor(this)
 }
 

@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="dto"
-            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutListDomainObject" />
+            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutOverwriteDomainObject" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/selectOnClick"
         android:layout_width="match_parent"
         android:layout_height="@dimen/half_fab_size"
-        tools:background="@drawable/bg_rounded_lozenge"
-        android:background="@drawable/bg_rounded_lozenge">
+        android:background="@drawable/bg_rounded_lozenge"
+        tools:background="@drawable/bg_rounded_lozenge">
 
         <CheckBox
             android:id="@+id/savedWorkoutSelect"
             android:layout_width="@dimen/half_fab_size"
             android:layout_height="@dimen/half_fab_size"
             android:button="@drawable/checkbox_circle"
+            android:checked="@{dto.selected}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:checked="@{dto.selected}"
             tools:checked="true" />
 
         <EditText
+            android:inputType="text"
+            android:autofillHints="no"
+            android:hint="@string/workout_name"
             android:id="@+id/workoutNameET"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

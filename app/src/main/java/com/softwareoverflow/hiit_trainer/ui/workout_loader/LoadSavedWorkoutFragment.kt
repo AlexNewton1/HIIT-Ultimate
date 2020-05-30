@@ -44,15 +44,18 @@ class LoadSavedWorkoutFragment : Fragment() {
             setEventListener(object :
                 ISelectableEditableListEventListener {
                 override fun onItemSelected(selected: Long?) {
-                    val action =
-                        LoadSavedWorkoutFragmentDirections.actionLoadSavedWorkoutFragmentToWorkoutFragment(
-                            workoutId = selected!!
-                        )
-                    findNavController().navigate(action)
+                    if(selected != null) {
+                        val action =
+                            LoadSavedWorkoutFragmentDirections.actionLoadSavedWorkoutFragmentToWorkoutFragment(
+                                workoutId = selected
+                            )
+                        findNavController().navigate(action)
+                    } else {
+                        findNavController().navigate(R.id.action_loadSavedWorkoutFragment_to_upgradeDialog)
+                    }
                 }
 
                 override fun triggerItemDeletion(id: Long) {
-                    // TODO probably add are you sure dialog
                     viewModel.deleteWorkout(id)
                 }
 
@@ -67,9 +70,8 @@ class LoadSavedWorkoutFragment : Fragment() {
         }
 
         binding.listSavedWorkouts.addItemDecoration(
-            SpacedListDecoration(
-                requireContext()
-            )
+            SpacedListDecoration(requireContext())
+
         )
 
         viewModel.workouts.observe(viewLifecycleOwner, Observer {
@@ -99,5 +101,5 @@ class LoadSavedWorkoutFragment : Fragment() {
         return binding.root
     }
 
-    // TODO add some form of animation to the views when first displayed
+    // TODO add some form of animation to the views when first displayed. Rise up, come down, slide in etc
 }

@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_loadSavedWorkoutFragment"
             app:destination="@id/loadSavedWorkoutFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_upgradeDialog"
+            app:destination="@id/upgradeDialog" />
     </fragment>
     <!-- TODO  Make all the labels use string resources -->
 
@@ -128,6 +131,9 @@
                 android:defaultValue="0L"
                 app:argType="long"/>
         </action>
+        <action
+            android:id="@+id/action_loadSavedWorkoutFragment_to_upgradeDialog"
+            app:destination="@id/upgradeDialog" />
     </fragment>
     <fragment
         android:id="@+id/workoutCompleteFragment"
@@ -136,5 +142,11 @@
         <argument
             android:name="workoutDto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
+            app:destination="@id/upgradeDialog" />
     </fragment>
+    <dialog
+        android:id="@+id/upgradeDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeDialog" />
 </navigation>

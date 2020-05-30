@@ -18,7 +18,7 @@ class OverwriteWorkoutListAdapter(
     private val context: Context,
     eventListener: ISelectableEditableListEventListener
 ) :
-    DataBindingAdapter<WorkoutListDomainObject>(
+    DataBindingAdapter<WorkoutOverwriteDomainObject>(
         DiffCallback(),
         AdapterClickListener(eventListener)
     ) {
@@ -26,7 +26,7 @@ class OverwriteWorkoutListAdapter(
     private var currentlySelectedId: Long? = null
     lateinit var updatedName: String; private set
 
-    override fun getColorHexForItem(item: WorkoutListDomainObject) =
+    override fun getColorHexForItem(item: WorkoutOverwriteDomainObject) =
         "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
 
     override fun getItemViewType(position: Int): Int {
@@ -34,7 +34,7 @@ class OverwriteWorkoutListAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: DataBindingViewHolderBase<WorkoutListDomainObject>,
+        holder: DataBindingViewHolderBase<WorkoutOverwriteDomainObject>,
         position: Int
     ) {
         super.onBindViewHolder(holder, position)
@@ -111,11 +111,11 @@ class OverwriteWorkoutListAdapter(
     }
 
     class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :
-        IAdapterOnClickListener<WorkoutListDomainObject> {
+        IAdapterOnClickListener<WorkoutOverwriteDomainObject> {
 
         override fun onClick(
             view: View,
-            item: WorkoutListDomainObject,
+            item: WorkoutOverwriteDomainObject,
             position: Int,
             isLongClick: Boolean
         ) {
@@ -124,17 +124,17 @@ class OverwriteWorkoutListAdapter(
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<WorkoutListDomainObject>() {
+    class DiffCallback : DiffUtil.ItemCallback<WorkoutOverwriteDomainObject>() {
         override fun areItemsTheSame(
-            oldItem: WorkoutListDomainObject,
-            newItem: WorkoutListDomainObject
+            oldItem: WorkoutOverwriteDomainObject,
+            newItem: WorkoutOverwriteDomainObject
         ): Boolean {
             return oldItem.dto.id == newItem.dto.id
         }
 
         override fun areContentsTheSame(
-            oldItem: WorkoutListDomainObject,
-            newItem: WorkoutListDomainObject
+            oldItem: WorkoutOverwriteDomainObject,
+            newItem: WorkoutOverwriteDomainObject
         ): Boolean {
             return oldItem == newItem
         }

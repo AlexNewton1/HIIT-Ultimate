@@ -2,9 +2,10 @@ package com.softwareoverflow.hiit_trainer.ui.workout_loader
 
 import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
-import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
+import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -15,16 +16,12 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
     private val _searchFilter = MutableLiveData("")
 
     private val _workouts = repo.getAllWorkouts()
-    private val _workoutsSorted = MediatorLiveData<List<WorkoutDTO>>()
-    val workouts: LiveData<List<WorkoutDTO>>
+    private val _workoutsSorted = MediatorLiveData<List<WorkoutLoaderDomainObject>>()
+    val workouts: LiveData<List<WorkoutLoaderDomainObject>>
         get() = _workoutsSorted
 
     init {
         _workoutsSorted.addSource(_workouts) {
-            for(workout in it)
-                for(set in workout.workoutSets)
-                    Timber.d("Workout ${workout.id} et: ${set.exerciseTypeDTO!!.name}")
-
             _workoutsSorted.value = getWorkoutsToDisplay()
         }
 
@@ -48,7 +45,7 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
         _searchFilter.value = filterText
     }
 
-    private fun getWorkoutsToDisplay() : List<WorkoutDTO>{
+    private fun getWorkoutsToDisplay() : List<WorkoutLoaderDomainObject>{
         var workouts = _workouts.value ?: arrayListOf()
 
         // Filter
@@ -61,7 +58,19 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
         if (sortOrder.value == SortOrder.ASC)
             workouts = workouts.reversed()
 
-        return workouts
+        val domainObjects = workouts.map { WorkoutLoaderDomainObject(it) }.toMutableList()
+
+        if(!UpgradeManager.hasUserUpgraded && _searchFilter.value.isNullOrEmpty()){
+            Timber.d("Loading: not upgraded & empty search. Checking to add some stuff... $domainObjects")
+            while(domainObjects.size < UpgradeManager.maxSavedWorkoutsFreeVersion)
+                domainObjects.add(WorkoutLoaderDomainObject.placeholderUnlocked)
+
+            Timber.d("Loading: Adding placeholderLocked")
+            domainObjects.add(WorkoutLoaderDomainObject.placeholderLocked)
+        }
+
+        Timber.d("Loading: Returning domain objects $domainObjects")
+        return domainObjects
     }
 
     fun deleteWorkout(id: Long){

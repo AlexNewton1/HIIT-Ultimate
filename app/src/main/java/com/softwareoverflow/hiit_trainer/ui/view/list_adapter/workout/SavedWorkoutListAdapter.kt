@@ -1,6 +1,9 @@
 package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -8,31 +11,48 @@ import androidx.core.content.ContextCompat
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
-import timber.log.Timber
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.*
 
 class SavedWorkoutListAdapter(private val context: Context) :
-    DataBindingAdapter<WorkoutDTO>(
+    DataBindingAdapter<WorkoutLoaderDomainObject>(
         DiffCallbackBase(),
         AdapterClickListener()
     ) {
 
-    override fun getItemViewType(position: Int): Int {
-        Timber.d("LoadWorkout: SavedWorkoutListAdapter getItemViewType called")
-        return R.layout.list_item_workout
+    override fun onBindViewHolder(
+        holder: DataBindingViewHolderBase<WorkoutLoaderDomainObject>,
+        position: Int
+    ) {
+        super.onBindViewHolder(holder, position)
+
+        if (currentList[position].type != WorkoutLoaderDomainObjectType.USER) {
+
+            val background = holder.itemView.findViewById<View>(R.id.backgroundView).background
+            background.colorFilter =
+                PorterDuffColorFilter(Color.parseColor("#2b2b2b"), PorterDuff.Mode.SRC_IN)
+            background.alpha = 75
+        }
     }
 
-    override fun getColorHexForItem(item: WorkoutDTO): String =
-        "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
+    override fun getItemViewType(position: Int): Int {
+        return if (currentList[position].type == WorkoutLoaderDomainObjectType.USER)
+            R.layout.list_item_workout
+        else
+            R.layout.list_item_workout_placeholder
+    }
+
+    override fun getColorHexForItem(item: WorkoutLoaderDomainObject): String {
+        return if (item.type == WorkoutLoaderDomainObjectType.USER)
+            "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
+        else
+            "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
+    }
 
     fun setEventListener(listener: ISelectableEditableListEventListener) {
         AdapterClickListener.setEventListener(listener)
     }
 
-    class AdapterClickListener : IAdapterOnClickListener<WorkoutDTO>,
+    class AdapterClickListener : IAdapterOnClickListener<WorkoutLoaderDomainObject>,
         PopupMenu.OnMenuItemClickListener {
         companion object {
             private var eventListener: ISelectableEditableListEventListener? = null
@@ -44,16 +64,20 @@ class SavedWorkoutListAdapter(private val context: Context) :
 
         private lateinit var clickedItem: WorkoutDTO
 
-        override fun onClick(view: View, item: WorkoutDTO, position: Int, isLongClick: Boolean){
-
-            if(isLongClick){
-                clickedItem = item
+        override fun onClick(
+            view: View,
+            item: WorkoutLoaderDomainObject,
+            position: Int,
+            isLongClick: Boolean
+        ) {
+            if (isLongClick && item.type == WorkoutLoaderDomainObjectType.USER) {
+                clickedItem = item.dto
                 IconPopupMenuBuilder(view.context, view).apply {
                     setOnMenuItemClickListener(this@AdapterClickListener)
                     setMenuResource(R.menu.workout_actions)
                 }.build().show()
             } else {
-                eventListener?.onItemSelected(item.id)
+                eventListener?.onItemSelected(item.dto.id)
             }
         }
 

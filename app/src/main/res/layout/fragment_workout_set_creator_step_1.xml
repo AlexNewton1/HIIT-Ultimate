@@ -36,16 +36,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:contentDescription="@string/content_desc_sort_alphabetically"
             android:id="@+id/sortButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
             android:src="@{(viewModel.sortOrder == SortOrder.ASC) ? @drawable/icon_sort_alph_asc : @drawable/icon_sort_alph_desc }"
             app:layout_constraintBottom_toBottomOf="@+id/view2"
-            tools:src="@drawable/icon_sort_alph_desc"
             app:layout_constraintDimensionRatio="W,1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/icon_sort_alph_desc" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exerciseTypePickerList"

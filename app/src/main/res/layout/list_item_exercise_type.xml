@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="dto"
             type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeListDomainObject" />
@@ -21,12 +23,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
+            app:colorHex="@{dto.dto.colorHex}"
+            app:iconName="@{dto.dto.iconName}"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:colorHex="@{dto.dto.colorHex}"
-            app:iconName="@{dto.dto.iconName}"
             tools:src="@drawable/icon_fire" />
 
         <TextView
@@ -39,23 +41,23 @@
             android:gravity="center"
             android:maxLength="@integer/et_name_length_max"
             android:padding="@dimen/fragment_padding"
+            android:text="@{dto.dto.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/exerciseTypeIcon"
             app:layout_constraintStart_toStartOf="@+id/exerciseTypeIcon"
             app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
-            android:text="@{dto.dto.name}"
             tools:text="This is the exercise type name" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/et_selected_frame"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/bg_rounded_lozenge_outline"
             android:visibility="@{dto.selected ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/bg_rounded_lozenge_outline">
+            app:layout_constraintTop_toTopOf="parent">
 
             <View
                 android:id="@+id/tickIconView"
@@ -75,6 +77,7 @@
                 android:layout_marginBottom="8dp"
                 android:adjustViewBounds="true"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/content_desc_selected"
                 android:scaleType="fitXY"
                 android:src="@drawable/icon_tick"
                 app:layout_constraintBottom_toBottomOf="parent"

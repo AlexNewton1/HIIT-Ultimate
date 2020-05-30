@@ -5,13 +5,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutListDomainObject
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutOverwriteDomainObject
 
 class OverwriteWorkoutViewModel(repo: IWorkoutRepository, val dto: WorkoutDTO) : WorkoutSaverViewModel(repo, dto) {
 
     private val _savedWorkouts = repo.getAllWorkouts()
-    private val _existingWorkouts = MediatorLiveData<List<WorkoutListDomainObject>>();
-    val existingWorkouts: LiveData<List<WorkoutListDomainObject>>
+    private val _existingWorkouts = MediatorLiveData<List<WorkoutOverwriteDomainObject>>();
+    val existingWorkouts: LiveData<List<WorkoutOverwriteDomainObject>>
         get() = _existingWorkouts
 
     private val _currentSelectedId = MutableLiveData(dto.id)
@@ -33,8 +33,8 @@ class OverwriteWorkoutViewModel(repo: IWorkoutRepository, val dto: WorkoutDTO) :
         }
     }
 
-    private fun getWorkoutNamesToDisplay(dtoList: List<WorkoutDTO>): List<WorkoutListDomainObject> {
-        return dtoList.map { WorkoutListDomainObject(it, it.id == _currentSelectedId.value) }
+    private fun getWorkoutNamesToDisplay(dtoList: List<WorkoutDTO>): List<WorkoutOverwriteDomainObject> {
+        return dtoList.map { WorkoutOverwriteDomainObject(it, it.id == _currentSelectedId.value) }
     }
 
     fun setCurrentlySelectedId(selected: Long?) {
