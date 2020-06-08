@@ -43,7 +43,7 @@ class WorkoutSetListAdapter :
 
             clickedPosition = position
 
-            /* TODO in future version, find a way of enabling / disabling the move up / move down menu items based on position.
+            /* TODO FUTURE VERSION, find a way of enabling / disabling the move up / move down menu items based on position.
                 This was attempted by changing the interface, although the viewHolders aren't recreated so passing static values to them
                 at creation is not feasible. Will need to think up a solution to this. For now, this all options are allowed and the logic
                 is in the view model to prevent any indexing errors.

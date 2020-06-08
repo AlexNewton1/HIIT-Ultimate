@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeScreenFragment"
         android:name="com.softwareoverflow.hiit_trainer.ui.HomeScreenFragment"
-        android:label="HIIT Trainer"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_home_screen">
         <action
             android:id="@+id/action_homeScreenFragment_to_workoutCreatorHomeFragment"
@@ -27,12 +27,11 @@
             android:id="@+id/action_homeScreenFragment_to_upgradeDialog"
             app:destination="@id/upgradeDialog" />
     </fragment>
-    <!-- TODO  Make all the labels use string resources -->
 
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.softwareoverflow.hiit_trainer.ui.AboutFragment"
-        android:label="About HIIT Trainer"
+        android:label="@string/nav_about"
         tools:layout="@layout/fragment_about" />
 
     <navigation
@@ -66,12 +65,12 @@
             <fragment
                 android:id="@+id/exerciseTypeCreator"
                 android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator.ExerciseTypeCreatorFragment"
-                android:label="Create Exercise Type"
+                android:label="@string/nav_et_creator"
                 tools:layout="@layout/fragment_exercise_type_creator" />
             <fragment
                 android:id="@+id/exerciseTypePickerFragment"
                 android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep1Fragment"
-                android:label="Create Workout Set (Step 1)"
+                android:label="@string/nav_set_creator_step_1"
                 tools:layout="@layout/fragment_workout_set_creator_step_1">
                 <action
                     android:id="@+id/action_exerciseTypePickerFragment_to_workoutSetCreator"
@@ -83,7 +82,7 @@
             <fragment
                 android:id="@+id/workoutSetCreator"
                 android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep2Fragment"
-                android:label="Create Workout Set (Step 2)"
+                android:label="@string/nav_set_creator_step_2"
                 tools:layout="@layout/fragment_workout_set_creator_step_2">
                 <action
                     android:id="@+id/action_workoutSetCreator_to_workoutCreatorHomeFragment"
@@ -102,24 +101,26 @@
     <fragment
         android:id="@+id/workoutFragment"
         android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutFragment"
-        android:label="Workout">
+        android:label="@string/nav_workout">
         <argument
             android:name="workoutId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <argument
             android:name="workoutDto"
+            android:defaultValue="@null"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_workoutFragment_to_workoutCompleteFragment"
-            app:destination="@id/workoutCompleteFragment" />
+            app:destination="@id/workoutCompleteFragment"
+            app:popUpTo="@id/workoutCompleteFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/loadSavedWorkoutFragment"
         android:name="com.softwareoverflow.hiit_trainer.ui.workout_loader.LoadSavedWorkoutFragment"
-        android:label="Saved Workouts">
+        android:label="@string/nav_saved_workouts">
         <action
             android:id="@+id/action_loadSavedWorkoutFragment_to_workoutFragment"
             app:destination="@id/workoutFragment" />
@@ -129,7 +130,7 @@
             <argument
                 android:name="workoutCreatorWorkoutId"
                 android:defaultValue="0L"
-                app:argType="long"/>
+                app:argType="long" />
         </action>
         <action
             android:id="@+id/action_loadSavedWorkoutFragment_to_upgradeDialog"
@@ -138,13 +139,18 @@
     <fragment
         android:id="@+id/workoutCompleteFragment"
         android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutCompleteFragment"
-        android:label="WorkoutCompleteFragment" >
+        android:label="@string/workout_complete">
         <argument
             android:name="workoutDto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
         <action
             android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
             app:destination="@id/upgradeDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment"
+            app:popUpTo="@id/homeScreenFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <dialog
         android:id="@+id/upgradeDialog"

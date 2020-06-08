@@ -5,6 +5,5 @@
         android:icon="@drawable/icon_loading"
         app:showAsAction="always"
         android:visible="false"
-        android:title="..."
         />
 </menu>

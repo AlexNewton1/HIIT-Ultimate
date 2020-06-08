@@ -38,6 +38,8 @@
         <EditText
             android:id="@+id/etExerciseTypeName"
             android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
@@ -45,6 +47,7 @@
             android:gravity="center"
             android:hint="@string/exercise_type_name"
             android:inputType="text"
+            android:backgroundTint="@color/colorPrimaryFaded"
             android:maxLength="@integer/et_name_length_max"
             android:text="@{viewModel.exerciseTypeName}"
             app:layout_constraintBottom_toBottomOf="parent"

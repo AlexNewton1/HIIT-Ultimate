@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.view.inputmethod.InputMethodManager
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
-import timber.log.Timber
+import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import kotlin.math.abs
 
 val Int.pxToDp: Int
@@ -16,18 +16,31 @@ val Int.pxToDp: Int
 val Int.dpToPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-fun getWorkoutCompleteExerciseType(context: Context): ExerciseTypeDTO {
-    return ExerciseTypeDTO(null, context.getString(R.string.workout_complete), "icon_trophy", "#FF000000")
-}
 
-fun String.getDrawableId(context: Context): Int {
-    return context.resources.getIdentifier(this, "drawable", context.packageName)
-}
+fun getWorkoutPrepSet(context: Context): WorkoutSetDTO = WorkoutSetDTO(
+    ExerciseTypeDTO(
+        null,
+        context.getString(R.string.get_ready),
+        "icon_heart_pulse",
+        "#FF000000"
+    ),
+    5, // TODO - maybe allow this to be configurable
+    0,
+    1,
+    0
+)
 
-fun String.getColorId(): Int {
-    Timber.d("Loading: color: $this")
-    return Color.parseColor(this)
-}
+fun getWorkoutCompleteExerciseType(context: Context): ExerciseTypeDTO = ExerciseTypeDTO(
+    null,
+    context.getString(R.string.workout_complete),
+    "icon_trophy",
+    "#FF000000"
+)
+
+fun String.getDrawableId(context: Context) =
+    context.resources.getIdentifier(this, "drawable", context.packageName)
+
+fun String.getColorId() = Color.parseColor(this)
 
 fun <T> List<T>.takeN(n: Int): List<T> {
     return when {

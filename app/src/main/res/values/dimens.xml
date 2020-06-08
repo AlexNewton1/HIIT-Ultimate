@@ -4,6 +4,7 @@
     <dimen name="bottom_bar_height">48dp</dimen>
 
     <dimen name="fab_size">56dp</dimen>
+    <dimen name="fab_size_single_padded">64dp</dimen>
     <dimen name="half_fab_size">28dp</dimen>
     <dimen name="half_fab_size_padded">32dp</dimen>
     <dimen name="fab_size_padded">72dp</dimen>

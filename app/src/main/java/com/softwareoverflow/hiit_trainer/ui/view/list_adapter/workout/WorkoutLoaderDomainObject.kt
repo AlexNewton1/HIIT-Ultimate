@@ -1,5 +1,7 @@
 package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 
+import android.content.Context
+import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 
 data class WorkoutLoaderDomainObject(
@@ -7,17 +9,17 @@ data class WorkoutLoaderDomainObject(
     val type: WorkoutLoaderDomainObjectType = WorkoutLoaderDomainObjectType.USER
 ) {
     companion object {
-        // TODO string res
-        val placeholderUnlocked = WorkoutLoaderDomainObject(
-            WorkoutDTO(name = "Workout slot available on FREE mode"),
-            WorkoutLoaderDomainObjectType.PLACEHOLDER_UNLOCKED
-        )
+        fun getPlaceholderUnlocked(context: Context) =
+            WorkoutLoaderDomainObject(
+                WorkoutDTO(name = context.getString(R.string.workout_slot_free)),
+                WorkoutLoaderDomainObjectType.PLACEHOLDER_UNLOCKED
+            )
 
-        // TODO string res
-        val placeholderLocked = WorkoutLoaderDomainObject(
-            WorkoutDTO(name = "Upgrade to PRO to unlock unlimited save slots"),
-            WorkoutLoaderDomainObjectType.PLACEHOLDER_LOCKED
-        )
+        fun getPlaceholderLocked(context: Context) =
+            WorkoutLoaderDomainObject(
+                WorkoutDTO(name = context.getString(R.string.workout_slot_locked)),
+                WorkoutLoaderDomainObjectType.PLACEHOLDER_LOCKED
+            )
     }
 }
 

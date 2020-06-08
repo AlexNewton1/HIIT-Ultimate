@@ -54,11 +54,20 @@
             android:layout_height="0dp"
             android:layout_margin="8dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/createNewExerciseTypeFAB"
+            app:layout_constraintBottom_toTopOf="@+id/view3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameSearch"
             app:spanCount="3" />
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fab_size_double_padded"
+            android:background="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/createNewExerciseTypeFAB"

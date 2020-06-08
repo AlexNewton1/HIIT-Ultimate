@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO get icons showing next to choices on dropdown menu -->
-
     <group android:menuCategory="alternative" android:orderInCategory="0" >
         <item
             android:orderInCategory="0"
             android:id="@+id/workout_set_menu_move_up"
             android:icon="@android:drawable/arrow_up_float"
-            android:title="Move up" />
+            android:title="@string/move_up" />
 
         <item
             android:orderInCategory="1"
             android:id="@+id/workout_set_menu_move_down"
             android:icon="@android:drawable/arrow_down_float"
-            android:title="Move down" />
+            android:title="@string/move_down" />
     </group>
 
     <group android:menuCategory="container" android:orderInCategory="1" >

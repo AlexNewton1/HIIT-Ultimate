@@ -61,7 +61,8 @@
             android:layout_marginEnd="8dp"
             android:src="@drawable/icon_repeat"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/content_desc_num_reps" />
 
         <TextView
             android:layout_width="@dimen/icon_size_large"
@@ -126,13 +127,15 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:src='@{(viewModel.currentSection == "WORK") ? @drawable/icon_fire : ((viewModel.currentSection == "REST") ? @drawable/icon_rest : @drawable/icon_recover )}'
+            android:src='@{(viewModel.currentSection == "WORK") ? @drawable/icon_fire : ((viewModel.currentSection == "REST") ? @drawable/icon_rest : ((viewModel.currentSection == "RECOVER") ? @drawable/icon_recover : @drawable/icon_heart_pulse))}'
             app:layout_constraintBottom_toTopOf="@+id/workoutSectionLabelText"
             app:layout_constraintDimensionRatio="W,1:1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8"
-            tools:src="@drawable/icon_fire" />
+            tools:src="@drawable/icon_heart_pulse"
+            android:contentDescription="@string/content_desc_workout_section_icon" />
 
         <TextView
             android:id="@+id/workoutSectionLabelText"
@@ -140,32 +143,34 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:alpha="0.0"
             android:text="@{viewModel.currentSection}"
-            android:textColor='@{(viewModel.currentSection == "WORK") ? @color/work : ((viewModel.currentSection == "REST") ? @color/rest : @color/recover )}'
+            android:textColor='@{(viewModel.currentSection == "WORK") ? @color/work : ((viewModel.currentSection == "REST") ? @color/rest : ((viewModel.currentSection == "RECOVER") ? @color/recover : @android:color/white))}'
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:alpha="1f"
-            tools:text="Work"
-            tools:textColor="@color/work" />
+            tools:text="Prepare"
+            tools:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="@{viewModel.sectionTimeRemaining}"
             android:textSize="100sp"
-            app:layout_constraintBottom_toTopOf="@+id/view4"
+            app:layout_constraintBottom_toTopOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upNextExerciseTypeView"
             tools:text="01:23" />
 
         <TextView
@@ -207,7 +212,8 @@
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            tools:src="@drawable/icon_sound_on" />
+            tools:src="@drawable/icon_sound_on"
+            android:contentDescription="@string/content_desc_toggle_mute" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -220,7 +226,8 @@
             app:layout_constraintEnd_toStartOf="@+id/imageView4"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
-            tools:src="@android:drawable/ic_media_pause" />
+            tools:src="@android:drawable/ic_media_pause"
+            android:contentDescription="@string/content_desc_toggle_pause" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -232,7 +239,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/view4"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageView2" />
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            android:contentDescription="@string/content_desc_skip" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

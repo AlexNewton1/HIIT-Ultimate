@@ -1,9 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
@@ -11,28 +8,16 @@ import androidx.core.content.ContextCompat
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.*
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 
 class SavedWorkoutListAdapter(private val context: Context) :
     DataBindingAdapter<WorkoutLoaderDomainObject>(
         DiffCallbackBase(),
         AdapterClickListener()
     ) {
-
-    override fun onBindViewHolder(
-        holder: DataBindingViewHolderBase<WorkoutLoaderDomainObject>,
-        position: Int
-    ) {
-        super.onBindViewHolder(holder, position)
-
-        if (currentList[position].type != WorkoutLoaderDomainObjectType.USER) {
-
-            val background = holder.itemView.findViewById<View>(R.id.backgroundView).background
-            background.colorFilter =
-                PorterDuffColorFilter(Color.parseColor("#2b2b2b"), PorterDuff.Mode.SRC_IN)
-            background.alpha = 75
-        }
-    }
 
     override fun getItemViewType(position: Int): Int {
         return if (currentList[position].type == WorkoutLoaderDomainObjectType.USER)
@@ -45,7 +30,7 @@ class SavedWorkoutListAdapter(private val context: Context) :
         return if (item.type == WorkoutLoaderDomainObjectType.USER)
             "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
         else
-            "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.colorPrimary))
+            "#000000" // Black
     }
 
     fun setEventListener(listener: ISelectableEditableListEventListener) {

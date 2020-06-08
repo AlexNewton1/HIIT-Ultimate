@@ -57,6 +57,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <View
+            android:id="@+id/colorFade"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_rounded_lozenge"
+            app:layout_constraintTop_toTopOf="@id/backgroundView"
+            app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/exerciseTypeIcon"
             android:layout_width="@dimen/fab_size"
@@ -69,21 +79,20 @@
             app:layout_constraintTop_toTopOf="@id/backgroundView"
             tools:src="@drawable/icon_locked" />
 
-        <!-- TODO string res this and above -->
         <TextView
             android:id="@+id/exerciseTypeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:maxLines="3"
-            android:text='@{dto.type == WorkoutLoaderDomainObjectType.PLACEHOLDER_UNLOCKED ? "FREE Workout Slot" : "Upgrade to PRO for unlimited slots!" }'
+            android:text="@{dto.dto.name}"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
             app:layout_constraintTop_toTopOf="@+id/backgroundView"
-            tools:text="Upgrade to PRO for unlimited slots!" />
+            tools:text="@string/workout_slot_locked" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -42,7 +42,6 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         return workoutDao.createOrUpdate(workoutEntity, workoutSetEntityList)
     }
 
-    // TODO maybe have a separate Repository object for exercise types if this one becomes cluttered
     override fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>> {
         return Transformations.switchMap(exerciseTypeDao.getAllExerciseTypes()) {
             MutableLiveData(it.toExerciseTypeDTO())

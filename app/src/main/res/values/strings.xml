@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">HIIT-Trainer</string>
+    <string name="app_name">HIIT Trainer</string>
+    <string name="nav_about">About HIIT Trainer</string>
+    <string name="nav_saved_workouts">Saved Workouts</string>
+    <string name="nav_workout">Workout</string>
+    <string name="nav_set_creator_step_1">Create Workout Set (Step 1)</string>
+    <string name="nav_set_creator_step_2">Create Workout Set (Step 2)</string>
+    <string name="nav_et_creator">Create Exercise Type</string>
 
     <string name="create_new_exercise_type">Create New Exercise Type</string>
     <string name="error_name_required">Please enter a name.</string>
@@ -33,9 +39,9 @@
 
     <string name="upgrade_to_pro">Upgrade To Pro!</string>
     <string name="upgrade_to_pro_benefits">Get the following benefits:
-            \n\u2022 Advert Free
-            \n\u2022 Unlimited Saved Workout Slots
-            \n\u2022 Access to all future PRO features
+            \nAdvert Free
+            \nUnlimited Saved Workout Slots
+            \nAccess to all future PRO features
     </string>
     <string name="upgrade_now">Upgrade Now</string>
 
@@ -49,5 +55,15 @@
 
     <string name="content_desc_sort_alphabetically">Sort Alphabetically</string>
     <string name="content_desc_selected">Image indicating this item is selected</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="workout_slot_free">FREE Workout Slot</string>
+    <string name="workout_slot_locked">Upgrade to PRO for unlimited slots!</string>
+    <string name="get_ready">Get Ready!</string>
+    <string name="content_desc_workout_section_icon">Icon representing the current section of the workout</string>
+    <string name="content_desc_toggle_mute">Icon showing the current sound status. Used to mute / un-mute the workout sounds</string>
+    <string name="content_desc_toggle_pause">Shows the current pause status. Toggles between paused an un-paused</string>
+    <string name="content_desc_skip">Skip the current workout section</string>
+    <string name="content_desc_num_reps">UI icon indicating the current repitition</string>
 
 </resources>

@@ -5,10 +5,10 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorPrimaryFaded">#6CBDB5</color>
 
-    <color name="background">#C8C8C8</color>
+    <color name="background">#CDDADD</color>
 
     <color name="work">#FF7043</color>
-    <color name="rest">#FFA726</color>
+    <color name="rest">#FF9514</color>
     <color name="numReps">#66BB6A</color>
     <color name="recover">#42A5F5</color>
 </resources>

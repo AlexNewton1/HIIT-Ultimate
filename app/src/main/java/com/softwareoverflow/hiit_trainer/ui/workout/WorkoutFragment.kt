@@ -20,7 +20,6 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.animation.MoveAndScaleAnimationFactory
 import kotlinx.android.synthetic.main.fragment_workout.*
-import timber.log.Timber
 
 class WorkoutFragment : Fragment(), IWorkoutObserver {
 
@@ -51,7 +50,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         viewModel.workout.observe(viewLifecycleOwner, object : Observer<WorkoutDTO> {
             override fun onChanged(dto: WorkoutDTO?) {
                 dto?.let {
-                    timer = WorkoutTimer(it, this@WorkoutFragment)
+                    timer = WorkoutTimer(requireContext(), it, this@WorkoutFragment)
 
                     // We only want to observe when the workout is first initialised as not null. Remove the observer.
                     viewModel.workout.removeObserver(this)
@@ -61,15 +60,13 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
 
         viewModel.skipSection.observe(viewLifecycleOwner, Observer {
             if (it) {
-                Timber.d("Timer: Trying to skip")
                 timer?.skip()
-                Timber.d("Timer: Skipped")
                 viewModel.onSectionSkipped() // Notify the viewModel the section has been skipped
             }
         })
 
         viewModel.soundOn.observe(viewLifecycleOwner, Observer {
-            // TODO handle sound playing, it will probably be through the Timer delegating to a different class?
+            timer?.toggleSound(it)
         })
 
         viewModel.isPaused.observe(viewLifecycleOwner, Observer {
@@ -90,7 +87,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         })
 
         // TODO come up with a nicer way of handling all the animations and prevent the flashing.
-        // TODO also need a way of passing the anim time in for cases when recover time is less than 3s (otherwise animation jumps part way through to end)
+        // TODO FUTURE VERSION Maybe a way of passing the anim time in for cases when recover time is less than 3s (otherwise animation jumps part way through to end). This use case of recovery < 3s seems unlikely so not a priority
         binding.root.doOnLayout {
             scaleAndMoveAnimation = MoveAndScaleAnimationFactory().apply {
                 setDuration(3000L)

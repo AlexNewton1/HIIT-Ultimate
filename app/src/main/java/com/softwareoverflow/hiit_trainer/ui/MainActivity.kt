@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
 
@@ -47,6 +48,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
+        val controller = findNavController(R.id.myNavHostFragment)
+
+        return when(controller.currentDestination?.id) {
+            R.id.workoutCompleteFragment -> {
+                controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
+                true
+            }
+            else -> NavigationUI.navigateUp(navController, appBarConfiguration)
+        }
     }
 }

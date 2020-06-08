@@ -1,18 +1,23 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
+import android.content.Context
 import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 
 // TODO retrofit a preparation timer in....
-class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) {
+class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: IWorkoutObserver) {
 
     private lateinit var timer: CountDownTimer
     private var millisecondsRemaining: Long = workout.getDuration() * 1000L
+
+    private val _soundManager: WorkoutMediaManager = WorkoutMediaManager(context)
+
+    private var isRunning = false
     private var isPaused: Boolean = false
 
     private var workoutSets = workout.workoutSets.iterator()
-    private var currentSection = WorkoutSection.WORK
+    private var currentSection = WorkoutSection.PREPARE
     private var currentSet = workoutSets.next()
     private var currentSetIndex = 0
     private var currentRep = 1
@@ -20,6 +25,8 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
 
     init {
         createTimer(millisecondsRemaining)
+
+        isRunning = true
         timer.start()
 
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
@@ -31,13 +38,30 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
         millisecondsRemaining =
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
+        if(millisecondsRemaining <= 0 ){
+            _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
+            observer.onFinish()
+            return
+        }
+
+        val currentSound = _soundManager.isMuted()
+        _soundManager.toggleSound(false) // Mute all noises when skipping through
         startNextWorkoutSection()
+        _soundManager.toggleSound(currentSound)
+
+        // Update any observers with the new values
+        observer.onTimerTick(
+            (millisecondsRemaining / 1000).toInt(),
+            (millisRemainingInSection / 1000).toInt()
+        )
 
         // Cancel and recreate the timer
+        isRunning = false
         timer.cancel()
 
         if (!isPaused) {
             createTimer(millisecondsRemaining)
+            isRunning = true
             timer.start()
         }
     }
@@ -47,11 +71,19 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
         this.isPaused = isPaused
 
         if (isPaused) {
+            isRunning = false
             timer.cancel()
-        } else {
+        } else if (!isRunning) {
             createTimer(millisecondsRemaining)
+
+            isRunning = true
             timer.start()
         }
+    }
+
+    /** Allows muting / un-muting **/
+    fun toggleSound(playSound: Boolean){
+        _soundManager.toggleSound(playSound)
     }
 
     private fun createTimer(millis: Long) {
@@ -68,6 +100,10 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
                         (millisecondsRemaining / 1000).toInt(),
                         (millisRemainingInSection / 1000).toInt()
                     )
+
+                    if (millisRemainingInSection <= 3000L && currentSection != WorkoutSection.WORK ) {
+                        _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
+                    }
                 }
 
                 millisRemainingInSection -= tickInterval
@@ -80,7 +116,15 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
     }
 
     private fun startNextWorkoutSection() {
-        if (currentRep == currentSet.numReps) {
+        if(currentSection == WorkoutSection.PREPARE){
+            // Begin the workout
+            currentSection = WorkoutSection.WORK
+
+            if(workoutSets.hasNext())
+                currentSet = workoutSets.next()
+            millisRemainingInSection = getCurrentSetWorkTime()
+        }
+        else if (currentRep == currentSet.numReps) {
             if (currentSection == WorkoutSection.RECOVER) {
                 // Start the new workout set
                 currentRep = 1
@@ -111,10 +155,12 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
             }
         }
 
+        _soundManager.playSound(currentSection)
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
     fun cancel(){
+        _soundManager.onDestroy()
         timer.cancel()
     }
 
@@ -124,5 +170,5 @@ class WorkoutTimer(workout: WorkoutDTO, private val observer: IWorkoutObserver) 
 }
 
 enum class WorkoutSection {
-    WORK, REST, RECOVER
+    PREPARE, WORK, REST, RECOVER
 }

@@ -81,7 +81,6 @@ class LoadSavedWorkoutFragment : Fragment() {
             }
         })
 
-        // TODO sort out click listener on the sort order, and add search filtering
         binding.sortButton.setOnClickListener {
             viewModel.changeSortOrder();
         }

@@ -25,8 +25,6 @@ class XViewPagerPicker @JvmOverloads constructor(
         setupIconPager()
     }
 
-    // TODO maybe make a custom view extending ViewPager2 which can handle the setting by name, moving forward / backward etc etc instead of handling iconPager and ColorPager here
-
     private fun setupColorPager() {
         val colorHexIds: MutableList<String> = resources.getStringArray(R.array.et_colors).toMutableList()
         val ids = colorHexIds.map{
@@ -39,7 +37,6 @@ class XViewPagerPicker @JvmOverloads constructor(
                 ids
             )
 
-        // TODO change this if it works for iconAdapter
         setupPager(colorViewPager, colorAdapter)
     }
 
@@ -119,11 +116,6 @@ class XViewPagerPicker @JvmOverloads constructor(
 
     /*
     TODO investigate use cases architecture further as a potential alternative to the DTO model
-
-    TODO investigate if DiffUtil and ListAdapter can be used for the ViewPager2 instead of manually removing and adding the items each swipe
-
-    TODO create some fake data for the database.
-    TODO create recyclerview and listAdapter for showing all of the exercise types
-    TODO use DiffUtil for it
+    TODO create some initial data for the database.
      */
 }

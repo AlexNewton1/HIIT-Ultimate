@@ -1,5 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_loader
 
+import android.content.Context
 import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
@@ -7,9 +8,8 @@ import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
-class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel() {
+class WorkoutLoaderViewModel(private val context: Context, private val repo: IWorkoutRepository) : ViewModel() {
 
 
     val sortOrder = MutableLiveData(SortOrder.ASC)
@@ -20,17 +20,26 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
     val workouts: LiveData<List<WorkoutLoaderDomainObject>>
         get() = _workoutsSorted
 
+    private var initialized = false
+
+    private val _workoutsSortedChangeObserver = Observer<Any> {
+        if(initialized)
+            _workoutsSorted.value = getWorkoutsToDisplay()
+    }
+
     init {
-        _workoutsSorted.addSource(_workouts) {
-            _workoutsSorted.value = getWorkoutsToDisplay()
-        }
+        _workoutsSorted.addSource(sortOrder, _workoutsSortedChangeObserver)
+        _workoutsSorted.addSource(_searchFilter, _workoutsSortedChangeObserver)
 
-        _workoutsSorted.addSource(sortOrder) {
-            _workoutsSorted.value = getWorkoutsToDisplay()
-        }
+        viewModelScope.launch {
+            LoadingSpinner.showLoadingIcon()
 
-        _workoutsSorted.addSource(_searchFilter){
-            _workoutsSorted.value = getWorkoutsToDisplay()
+            _workoutsSorted.addSource(_workouts) {
+                initialized = true
+                _workoutsSorted.value = getWorkoutsToDisplay()
+            }
+
+            LoadingSpinner.hideLoadingIcon()
         }
     }
 
@@ -61,15 +70,12 @@ class WorkoutLoaderViewModel(private val repo: IWorkoutRepository) : ViewModel()
         val domainObjects = workouts.map { WorkoutLoaderDomainObject(it) }.toMutableList()
 
         if(!UpgradeManager.hasUserUpgraded && _searchFilter.value.isNullOrEmpty()){
-            Timber.d("Loading: not upgraded & empty search. Checking to add some stuff... $domainObjects")
             while(domainObjects.size < UpgradeManager.maxSavedWorkoutsFreeVersion)
-                domainObjects.add(WorkoutLoaderDomainObject.placeholderUnlocked)
+                domainObjects.add(WorkoutLoaderDomainObject.getPlaceholderUnlocked(context))
 
-            Timber.d("Loading: Adding placeholderLocked")
-            domainObjects.add(WorkoutLoaderDomainObject.placeholderLocked)
+            domainObjects.add(WorkoutLoaderDomainObject.getPlaceholderLocked(context))
         }
 
-        Timber.d("Loading: Returning domain objects $domainObjects")
         return domainObjects
     }
 

@@ -19,6 +19,13 @@
         android:layout_height="@dimen/fab_size"
         android:background="@drawable/bg_rounded_lozenge">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colorFade"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fab_size"
+            android:background="@drawable/bg_rounded_lozenge"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/circularIconImageView2"
             android:layout_width="@dimen/fab_size"
@@ -131,11 +138,11 @@
             app:layout_constraintTop_toTopOf="@+id/workoutSetIcon5" />
 
         <ImageButton
-            android:contentDescription="@string/start_workout"
             android:id="@+id/selectOnClick"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/start_workout"
             android:src="@android:drawable/ic_media_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

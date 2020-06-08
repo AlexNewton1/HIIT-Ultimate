@@ -16,8 +16,17 @@
         android:id="@+id/selectOnClick"
         android:layout_width="match_parent"
         android:layout_height="@dimen/half_fab_size"
-        android:background="@drawable/bg_rounded_lozenge"
-        tools:background="@drawable/bg_rounded_lozenge">
+        android:background="@drawable/bg_rounded_lozenge">
+
+        <View
+            android:id="@+id/colorFade"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/half_fab_size"
+            android:background="@drawable/bg_rounded_lozenge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/savedWorkoutSelect"
@@ -48,7 +57,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/bg_rounded_lozenge_outline"
+            android:background="@drawable/bg_rounded_lozenge_selected"
             android:visibility="@{dto.selected ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/savedWorkoutSelect"

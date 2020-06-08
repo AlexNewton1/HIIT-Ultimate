@@ -7,14 +7,14 @@ import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryFactory
 
 class WorkoutLoaderViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
 
-    // TODO looks like theres getting a lot of repition in these methods. Could possibly try and have a few preset factories which pass (repo), (repo, id)... and then only have special factories
+    // TODO looks like there's getting a lot of repetition in these methods. Could possibly try and have a few preset factories which pass (repo), (repo, id)... and then only have special factories
     // for special cases?
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WorkoutLoaderViewModel::class.java)) {
             val repo = WorkoutRepositoryFactory.getInstance(context)
-            return WorkoutLoaderViewModel(repo) as T
+            return WorkoutLoaderViewModel(context, repo) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

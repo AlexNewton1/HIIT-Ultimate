@@ -16,7 +16,6 @@ import com.softwareoverflow.hiit_trainer.databinding.FragmentExerciseTypeCreator
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel
 import kotlinx.android.synthetic.main.fragment_exercise_type_creator.*
 
-// TODO - move this out of workout_creator package. Not really directly related to creating a workout
 class ExerciseTypeCreatorFragment : Fragment() {
 
     private lateinit var viewModel: ExerciseTypeViewModel
@@ -27,8 +26,6 @@ class ExerciseTypeCreatorFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        // TODO - probably change this to binding layout so it can auto-select the correct items and populate the correct name
         val binding: FragmentExerciseTypeCreatorBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_exercise_type_creator,
@@ -36,7 +33,6 @@ class ExerciseTypeCreatorFragment : Fragment() {
             false
         )
 
-        // TODO - pass in the correct Id
         // This does not take the corresponding factory, as the view model *SHOULD* always be created by this point
         val workoutSetViewModel: WorkoutSetCreatorViewModel by navGraphViewModels(R.id.nav_workout_set_creator)
         val viewModelFactory =

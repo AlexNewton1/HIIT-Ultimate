@@ -20,7 +20,7 @@ class IconPopupMenuBuilder(private val context: Context, private val view: View)
     }
 
     fun build() : PopupMenu {
-        val menu = PopupMenu(context, view);
+        val menu = PopupMenu(context, view)
 
         try {
             val fields: Array<Field> = menu.javaClass.declaredFields

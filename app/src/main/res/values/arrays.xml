@@ -2,19 +2,20 @@
 <resources>
 
     <string-array name="et_colors">
-        <item>#000000</item>
+
         <item>#666666</item>
-        <item>#E53935</item>
-        <item>#F4511E</item>
-        <item>#FB8C00</item>
-        <item>#FFB300</item>
+        <item>#FFFF3636</item>
+        <item>#FD5C29</item>
+        <item>#FFA218</item>
+        <item>#FFC02B</item>
         <item>#43A047</item>
-        <item>#00897B</item>
+        <item>#008296</item>
         <item>#039BE5</item>
-        <item>#3949AB</item>
+        <item>#3F51B5</item>
         <item>#5E35B1</item>
-        <item>#8E24AA</item>
-        <item>#D81B60</item>
+        <item>#9C27B0</item>
+        <item>#FFEA4DB0</item>
+        <item>#FFFB3B5E</item>
     </string-array>
 
     <array name="et_icons">

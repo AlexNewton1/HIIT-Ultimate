@@ -21,19 +21,23 @@ class SaveNewWorkoutDialog : SaveWorkoutDialog() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate<DialogSaveNewWorkoutBinding>(
+        val binding = DataBindingUtil.inflate<DialogSaveNewWorkoutBinding>(
             inflater,
             R.layout.dialog_save_new_workout,
             container,
             false
         ) .apply {
-            lifecycleOwner = this@SaveNewWorkoutDialog
-            viewModel = viewModel
-
             cancelButton.setOnClickListener {
                 findNavController().navigateUp()
             }
+
+            saveButton.setOnClickListener {
+                saverViewModel.saveWorkout()
+            }
         }
+
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         return binding.root
     }

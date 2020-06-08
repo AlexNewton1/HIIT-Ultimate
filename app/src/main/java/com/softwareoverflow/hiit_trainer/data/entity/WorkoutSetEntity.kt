@@ -28,7 +28,7 @@ class WorkoutSetEntity(
     var workoutId: Long,
     var orderInWorkout: Int,
 
-    var exerciseTypeId: Long? = null, // TODO think about the case of deleting exercise types... That probably
+    var exerciseTypeId: Long? = null,
     var workTime: Int,
     var restTime: Int,
     var numReps: Int,

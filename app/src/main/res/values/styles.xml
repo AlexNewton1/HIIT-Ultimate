@@ -7,12 +7,19 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:windowBackground">@color/background</item>
+
         <item name="android:buttonStyle">@style/appButtonStyle</item>
+
+
+        <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
+        <item name="android:actionBarWidgetTheme">@style/PopupMenuTextView</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="appButtonStyle" parent="Widget.AppCompat.Button.Borderless" >
         <item name="android:textColor">@android:color/white</item>
-        <item name="background">@drawable/bg_rounded_lozenge</item>
+        <item name="background">@drawable/bg_rounded_lozenge_primary</item>
     </style>
 
     <style name="DialogTheme_transparent" parent="Theme.AppCompat.Dialog">
@@ -22,5 +29,19 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <!-- Change Overflow Menu ListView Divider Property -->
+    <style name="PopupMenuListView" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:divider">#FF0000</item>
+        <item name="android:dividerHeight">2dp</item>
+    </style>
+
+    <style name="PopupMenuTextView" parent="android:Theme.Holo.Light">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <!-- Change Overflow Menu Background -->
+    <style name="PopupMenu" parent="android:Widget.Holo.Light.ListPopupWindow">
+        <item name="android:popupBackground">@color/colorPrimary</item>
+    </style>
     <!-- TODO maybe create a style for the PopupMenu to make it look nicer -->
 </resources>
