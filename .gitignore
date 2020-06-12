@@ -63,7 +63,7 @@ captures/
 google-services.json
 
 #Keys
-app/keys.properties
+gradle.properties
 
 # Freeline
 freeline.py
