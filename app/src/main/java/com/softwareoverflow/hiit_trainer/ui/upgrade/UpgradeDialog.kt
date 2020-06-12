@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.dialog_upgrade.view.*
 
 class UpgradeDialog : FadedDialogBase() {
 
+    private lateinit var billingViewModel: BillingViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

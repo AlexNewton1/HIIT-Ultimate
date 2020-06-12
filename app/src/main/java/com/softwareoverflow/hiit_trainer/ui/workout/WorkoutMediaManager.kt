@@ -30,7 +30,7 @@ class WorkoutMediaManager(context: Context) {
             .build()
 
         _soundPool = SoundPool.Builder()
-            .setMaxStreams(1)
+            .setMaxStreams(2)
             .setAudioAttributes(audioAttrs)
             .build()
             .apply {
@@ -61,6 +61,7 @@ class WorkoutMediaManager(context: Context) {
             WorkoutSection.WORK -> playSound(WorkoutSound.SOUND_WORK_START)
             WorkoutSection.REST -> playSound(WorkoutSound.SOUND_REST_START)
             WorkoutSection.RECOVER -> playSound(WorkoutSound.SOUND_RECOVER_START)
+            WorkoutSection.PREPARE -> { /* Do Nothing */ }
         }
     }
 

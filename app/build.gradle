@@ -23,11 +23,32 @@ android {
         })
     }
     buildTypes {
+        debug {
+            resValue "string", "adUnitId_banner", "\"ca-app-pub-3940256099942544/6300978111\""
+            resValue "string", "adUnitId_interstitial_workout_start", "\"ca-app-pub-3940256099942544/1033173712\""
+            resValue "string", "adUnitId_interstitial_workout_end", "\"ca-app-pub-3940256099942544/1033173712\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            resValue "string", "adUnitId_banner", "\"ca-app-pub-3940256099942544/6300978111\""
+            resValue "string", "adUnitId_interstitial_workout_start", "\"ca-app-pub-3940256099942544/1033173712\""
+            resValue "string", "adUnitId_interstitial_workout_end", "\"ca-app-pub-3940256099942544/1033173712\""
+
+            // TODO
+            resValue "string", "adUnitId_banner", "\"TODO\""
+            resValue "string", "adUnitId_interstitial", "\"TODO\""
         }
     }
+
+    def getKey(name: String) String {
+        def keysFile = file("keys.properties")
+        def keysProperties = new Properties()
+        keyProperties
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -83,6 +104,10 @@ dependencies {
     // UI
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'io.github.yavski:fab-speed-dial:1.0.6'
+
+    // Monetization
+    implementation 'com.android.billingclient:billing-ktx:3.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
 
     // Testing
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

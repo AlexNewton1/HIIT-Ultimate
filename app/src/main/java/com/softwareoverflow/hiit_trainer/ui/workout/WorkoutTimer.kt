@@ -5,7 +5,6 @@ import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 
-// TODO retrofit a preparation timer in....
 class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: IWorkoutObserver) {
 
     private lateinit var timer: CountDownTimer
@@ -109,7 +108,7 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: 
                 millisRemainingInSection -= tickInterval
                 millisecondsRemaining -= tickInterval
 
-                if (millisRemainingInSection <= 0)
+                if (millisRemainingInSection <= 0 && millisUntilFinished > tickInterval)
                     startNextWorkoutSection()
             }
         }

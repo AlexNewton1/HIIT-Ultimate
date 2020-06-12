@@ -86,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fragment_padding"
             android:gravity="center"
+            android:textColor="@android:color/white"
             android:text="@string/create_new_exercise_type"
             app:layout_constraintBottom_toBottomOf="@+id/createNewExerciseTypeFAB"
             app:layout_constraintStart_toEndOf="@id/createNewExerciseTypeFAB"
