@@ -36,12 +36,15 @@
     <string name="overwrite_existing">Overwrite Existing</string>
     <string name="overwrite_existing_workout">Overwrite Existing Workout</string>
     <string name="workout_saved">Workout \'%1$s\' saved.</string>
+    <string name="error_delete_et_prefix">Cannot delete exercise type \'%1$s\'. It is used by workout\u0020</string>
+    <string name="error_delete_et_truncated">\u0020and others.</string>
+    <string name="error_delete_et_postfix">\u0020Please edit or delete those workouts first.</string>
 
     <string name="upgrade_to_pro">Upgrade To Pro!</string>
     <string name="upgrade_to_pro_benefits">Get the following benefits:
-            \nAdvert Free
-            \nUnlimited Saved Workout Slots
-            \nAccess to all future PRO features
+            \r\nAdvert Free
+            \r\nUnlimited Saved Workout Slots
+            \r\nAccess to all future PRO features
     </string>
     <string name="upgrade_now">Upgrade Now</string>
 
@@ -51,8 +54,7 @@
     <string name="up_next">Up Next:</string>
     <string name="remaining_time">Remaining Time:</string>
     <string name="workout_complete">Workout Complete!</string>
-
-
+    
     <string name="content_desc_sort_alphabetically">Sort Alphabetically</string>
     <string name="content_desc_selected">Image indicating this item is selected</string>
     <string name="move_up">Move up</string>
@@ -65,5 +67,8 @@
     <string name="content_desc_toggle_pause">Shows the current pause status. Toggles between paused an un-paused</string>
     <string name="content_desc_skip">Skip the current workout section</string>
     <string name="content_desc_num_reps">UI icon indicating the current repitition</string>
+    <string name="create_your_workout">Create Your Workout</string>
+    <string name="edit_your_workout">Edit Workout \'%1$s\'</string>
+    <string name="error_no_workout_sets">Please add at least one Workout Set to your Workout</string>
 
 </resources>

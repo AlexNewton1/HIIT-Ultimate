@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.dialog_overwrite_existing_workout.*
 class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
 
     private val _overwriteExistingViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.overwriteExistingWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireContext(), workoutViewModel.workout.value!!, false)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), workoutViewModel.workout.value!!, false)
     }
     private val overwriteExistingViewModel: OverwriteWorkoutViewModel
         get() = _overwriteExistingViewModel as OverwriteWorkoutViewModel

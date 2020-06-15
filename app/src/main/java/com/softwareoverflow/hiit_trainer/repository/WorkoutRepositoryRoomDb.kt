@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.data.WorkoutDatabase
 import com.softwareoverflow.hiit_trainer.data.mapper.*
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
@@ -21,6 +22,10 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         return Transformations.switchMap(workoutDao.getAllWorkouts()) {
             MutableLiveData(it.toDTO())
         }
+    }
+
+    override suspend fun getWorkoutCount(): Int {
+        return workoutDao.getWorkoutCount()
     }
 
     override suspend fun deleteWorkoutById(workoutId: Long) {
@@ -69,17 +74,13 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
             val workoutNames = workoutDao.getExerciseTypeWorkoutNames(dto.id!!);
             if (workoutNames.any()) {
                 val error = workoutNames.toHashSet().joinToString(", ",
-                    "Cannot delete exercise type '${dto.name}'. It is used by workout ",
+                    context.getString(R.string.error_delete_et_prefix, dto.name),
                     limit = 2,
-                    truncated = " and others.",
+                    truncated = context.getString(R.string.error_delete_et_truncated),
                     transform = { "'${it}'" },
-                postfix = " Please edit or delete those workouts first.")
-
-                // TODO resource string this stuff
+                postfix = context.getString(R.string.error_delete_et_postfix))
 
                 throw IllegalStateException(error);
-            } else {
-                exerciseTypeDao.delete(dto.toEntity());
             }
 
             exerciseTypeDao.delete(dto.toEntity())

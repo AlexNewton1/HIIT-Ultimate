@@ -12,6 +12,8 @@ interface IWorkoutRepository {
     //region Workout
     fun getAllWorkouts() : LiveData<List<WorkoutDTO>>
 
+    suspend fun getWorkoutCount(): Int
+
     suspend fun deleteWorkoutById(workoutId: Long)
 
     suspend fun getWorkoutById(workoutId: Long) : WorkoutDTO

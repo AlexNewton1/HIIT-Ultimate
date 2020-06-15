@@ -16,6 +16,9 @@ interface WorkoutDao :
     @Query("SELECT * FROM Workout")
     fun getAllWorkouts(): LiveData<List<Workout>>
 
+    @Query("SELECT COUNT(*) FROM workout")
+    suspend fun getWorkoutCount(): Int
+
     @Transaction
     suspend fun createOrUpdate(workout: WorkoutEntity, workoutSets: List<WorkoutSetEntity>): Long {
         val id = createOrUpdate(workout)

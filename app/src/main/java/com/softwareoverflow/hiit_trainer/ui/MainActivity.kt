@@ -1,5 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private lateinit var adsManager: AdsManager
+    private lateinit var prefs: SharedPreferences
 
-    private val billingClient: BillingViewModel = ViewModelProvider(this).get(BillingViewModel::class.java)
+    private lateinit var billingClient: BillingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO - show some information about what will be collected etc.
         adsManager = AdsManager(this, bannerAdvert)
-
+        prefs = getSharedPreferences("com.softwareoverflow.hiit_trainer", MODE_PRIVATE);
 
         navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
@@ -51,6 +53,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.upgradeDialog -> {
                     adsManager.hideBanner()
                 }
+                R.id.workoutCompleteFragment -> {
+                    adsManager.showAdAfterWorkout()
+                }
                 else -> {
                     drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                     adsManager.showBanner()
@@ -58,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        billingClient = ViewModelProvider(this).get(BillingViewModel::class.java)
         billingClient.userHasUpgraded.observe(this, Observer {
             adsManager.setUserUpgraded(it)
         })
@@ -95,7 +101,13 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        billingClient.queryPurchases()
+        if(::billingClient.isInitialized)
+            billingClient.queryPurchases()
+
+        if (prefs.getBoolean("firstRun", true)) {
+            AdsManager.isFirstRun = true
+            prefs.edit().putBoolean("firstRun", false).apply()
+        }
     }
 
     override fun onDestroy() {

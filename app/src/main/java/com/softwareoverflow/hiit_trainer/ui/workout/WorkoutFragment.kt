@@ -29,7 +29,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId, args.workoutDto)
     }
 
-    private var timer: WorkoutTimer? = null
+    private lateinit var timer: WorkoutTimer
 
     private lateinit var currentSectionLabelAnimation: ObjectAnimator
     private lateinit var scaleAndMoveAnimation: ValueAnimator
@@ -51,6 +51,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             override fun onChanged(dto: WorkoutDTO?) {
                 dto?.let {
                     timer = WorkoutTimer(requireContext(), it, this@WorkoutFragment)
+                    timer.start()
 
                     // We only want to observe when the workout is first initialised as not null. Remove the observer.
                     viewModel.workout.removeObserver(this)
@@ -60,17 +61,17 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
 
         viewModel.skipSection.observe(viewLifecycleOwner, Observer {
             if (it) {
-                timer?.skip()
+                timer.skip()
                 viewModel.onSectionSkipped() // Notify the viewModel the section has been skipped
             }
         })
 
         viewModel.soundOn.observe(viewLifecycleOwner, Observer {
-            timer?.toggleSound(it)
+            timer.toggleSound(it)
         })
 
         viewModel.isPaused.observe(viewLifecycleOwner, Observer {
-            timer?.togglePause(it)
+                timer.togglePause(it)
         })
 
         currentSectionLabelAnimation =
@@ -130,7 +131,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     }
 
     override fun onDestroy() {
-        timer?.cancel()
+        timer.cancel()
         super.onDestroy()
     }
 

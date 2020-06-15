@@ -3,7 +3,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
     compileSdkVersion 29
@@ -24,29 +25,21 @@ android {
     }
     buildTypes {
         debug {
-            resValue "string", "adUnitId_banner", "\"ca-app-pub-3940256099942544/6300978111\""
-            resValue "string", "adUnitId_interstitial_workout_start", "\"ca-app-pub-3940256099942544/1033173712\""
-            resValue "string", "adUnitId_interstitial_workout_end", "\"ca-app-pub-3940256099942544/1033173712\""
+            resValue "string", "ad_id_banner", "\"ca-app-pub-3940256099942544/6300978111\""
+            buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_START", "\"ca-app-pub-3940256099942544/1033173712\""
+            buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_END", "\"ca-app-pub-3940256099942544/1033173712\""
+            buildConfigField "String", "IAB_PUBLIC_KEY", hiit_iab_public_key
         }
 
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-            resValue "string", "adUnitId_banner", "\"ca-app-pub-3940256099942544/6300978111\""
-            resValue "string", "adUnitId_interstitial_workout_start", "\"ca-app-pub-3940256099942544/1033173712\""
-            resValue "string", "adUnitId_interstitial_workout_end", "\"ca-app-pub-3940256099942544/1033173712\""
-
-            // TODO
-            resValue "string", "adUnitId_banner", "\"TODO\""
-            resValue "string", "adUnitId_interstitial", "\"TODO\""
+            resValue "string", "ad_id_banner", hiit_ads_banner
+            buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_START", hiit_ads_interstitial_start_workout
+            buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_END", hiit_ads_interstitial_end_workout
+            buildConfigField "String", "IAB_PUBLIC_KEY", hiit_iab_public_key
         }
-    }
-
-    def getKey(name: String) String {
-        def keysFile = file("keys.properties")
-        def keysProperties = new Properties()
-        keyProperties
     }
 
     compileOptions {
@@ -86,7 +79,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     // Androidx Architecture Components
-    implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
@@ -108,6 +101,9 @@ dependencies {
     // Monetization
     implementation 'com.android.billingclient:billing-ktx:3.0.0'
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
 
     // Testing
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

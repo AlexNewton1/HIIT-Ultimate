@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutLoaderBinding
+import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.SavedWorkoutListAdapter
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_workout_loader.*
 class LoadSavedWorkoutFragment : Fragment() {
 
     val viewModel: WorkoutLoaderViewModel by navGraphViewModels(R.id.loadSavedWorkoutFragment) {
-        WorkoutLoaderViewModelFactory(requireContext())
+        WorkoutLoaderViewModelFactory(requireActivity().application, requireContext())
     }
 
     override fun onCreateView(
@@ -49,7 +50,10 @@ class LoadSavedWorkoutFragment : Fragment() {
                             LoadSavedWorkoutFragmentDirections.actionLoadSavedWorkoutFragmentToWorkoutFragment(
                                 workoutId = selected
                             )
-                        findNavController().navigate(action)
+                        // Navigate after the advert is closed
+                        AdsManager.showAdBeforeWorkout {
+                            findNavController().navigate(action)
+                        }
                     } else {
                         findNavController().navigate(R.id.action_loadSavedWorkoutFragment_to_upgradeDialog)
                     }

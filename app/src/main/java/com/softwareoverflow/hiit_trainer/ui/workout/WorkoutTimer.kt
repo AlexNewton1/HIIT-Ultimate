@@ -24,10 +24,6 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: 
 
     init {
         createTimer(millisecondsRemaining)
-
-        isRunning = true
-        timer.start()
-
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
@@ -156,6 +152,11 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: 
 
         _soundManager.playSound(currentSection)
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
+    }
+
+    fun start(){
+        isRunning = true
+        timer.start()
     }
 
     fun cancel(){

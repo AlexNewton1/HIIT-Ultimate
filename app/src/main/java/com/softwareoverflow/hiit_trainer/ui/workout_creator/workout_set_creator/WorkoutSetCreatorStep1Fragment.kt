@@ -145,7 +145,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        // TODO investigate some from of animation of the items
+        // TODO investigate some form of animation of the items
 /*        val lac = LayoutAnimationController(
             AnimationUtils.loadAnimation(
                 activity,

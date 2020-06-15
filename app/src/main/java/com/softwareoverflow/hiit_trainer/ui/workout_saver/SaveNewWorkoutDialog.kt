@@ -13,7 +13,7 @@ import com.softwareoverflow.hiit_trainer.databinding.DialogSaveNewWorkoutBinding
 class SaveNewWorkoutDialog : SaveWorkoutDialog() {
 
     private val saverViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.saveNewWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireContext(), workoutViewModel.workout.value!!, true)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), workoutViewModel.workout.value!!, true)
     }
 
     override fun onCreateView(

@@ -5,35 +5,60 @@ import android.view.View
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.softwareoverflow.hiit_trainer.BuildConfig
+import kotlin.random.Random
 
 class AdsManager(context: Context, private val bannerAd: AdView) {
 
-    private var isInitialized = false
+    companion object {
+        private var hasUserUpgraded = false
 
-    private var hasUserUpgraded = false
+        var isFirstRun = false
 
-    init {
-        MobileAds.initialize(context) {
-            // TODO
+        private lateinit var workoutStartInterstitial: RetryableInterstitialAd
+        private lateinit var workoutEndInterstitial: RetryableInterstitialAd
+
+        fun showAdBeforeWorkout(onAdClosedCallback: () -> Unit) {
+            if (!isFirstRun && !hasUserUpgraded && workoutStartInterstitial.isLoaded() && Random.nextBoolean()) { // Only show the ad 50% of the time before a workout (on average)
+                workoutStartInterstitial.setOnClosedAction(onAdClosedCallback)
+                workoutStartInterstitial.show()
+            } else {
+                onAdClosedCallback.invoke()
+            }
         }
-
-        val request = AdRequest.Builder().build()
-        bannerAd.loadAd(request)
     }
 
-    fun setUserUpgraded(upgraded: Boolean){
+
+    init {
+        MobileAds.initialize(context)
+
+        bannerAd.loadAd(AdRequest.Builder().build())
+        workoutStartInterstitial = RetryableInterstitialAd(
+            context.applicationContext,
+            BuildConfig.AD_INTERSTITIAL_WORKOUT_START
+        )
+        workoutEndInterstitial = RetryableInterstitialAd(
+            context.applicationContext,
+            BuildConfig.AD_INTERSTITIAL_WORKOUT_END
+        )
+    }
+
+    fun showAdAfterWorkout() {
+        if (!hasUserUpgraded && workoutEndInterstitial.isLoaded())
+            workoutEndInterstitial.show() // Always show the end
+    }
+
+    fun setUserUpgraded(upgraded: Boolean) {
         hasUserUpgraded = upgraded
     }
 
-    // TODO - add checking for if the user is upgared.
-    // TODO - probably cancel the current request?
-    fun hideBanner(){
+    fun hideBanner() {
         bannerAd.pause()
         bannerAd.visibility = View.GONE
     }
 
     fun showBanner() {
-        if(!hasUserUpgraded) {
+        if (!hasUserUpgraded) {
             bannerAd.resume()
             bannerAd.visibility = View.VISIBLE
         }
@@ -41,5 +66,7 @@ class AdsManager(context: Context, private val bannerAd: AdView) {
 
     fun destroy() {
         bannerAd.destroy()
+        workoutEndInterstitial.destroy()
+        workoutStartInterstitial.destroy()
     }
 }

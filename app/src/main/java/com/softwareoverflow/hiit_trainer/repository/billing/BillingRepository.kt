@@ -26,10 +26,11 @@ import com.softwareoverflow.hiit_trainer.billing.AugmentedSkuDetails
 import com.softwareoverflow.hiit_trainer.billing.Entitlement
 import com.softwareoverflow.hiit_trainer.billing.LocalBillingDb
 import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
-import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.GameSku.INAPP_SKUS
+import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.Upgrades.INAPP_SKUS
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
+import kotlin.NoSuchElementException
 
 /**
  * @param application the [Application] context
@@ -74,7 +75,7 @@ class BillingRepository private constructor(private val application: Application
     /**
      * This list tells clients what in-app products are available for sale
      */
-    val inAppSkuDetailsListLiveData: LiveData<List<AugmentedSkuDetails>> by lazy {
+    private val _inAppSkuDetailsListLiveData: LiveData<List<AugmentedSkuDetails>> by lazy {
         if (!::localCacheBillingClient.isInitialized) {
             localCacheBillingClient = LocalBillingDb.getInstance(application)
         }
@@ -96,9 +97,12 @@ class BillingRepository private constructor(private val application: Application
     }
 
     /**
-     * The maximum number of workout slots on free mode
+     * Gets the number of allowed workout slots for the user.
+     * This is unlimited for PRO users, and limited for FREE users
      */
-    val maxFreeWorkoutSlots = 3
+    fun getMaxWorkoutSlots(): Int {
+        return if(proUpgradeLiveData.value?.entitled == true) Int.MAX_VALUE else 3
+    }
 
     /**
      * Correlated data sources belong inside a repository module so that the rest of
@@ -145,7 +149,7 @@ class BillingRepository private constructor(private val application: Application
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 Timber.d("onBillingSetupFinished successfully")
-                querySkuDetailsAsync(BillingClient.SkuType.INAPP, GameSku.INAPP_SKUS)
+                querySkuDetailsAsync(BillingClient.SkuType.INAPP, INAPP_SKUS)
                 queryPurchasesAsync()
             }
             BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
@@ -280,7 +284,7 @@ class BillingRepository private constructor(private val application: Application
     private fun disburseNonConsumableEntitlement(purchase: Purchase) =
         CoroutineScope(Job() + Dispatchers.IO).launch {
             when (purchase.sku) {
-                GameSku.PRO_UPGRADE -> {
+                Upgrades.PRO_UPGRADE -> {
                     val proUpgrade = ProUpgrade(true)
                     insert(proUpgrade)
                     localCacheBillingClient.skuDetailsDao()
@@ -335,12 +339,20 @@ class BillingRepository private constructor(private val application: Application
      * launch the Google Play Billing flow. The response to this call is returned in
      * [onPurchasesUpdated]
      */
-    fun launchBillingFlow(activity: Activity, augmentedSkuDetails: AugmentedSkuDetails) =
+    private fun launchBillingFlow(activity: Activity, augmentedSkuDetails: AugmentedSkuDetails) =
         launchBillingFlow(activity, SkuDetails(augmentedSkuDetails.originalJson!!))
 
-    fun launchBillingFlow(activity: Activity, skuDetails: SkuDetails) {
+    private fun launchBillingFlow(activity: Activity, skuDetails: SkuDetails) {
         val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build()
         playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
+    }
+
+    fun upgradeToPro(activity: Activity){
+        val skuDetails = _inAppSkuDetailsListLiveData.value?.single { it.sku ==  Upgrades.PRO_UPGRADE}
+        if(skuDetails == null)
+            throw NoSuchElementException("Unable to find purchase for sku '${Upgrades.PRO_UPGRADE}'")
+        else
+            launchBillingFlow(activity, skuDetails)
     }
 
     /**
@@ -409,7 +421,7 @@ class BillingRepository private constructor(private val application: Application
      * Fragments, then you may want to define a list for each of those subsets. I only have two
      * subsets: INAPP_SKUS and SUBS_SKUS
      */
-    private object GameSku {
+    private object Upgrades {
         const val PRO_UPGRADE = "upgrade_to_pro" // TODO make sure this matches correctly
 
         val INAPP_SKUS = listOf(PRO_UPGRADE)

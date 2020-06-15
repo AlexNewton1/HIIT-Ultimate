@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.MainActivity
+import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
@@ -78,18 +79,16 @@ class WorkoutCreatorFragment : Fragment() {
                 else
                     noSetsTextHint.visibility = View.GONE
 
-                // TODO string resource these
                 (requireActivity() as MainActivity).supportActionBar?.title =
                     if (it.name.isBlank())
-                        "Create Your Workout"
+                        getString(R.string.create_your_workout)
                     else
-                        "Edit Workout '${it.name}'"
+                        getString(R.string.edit_your_workout, it.name)
             }
         })
 
         view.createNewWorkoutSetButton.setOnClickListener {
             viewModel.setWorkoutSetToEdit(null)
-            // TODO fix this breaking if going back to home fragment and then trying to create workout again
             findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
         }
 
@@ -99,7 +98,11 @@ class WorkoutCreatorFragment : Fragment() {
             else {
                 val action =
                     WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToWorkoutFragment(workoutDto = viewModel.workout.value)
-                findNavController().navigate(action)
+
+                // Show an advert and then naviage to the workout
+                AdsManager.showAdBeforeWorkout {
+                    findNavController().navigate(action)
+                }
             }
         }
 
@@ -128,8 +131,7 @@ class WorkoutCreatorFragment : Fragment() {
 
         noSetsSnackbar = Snackbar.make(
             requireView(),
-            // TODO string resource
-            "Please add at least one Workout Set to your Workout",
+            getString(R.string.error_no_workout_sets),
             Snackbar.LENGTH_SHORT
         )
     }

@@ -20,7 +20,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.softwareoverflow.hiit_trainer.billing.AugmentedSkuDetails
 import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
 import kotlinx.coroutines.CoroutineScope
@@ -51,13 +50,13 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
 
         _proUpgradeLiveData = repository.proUpgradeLiveData
         userHasUpgraded = Transformations.map(_proUpgradeLiveData) {
-            it.entitled
+            it?.entitled ?: false
         }
     }
 
     /**
-     * Not used in this sample app. But you may want to force refresh in your own app (e.g.
-     * pull-to-refresh)
+     * Query the users purchases. Done when the app is returned to (e.g. after navigating away to buy the product.
+     * This will enable immediate (hopefully) removal of adverts and addition of remaining workout slots
      */
     fun queryPurchases() = repository.queryPurchasesAsync()
 
@@ -68,7 +67,15 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.coroutineContext.cancel()
     }
 
-    fun makePurchase(activity: Activity, augmentedSkuDetails: AugmentedSkuDetails) {
-        repository.launchBillingFlow(activity, augmentedSkuDetails)
+    fun purchasePro(activity: Activity) {
+        try {
+            repository.upgradeToPro(activity)
+        } catch (e: NoSuchElementException) {
+            Timber.w(e, "Unable to upgrade to pro.")
+
+            // TODO log to firebase, show the user some details
+        }
     }
+
+    fun getMaxWorkoutSlots(): Int = repository.getMaxWorkoutSlots()
 }

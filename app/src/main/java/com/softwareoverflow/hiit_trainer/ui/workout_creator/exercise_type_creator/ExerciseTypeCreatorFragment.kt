@@ -46,7 +46,8 @@ class ExerciseTypeCreatorFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        // TODO - fix this issue
+        // TODO - fix the name entry
+        // TODO - limit name length for workout name
         val etNameMaxLength = requireActivity().resources.getInteger(R.integer.et_name_length_max)
         binding.etExerciseTypeName.apply {
             doBeforeTextChanged { text, start, count, after ->

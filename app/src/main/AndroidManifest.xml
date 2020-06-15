@@ -18,7 +18,8 @@
             android:value="ca-app-pub-5961771507160254~5113099106" />
         <activity
             android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

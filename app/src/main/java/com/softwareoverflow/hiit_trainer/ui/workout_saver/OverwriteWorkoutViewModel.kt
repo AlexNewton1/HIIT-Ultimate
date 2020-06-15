@@ -5,17 +5,22 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
+import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutOverwriteDomainObject
 
-class OverwriteWorkoutViewModel(repo: IWorkoutRepository, val dto: WorkoutDTO) : WorkoutSaverViewModel(repo, dto) {
+class OverwriteWorkoutViewModel(
+    billingViewModel: BillingViewModel,
+    workoutRepo: IWorkoutRepository,
+    val dto: WorkoutDTO
+) : WorkoutSaverViewModel(billingViewModel, workoutRepo, dto) {
 
-    private val _savedWorkouts = repo.getAllWorkouts()
+    private val _savedWorkouts = workoutRepo.getAllWorkouts()
     private val _existingWorkouts = MediatorLiveData<List<WorkoutOverwriteDomainObject>>();
     val existingWorkouts: LiveData<List<WorkoutOverwriteDomainObject>>
         get() = _existingWorkouts
 
     private val _currentSelectedId = MutableLiveData(dto.id)
-    val currentSelectedId : LiveData<Long?>
+    val currentSelectedId: LiveData<Long?>
         get() = _currentSelectedId
 
 
@@ -27,7 +32,7 @@ class OverwriteWorkoutViewModel(repo: IWorkoutRepository, val dto: WorkoutDTO) :
         }
 
         _existingWorkouts.addSource(_currentSelectedId) {
-            _savedWorkouts.value?.let{
+            _savedWorkouts.value?.let {
                 _existingWorkouts.value = getWorkoutNamesToDisplay(it)
             }
         }
@@ -43,7 +48,7 @@ class OverwriteWorkoutViewModel(repo: IWorkoutRepository, val dto: WorkoutDTO) :
 
     override fun saveWorkout() {
         val idToSave = currentSelectedId.value
-        if(idToSave == null) {
+        if (idToSave == null) {
             // TODO show snackbar or something
         } else {
             dto.id = idToSave

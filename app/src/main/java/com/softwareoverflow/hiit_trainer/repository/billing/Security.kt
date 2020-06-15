@@ -67,22 +67,46 @@ object Security {
      */
 
     // TODO INSERT CORRECT KEY
-    // TODO SEE ABOVE - OBFUSCATE
-    val BASE_64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArEaiCq7os9cmF" +
-            "+i564+pIOiSOVZa/LRzu0K79Dg6wKWjnJ1PkHAa4ZOJ81KrxyFk3q3UiJ3lNsTCdW216+KKdKp+YCOFLs" +
-            "sN+4FKjFBqY9lJbm6uuxZ9cPugMOTVFrVlmreYyhIY4jysfo4+LeyEmB7D20X7M+7diCRBEIsOY9lA2ne" +
-            "OtD6j0BR4rhLGR3xjN0LGrhCCdbw42+eIkc/awbY7FypLMJjbAmEnNBe1tlOxxX6ZgspwAlY8XjnX832l" +
-            "xxHdnuJKSPGtYCQLSt/LYc/go90/kc/U+oPtQy/KgCiQEcKeIL1a6AB294JDogkHuqRIeXIu1n4sAfzG" +
-            "cshrJQIDAQAB"
+    // TODO SEE ABOVE - OBFUSCATE by loading it through BuildConfig
+    val _BASE_64_ENCODED_PUBLIC_KEY = "" /*(e.g.) "4 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArEaiCq7os9cmF+i564+pIOiSOVZa/LRzu0K79Dg6wKWjnJ1PkHAa4ZOJ81KrxyFk3q3UiJ3lNsTCdW216+KKdKp+ " +
+            "2 YCOFLssN+4FKjFBqY9lJbm6uuxZ9cPugMOTVFrVlmreYyhIY4jysfo4+LeyEmB7D20X7M+7diCRBEIsOY9lA2neOtD6j0BR4rhLGR3xjN0LGrhCCdbw42+eIkc/awbY7FypLMJjbAmEnNBe1tlOxxX6ZgspwAlY8XjnX83 " +
+            "3 2lxxHdnuJKSPGtYCQLSt/LYc/go90/kc/U+oPtQy/KgCiQEcKeIL1a6AB294JDogkHuqRIeXIu1n4sAfzGcshrJQIDAQAB" */
 
-    /**
-     * Simple String transformation by XOR-ing all characters by value.
-     */
-    private fun stringTransform(s: String, i: Int): String {
-        val chars = s.toCharArray()
-        for (j in chars.indices) chars[j] = (chars[j] xor i) as Char
-        return String(chars)
+    val BASE_64_ENCODED_PUBLIC_KEY = transformKey(_BASE_64_ENCODED_PUBLIC_KEY)
+
+    private fun transformKey(s: String) : String{
+        val parts = mutableListOf<String>()
+
+        val split = s.split(" ")
+        for(i in 0 until split.count() step 2){
+
+            val reversed = reverseCase(split[i + 1])
+
+            val b = reversed.map {
+                it.toInt() xor split[i].toInt()
+            }
+
+            val c = b.map {
+                it.toChar()
+            }
+
+            val d = c.joinToString(separator = "")
+
+            parts.add(d)
+        }
+
+        return parts.joinToString(separator = "")
     }
+
+    private fun reverseCase(s: String): String {
+        return s.map {
+            if(it.isUpperCase()){
+                it.toLowerCase()
+            } else
+                it.toUpperCase()
+        }.joinToString(separator = "")
+    }
+
 
     /**
      * Verifies that the data was signed with the given signature

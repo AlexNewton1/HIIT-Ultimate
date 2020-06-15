@@ -60,10 +60,15 @@ class XViewPagerPicker @JvmOverloads constructor(
         setupPager(iconViewPager, iconAdapter)
     }
 
+    /* TODO FUTURE VERSION investigate the issues caused by swiping too quickly when the view is already scrolling to the initial position
+        This is deemed to be an unlikely use case, and as the only issue is UI issue which is solved by leaving and returning to the page
+    */
     private fun <T : RecyclerView.ViewHolder> setupPager(
         pager: ViewPager2,
         adapter: RecyclerView.Adapter<T>
     ) {
+        pager.isUserInputEnabled = false
+
         with(pager) {
             this.adapter = adapter
 
@@ -79,6 +84,8 @@ class XViewPagerPicker @JvmOverloads constructor(
                 )
             )
         }
+
+        pager.isUserInputEnabled = true
     }
 
     fun setIconByName(iconName: String) {
@@ -92,7 +99,6 @@ class XViewPagerPicker @JvmOverloads constructor(
         iconViewPager.currentItem = adapter.itemCount / 2
     }
 
-    // TODO - investigate the issues caused by swiping too quickly when the view is already scrolling to the inital position
     fun setColorByHex(colorHex: String?) {
         // TODO - change this to be an interface!
         val adapter = (colorViewPager.adapter as ExerciseTypeCreatorPagerAdapter)

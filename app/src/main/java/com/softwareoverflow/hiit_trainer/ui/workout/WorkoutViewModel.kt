@@ -69,9 +69,9 @@ class WorkoutViewModel(application: Application, workout: WorkoutDTO) :
 
     init {
         _mutableWorkout.addSource(_workout) {
-            it?.let{
+            it?.let {
                 val prepSet = getWorkoutPrepSet(application)
-                if(it.workoutSets[0] != prepSet) {
+                if (it.workoutSets[0] != prepSet) {
                     it.workoutSets.add(0, prepSet)
 
                     _upNextExerciseType.value = it.workoutSets[1].exerciseTypeDTO
@@ -83,12 +83,14 @@ class WorkoutViewModel(application: Application, workout: WorkoutDTO) :
         }
 
         viewModelScope.launch {
-            _workout.value = workout.apply {
-                _currentWorkoutSet.value = this.workoutSets[0]
-                _currentRep.value = 1
-                _sectionTimeRemaining.value = _currentWorkoutSet.value!!.workTime
-                _workoutTimeRemaining.value = this.getDuration()
-            }
+            // Copy the workout and deep copy the workout set list so as to not change the original
+            _workout.value = workout.copy(workoutSets = workout.workoutSets.toMutableList())
+                .apply {
+                    _currentWorkoutSet.value = this.workoutSets[0]
+                    _currentRep.value = 1
+                    _sectionTimeRemaining.value = _currentWorkoutSet.value!!.workTime
+                    _workoutTimeRemaining.value = this.getDuration()
+                }
         }
     }
 
