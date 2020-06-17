@@ -26,6 +26,15 @@ class AdsManager(context: Context, private val bannerAd: AdView) {
                 onAdClosedCallback.invoke()
             }
         }
+
+        fun showAdAfterWorkout(onAdClosedCallback: () -> Unit) {
+            if (!hasUserUpgraded && workoutEndInterstitial.isLoaded()) {
+                workoutEndInterstitial.setOnClosedAction(onAdClosedCallback)
+                workoutEndInterstitial.show() // Always show the end
+            } else {
+                onAdClosedCallback.invoke()
+            }
+        }
     }
 
 
@@ -41,11 +50,6 @@ class AdsManager(context: Context, private val bannerAd: AdView) {
             context.applicationContext,
             BuildConfig.AD_INTERSTITIAL_WORKOUT_END
         )
-    }
-
-    fun showAdAfterWorkout() {
-        if (!hasUserUpgraded && workoutEndInterstitial.isLoaded())
-            workoutEndInterstitial.show() // Always show the end
     }
 
     fun setUserUpgraded(upgraded: Boolean) {

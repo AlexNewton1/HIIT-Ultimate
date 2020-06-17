@@ -25,6 +25,8 @@ android {
     }
     buildTypes {
         debug {
+            versionNameSuffix ".debug"
+            resValue "string", "app_version", "Version ${defaultConfig.versionName}${versionNameSuffix}"
             resValue "string", "ad_id_banner", "\"ca-app-pub-3940256099942544/6300978111\""
             buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_START", "\"ca-app-pub-3940256099942544/1033173712\""
             buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_END", "\"ca-app-pub-3940256099942544/1033173712\""
@@ -35,6 +37,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
+            resValue "string", "app_version", "Version ${defaultConfig.versionName}"
             resValue "string", "ad_id_banner", hiit_ads_banner
             buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_START", hiit_ads_interstitial_start_workout
             buildConfigField "String", "AD_INTERSTITIAL_WORKOUT_END", hiit_ads_interstitial_end_workout
@@ -77,6 +80,7 @@ dependencies {
 
     // Androidx Components
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.preference:preference:1.1.1"
 
     // Androidx Architecture Components
     implementation "androidx.fragment:fragment-ktx:1.2.5"

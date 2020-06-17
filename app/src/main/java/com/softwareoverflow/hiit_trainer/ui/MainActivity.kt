@@ -1,8 +1,13 @@
 package com.softwareoverflow.hiit_trainer.ui
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -13,13 +18,15 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.navigation.NavigationView
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -35,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO - show some information about what will be collected etc.
         adsManager = AdsManager(this, bannerAdvert)
-        prefs = getSharedPreferences("com.softwareoverflow.hiit_trainer", MODE_PRIVATE);
+        prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
@@ -50,11 +57,10 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
                     adsManager.hideBanner()
                 }
-                R.id.upgradeDialog -> {
+                R.id.upgradeDialog -> adsManager.hideBanner()
+                R.id.settingsFragment -> {
                     adsManager.hideBanner()
-                }
-                R.id.workoutCompleteFragment -> {
-                    adsManager.showAdAfterWorkout()
+                    drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                 }
                 else -> {
                     drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
@@ -69,6 +75,34 @@ class MainActivity : AppCompatActivity() {
         })
 
         NavigationUI.setupWithNavController(navView, navController)
+
+        navView.setNavigationItemSelectedListener(this)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.navMenuSettings -> findNavController(R.id.myNavHostFragment).navigate(R.id.action_homeScreenFragment_to_settingsFragment)
+            R.id.navMenuFeedback -> launchEmailFeedback()
+        }
+
+        return true
+    }
+
+    private fun launchEmailFeedback(){
+        val i = Intent(Intent.ACTION_SENDTO).apply {
+            type = "text/plain"
+            data = Uri.parse("mailto:SoftwareOverflow@gmail.com?subject=HIIT Trainer Feedback")
+        }
+
+        try {
+            startActivity(Intent.createChooser(i, "Send email feedback"))
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(
+                this@MainActivity,
+                "There are no email clients installed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -80,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val controller = findNavController(R.id.myNavHostFragment)
 
-        return when(controller.currentDestination?.id) {
+        return when (controller.currentDestination?.id) {
             R.id.workoutCompleteFragment -> {
                 controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
                 true
@@ -91,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val controller = findNavController(R.id.myNavHostFragment)
-        if(controller.currentDestination?.id == R.id.workoutCompleteFragment){
+        if (controller.currentDestination?.id == R.id.workoutCompleteFragment) {
             controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
         } else {
             super.onBackPressed()
@@ -101,7 +135,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if(::billingClient.isInitialized)
+        if (::billingClient.isInitialized)
             billingClient.queryPurchases()
 
         if (prefs.getBoolean("firstRun", true)) {

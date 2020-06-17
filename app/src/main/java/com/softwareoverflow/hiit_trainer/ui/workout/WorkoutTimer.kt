@@ -5,7 +5,7 @@ import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 
-class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: IWorkoutObserver) {
+class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, private val observer: IWorkoutObserver) {
 
     private lateinit var timer: CountDownTimer
     private var millisecondsRemaining: Long = workout.getDuration() * 1000L
@@ -16,7 +16,7 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: 
     private var isPaused: Boolean = false
 
     private var workoutSets = workout.workoutSets.iterator()
-    private var currentSection = WorkoutSection.PREPARE
+    private var currentSection = if (hasPrepSet) WorkoutSection.PREPARE else WorkoutSection.WORK
     private var currentSet = workoutSets.next()
     private var currentSetIndex = 0
     private var currentRep = 1
@@ -86,6 +86,7 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, private val observer: 
 
         timer = object : CountDownTimer(millis, tickInterval) {
             override fun onFinish() {
+                timer.cancel()
                 observer.onFinish()
             }
 

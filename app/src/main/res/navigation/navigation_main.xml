@@ -26,14 +26,10 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_upgradeDialog"
             app:destination="@id/upgradeDialog" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.softwareoverflow.hiit_trainer.ui.AboutFragment"
-        android:label="@string/nav_about"
-        tools:layout="@layout/fragment_about" />
-
     <navigation
         android:id="@+id/nav_workout_creator"
         app:startDestination="@id/workoutCreatorFragment">
@@ -45,16 +41,14 @@
             <action
                 android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
                 app:destination="@id/nav_workout_set_creator" />
+            <action android:id="@+id/action_workoutCreatorFragment_to_saveNewWorkoutDialog"
+                app:destination="@+id/saveNewWorkoutDialog" />
+            <action android:id="@+id/action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog"
+                app:destination="@+id/overwriteExistingWorkoutDialog" />
             <argument
                 android:name="workoutCreatorWorkoutId"
                 android:defaultValue="0L"
                 app:argType="long" />
-            <action
-                android:id="@+id/action_workoutCreatorFragment_to_saveNewWorkoutDialog"
-                app:destination="@id/saveNewWorkoutDialog" />
-            <action
-                android:id="@+id/action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog"
-                app:destination="@id/overwriteExistingWorkoutDialog" />
             <action
                 android:id="@+id/action_workoutCreatorFragment_to_workoutFragment"
                 app:destination="@id/workoutFragment" />
@@ -89,14 +83,6 @@
                     app:destination="@id/workoutCreatorFragment" />
             </fragment>
         </navigation>
-        <dialog
-            android:id="@+id/saveNewWorkoutDialog"
-            android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
-            android:label="Save New Workout" />
-        <dialog
-            android:id="@+id/overwriteExistingWorkoutDialog"
-            android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.OverwriteExistingWorkoutDialog"
-            android:label="Overwrite Existing Workout" />
     </navigation>
     <fragment
         android:id="@+id/workoutFragment"
@@ -145,14 +131,40 @@
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
         <action
             android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
-            app:destination="@id/upgradeDialog" />
+            app:destination="@+id/upgradeDialog" />
         <action
             android:id="@+id/action_workoutCompleteFragment_to_homeScreenFragment"
             app:destination="@id/homeScreenFragment"
             app:popUpTo="@id/homeScreenFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_saveNewWorkoutDialog"
+            app:destination="@id/saveNewWorkoutDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_overwriteExistingWorkoutDialog"
+            app:destination="@id/overwriteExistingWorkoutDialog" />
     </fragment>
     <dialog
         android:id="@+id/upgradeDialog"
         android:name="com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeDialog" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.settings.SettingsFragment"
+        android:label="@string/settings" />
+    <dialog
+        android:id="@+id/saveNewWorkoutDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
+        android:label="SaveNewWorkoutDialog" >
+        <argument
+            android:name="workoutDto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </dialog>
+    <dialog
+        android:id="@+id/overwriteExistingWorkoutDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.OverwriteExistingWorkoutDialog"
+        android:label="OverwriteExistingWorkoutDialog" >
+        <argument
+            android:name="workoutDto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </dialog>
 </navigation>

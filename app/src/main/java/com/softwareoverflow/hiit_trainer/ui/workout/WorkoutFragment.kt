@@ -18,6 +18,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.view.animation.MoveAndScaleAnimationFactory
 import kotlinx.android.synthetic.main.fragment_workout.*
 
@@ -29,10 +30,12 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId, args.workoutDto)
     }
 
-    private lateinit var timer: WorkoutTimer
+    private var timer: WorkoutTimer? = null
 
     private lateinit var currentSectionLabelAnimation: ObjectAnimator
     private lateinit var scaleAndMoveAnimation: ValueAnimator
+
+    private var isWorkoutFinished = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +53,8 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         viewModel.workout.observe(viewLifecycleOwner, object : Observer<WorkoutDTO> {
             override fun onChanged(dto: WorkoutDTO?) {
                 dto?.let {
-                    timer = WorkoutTimer(requireContext(), it, this@WorkoutFragment)
-                    timer.start()
+                    timer = WorkoutTimer(requireContext(), it, viewModel.hasPrepSet, this@WorkoutFragment)
+                    timer!!.start()
 
                     // We only want to observe when the workout is first initialised as not null. Remove the observer.
                     viewModel.workout.removeObserver(this)
@@ -61,17 +64,17 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
 
         viewModel.skipSection.observe(viewLifecycleOwner, Observer {
             if (it) {
-                timer.skip()
+                timer?.skip()
                 viewModel.onSectionSkipped() // Notify the viewModel the section has been skipped
             }
         })
 
         viewModel.soundOn.observe(viewLifecycleOwner, Observer {
-            timer.toggleSound(it)
+            timer?.toggleSound(it)
         })
 
         viewModel.isPaused.observe(viewLifecycleOwner, Observer {
-                timer.togglePause(it)
+                timer?.togglePause(it)
         })
 
         currentSectionLabelAnimation =
@@ -126,12 +129,18 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     }
 
     override fun onFinish() {
-        val action = WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
-        findNavController().navigate(action)
+        if(!isWorkoutFinished) {
+            isWorkoutFinished = true
+
+            val action = WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
+            AdsManager.showAdAfterWorkout() {
+                findNavController().navigate(action)
+            }
+        }
     }
 
     override fun onDestroy() {
-        timer.cancel()
+        timer?.cancel()
         super.onDestroy()
     }
 

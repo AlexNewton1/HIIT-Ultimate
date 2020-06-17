@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.DialogOverwriteExistingWorkoutBinding
@@ -17,8 +18,10 @@ import kotlinx.android.synthetic.main.dialog_overwrite_existing_workout.*
 
 class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
 
+    private val args: OverwriteExistingWorkoutDialogArgs by navArgs()
+
     private val _overwriteExistingViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.overwriteExistingWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), workoutViewModel.workout.value!!, false)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.workoutDto, false)
     }
     private val overwriteExistingViewModel: OverwriteWorkoutViewModel
         get() = _overwriteExistingViewModel as OverwriteWorkoutViewModel

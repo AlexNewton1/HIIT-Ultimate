@@ -41,10 +41,9 @@
     <string name="error_delete_et_postfix">\u0020Please edit or delete those workouts first.</string>
 
     <string name="upgrade_to_pro">Upgrade To Pro!</string>
-    <string name="upgrade_to_pro_benefits">Get the following benefits:
-            \r\nAdvert Free
-            \r\nUnlimited Saved Workout Slots
-            \r\nAccess to all future PRO features
+    <string name="upgrade_to_pro_benefits">Get the following benefits:</string>
+    <string name="upgrade_to_pro_benefits_list">
+        \u2022 Advert Free\n\u2022 Unlimited Saved Workout Slots\n\u2022 Access to all future PRO features
     </string>
     <string name="upgrade_now">Upgrade Now</string>
 
@@ -54,7 +53,7 @@
     <string name="up_next">Up Next:</string>
     <string name="remaining_time">Remaining Time:</string>
     <string name="workout_complete">Workout Complete!</string>
-    
+
     <string name="content_desc_sort_alphabetically">Sort Alphabetically</string>
     <string name="content_desc_selected">Image indicating this item is selected</string>
     <string name="move_up">Move up</string>
@@ -66,9 +65,32 @@
     <string name="content_desc_toggle_mute">Icon showing the current sound status. Used to mute / un-mute the workout sounds</string>
     <string name="content_desc_toggle_pause">Shows the current pause status. Toggles between paused an un-paused</string>
     <string name="content_desc_skip">Skip the current workout section</string>
-    <string name="content_desc_num_reps">UI icon indicating the current repitition</string>
+    <string name="content_desc_num_reps">UI icon indicating the current repetition</string>
     <string name="create_your_workout">Create Your Workout</string>
     <string name="edit_your_workout">Edit Workout \'%1$s\'</string>
     <string name="error_no_workout_sets">Please add at least one Workout Set to your Workout</string>
+
+    <string name="preparation_set_enabled">Preparation Phase</string>
+    <string name="preparation_set_summary">Shows a preparation timer before the workout starts</string>
+    <string name="preparation_set_time">Preparation Duration</string>
+    <string name="final_seconds_beep">Final Seconds Sound</string>
+    <string name="final_seconds_beep_summary">Play sound when nearing the end of a work phase</string>
+    <string name="final_seconds_beep_time">Play Sound At</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
 
 </resources>

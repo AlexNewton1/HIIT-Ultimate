@@ -37,4 +37,28 @@
         <item>@drawable/icon_rest</item>
         <item>@drawable/icon_plus</item>
     </array>
+
+    <string-array name="preparation_set_entries">
+        <item>3s</item>
+        <item>5s</item>
+        <item>10s</item>
+    </string-array>
+
+    <string-array name="preparation_set_entry_values">
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="final_seconds_beep_entries">
+        <item>5s</item>
+        <item>10s</item>
+        <item>15s</item>
+    </string-array>
+
+    <string-array name="final_seconds_beep_entry_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
 </resources>

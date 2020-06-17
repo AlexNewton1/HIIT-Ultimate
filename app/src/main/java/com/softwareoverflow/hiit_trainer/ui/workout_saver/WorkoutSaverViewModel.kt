@@ -48,8 +48,8 @@ open class WorkoutSaverViewModel(
         _noWorkoutSlotsRemainingWarning.value = false
     }
 
-    open fun saveWorkout() {
-        if (numWorkoutsSaved.value!!.toInt() >= billingViewModel.getMaxWorkoutSlots()) {
+    open fun saveWorkout(isOverwriting: Boolean = false) {
+        if (!isOverwriting && numWorkoutsSaved.value!!.toInt() >= billingViewModel.getMaxWorkoutSlots()) {
             _noWorkoutSlotsRemainingWarning.value = true
             return
         }

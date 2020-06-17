@@ -46,7 +46,7 @@ class OverwriteWorkoutViewModel(
         _currentSelectedId.value = selected
     }
 
-    override fun saveWorkout() {
+    fun saveWorkout() {
         val idToSave = currentSelectedId.value
         if (idToSave == null) {
             // TODO show snackbar or something
@@ -54,7 +54,6 @@ class OverwriteWorkoutViewModel(
             dto.id = idToSave
         }
 
-
-        super.saveWorkout()
+        super.saveWorkout(isOverwriting = true)
     }
 }

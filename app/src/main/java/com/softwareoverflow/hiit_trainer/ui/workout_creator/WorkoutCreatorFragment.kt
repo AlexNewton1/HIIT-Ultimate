@@ -89,7 +89,14 @@ class WorkoutCreatorFragment : Fragment() {
 
         view.createNewWorkoutSetButton.setOnClickListener {
             viewModel.setWorkoutSetToEdit(null)
-            findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
+
+            // If the snackbar for no remaining save slots is showing, clicks are registered on the screen.
+            // This causes IllegalArgumentException as the save workout dialog is still on screen. Catch these exceptions and do nothing.
+            try {
+                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
+            } catch (ex: IllegalArgumentException){
+                // Do nothing
+            }
         }
 
         view.startWorkoutButton.setOnClickListener {
@@ -97,7 +104,9 @@ class WorkoutCreatorFragment : Fragment() {
                 noSetsSnackbar.show()
             else {
                 val action =
-                    WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToWorkoutFragment(workoutDto = viewModel.workout.value)
+                    WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToWorkoutFragment(
+                        workoutDto = viewModel.workout.value
+                    )
 
                 // Show an advert and then naviage to the workout
                 AdsManager.showAdBeforeWorkout {
@@ -113,10 +122,19 @@ class WorkoutCreatorFragment : Fragment() {
                     return false
                 }
 
-                if (menuItem.title == requireContext().getString(R.string.save_as))
-                    findNavController().navigate(R.id.action_workoutCreatorFragment_to_saveNewWorkoutDialog)
-                 else if (menuItem.title == resources.getString(R.string.overwrite_existing))
-                    findNavController().navigate(R.id.action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog)
+                if (menuItem.title == requireContext().getString(R.string.save_as)) {
+                    val action =
+                        WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToSaveNewWorkoutDialog(
+                            workoutDto = viewModel.workout.value!!
+                        )
+                    findNavController().navigate(action)
+                } else if (menuItem.title == resources.getString(R.string.overwrite_existing)) {
+                    val action =
+                        WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToOverwriteExistingWorkoutDialog(
+                            workoutDto = viewModel.workout.value!!
+                        )
+                    findNavController().navigate(action)
+                }
 
                 return false
             }

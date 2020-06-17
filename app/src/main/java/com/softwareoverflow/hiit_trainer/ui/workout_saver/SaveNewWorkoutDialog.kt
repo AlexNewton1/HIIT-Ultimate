@@ -6,14 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.DialogSaveNewWorkoutBinding
 
 class SaveNewWorkoutDialog : SaveWorkoutDialog() {
 
+    private val args: SaveNewWorkoutDialogArgs by navArgs()
+
     private val saverViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.saveNewWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), workoutViewModel.workout.value!!, true)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.workoutDto, true)
     }
 
     override fun onCreateView(
