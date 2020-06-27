@@ -81,7 +81,9 @@ class WorkoutCompleteFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if(AdsManager.hasUserUpgraded)
+        if(AdsManager.hasUserUpgraded) {
+            upgradeToProIcon.visibility = View.GONE
             upgradeToProButton.visibility = View.GONE
+        }
     }
 }

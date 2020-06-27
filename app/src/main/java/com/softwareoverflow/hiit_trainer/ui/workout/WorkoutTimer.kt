@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
+import timber.log.Timber
 
 class WorkoutTimer(
     context: Context,
@@ -74,6 +75,8 @@ class WorkoutTimer(
             isRunning = false
             timer.cancel()
         } else if (!isRunning) {
+            millisecondsRemaining += 1000 // The display lags behind by 1s
+            millisRemainingInSection += 1000 // The display lags behind by 1s
             createTimer(millisecondsRemaining)
 
             isRunning = true
@@ -87,39 +90,38 @@ class WorkoutTimer(
     }
 
     private fun createTimer(millis: Long) {
-        val tickInterval = 100L
+        val tickInterval = 1000L
 
         timer = object : CountDownTimer(millis, tickInterval) {
             override fun onFinish() {
+                _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
                 timer.cancel()
                 observer.onFinish()
             }
 
             override fun onTick(millisUntilFinished: Long) {
-                if (millisecondsRemaining % 1000 == 0L) {
-                    observer.onTimerTick(
-                        (millisecondsRemaining / 1000).toInt(),
-                        (millisRemainingInSection / 1000).toInt()
-                    )
+                observer.onTimerTick(
+                    (millisecondsRemaining / 1000).toInt(),
+                    (millisRemainingInSection / 1000).toInt()
+                )
 
-                    if (currentSection == WorkoutSection.WORK) {
-                        when (millisRemainingInSection / 1000) {
-                            15L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_15)
-                            10L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_10)
-                            5L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_5)
-                        }
+                if (currentSection == WorkoutSection.WORK)
+                    when (millisRemainingInSection / 1000) {
+                        15L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_15)
+                        10L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_10)
+                        5L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_5)
                     }
 
-                    if (millisRemainingInSection <= 3000L) {
-                        _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
-                    }
-                }
-
-                millisRemainingInSection -= tickInterval
-                millisecondsRemaining -= tickInterval
+                if (millisRemainingInSection in 1..3000L)
+                    _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
 
                 if (millisRemainingInSection <= 0 && millisUntilFinished > tickInterval)
                     startNextWorkoutSection()
+
+                millisRemainingInSection -= tickInterval
+                millisecondsRemaining -= tickInterval
+                Timber.d("WorkoutTimer: $millisUntilFinished")
+
             }
         }
     }
@@ -165,6 +167,10 @@ class WorkoutTimer(
 
         _soundManager.playSound(currentSection)
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
+        observer.onTimerTick(
+            millisecondsRemaining.toInt() / 1000,
+            millisRemainingInSection.toInt() / 1000
+        )
     }
 
     fun start() {

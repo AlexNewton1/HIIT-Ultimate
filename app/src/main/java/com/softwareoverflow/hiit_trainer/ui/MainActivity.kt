@@ -75,8 +75,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         billingClient.userHasUpgraded.observe(this, Observer {
             adsManager.setUserUpgraded(it)
 
-            if(it)
+            if(it) {
+                upgradeToProIcon.visibility = View.GONE
                 upgradeToProButton.visibility = View.GONE
+            }
         })
 
         NavigationUI.setupWithNavController(navView, navController)
