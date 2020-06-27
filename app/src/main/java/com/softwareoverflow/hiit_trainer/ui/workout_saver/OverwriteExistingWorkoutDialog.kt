@@ -71,10 +71,9 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
             recyclerView.apply {
                 adapter = listAdapter
                 addItemDecoration(SpacedListDecoration(requireContext()))
-
-
             }
         }
+
         overwriteExistingViewModel.existingWorkouts.observe(
             viewLifecycleOwner,
             Observer {

@@ -90,7 +90,6 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             }
         })
 
-        // TODO come up with a nicer way of handling all the animations and prevent the flashing.
         // TODO FUTURE VERSION Maybe a way of passing the anim time in for cases when recover time is less than 3s (otherwise animation jumps part way through to end). This use case of recovery < 3s seems unlikely so not a priority
         binding.root.doOnLayout {
             scaleAndMoveAnimation = MoveAndScaleAnimationFactory().apply {
@@ -107,7 +106,8 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
                     binding.currentExerciseTypeName.textSize
                 )
                 setAlphaAnimation(binding.currentExerciseTypeView, 1f, 0f)
-            }.create(null)
+            }.create(){
+            }
         }
 
         return binding.root

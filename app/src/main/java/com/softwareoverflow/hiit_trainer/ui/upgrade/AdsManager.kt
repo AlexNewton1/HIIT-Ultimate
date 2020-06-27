@@ -1,17 +1,24 @@
 package com.softwareoverflow.hiit_trainer.ui.upgrade
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
+import androidx.preference.PreferenceManager
+import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.softwareoverflow.hiit_trainer.BuildConfig
+import com.softwareoverflow.hiit_trainer.R
 import kotlin.random.Random
 
-class AdsManager(context: Context, private val bannerAd: AdView) {
+
+class AdsManager(private val context: Context, private val bannerAd: AdView) {
 
     companion object {
-        private var hasUserUpgraded = false
+
+        var hasUserUpgraded = false
+        private set
 
         var isFirstRun = false
 
@@ -41,14 +48,32 @@ class AdsManager(context: Context, private val bannerAd: AdView) {
     init {
         MobileAds.initialize(context)
 
-        bannerAd.loadAd(AdRequest.Builder().build())
+        initialize()
+    }
+
+    private fun initialize() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val personalizedAds = prefs.getBoolean(context.getString(R.string.personalized_ads_enabled), false)
+
+        val adRequest = AdRequest.Builder().apply {
+            if(!personalizedAds){
+                val bundle = Bundle()
+                bundle.putString("npa", "1")
+                addNetworkExtrasBundle(AdMobAdapter::class.java, bundle)
+            }
+        }.build()
+
+
+        bannerAd.loadAd(adRequest)
         workoutStartInterstitial = RetryableInterstitialAd(
             context.applicationContext,
-            BuildConfig.AD_INTERSTITIAL_WORKOUT_START
+            BuildConfig.AD_INTERSTITIAL_WORKOUT_START,
+            adRequest
         )
         workoutEndInterstitial = RetryableInterstitialAd(
             context.applicationContext,
-            BuildConfig.AD_INTERSTITIAL_WORKOUT_END
+            BuildConfig.AD_INTERSTITIAL_WORKOUT_END,
+            adRequest
         )
     }
 

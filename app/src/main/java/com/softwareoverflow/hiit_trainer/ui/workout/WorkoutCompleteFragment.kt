@@ -11,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutCompleteBinding
+import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
+import kotlinx.android.synthetic.main.fragment_workout_complete.*
 
 class WorkoutCompleteFragment : Fragment() {
 
@@ -49,7 +51,6 @@ class WorkoutCompleteFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        // TODO sort this out - add the correct actions to nav graph
         binding.saveSpeedDial.setMenuListener(object : SimpleMenuListenerAdapter() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 if (menuItem.title == requireContext().getString(R.string.save_as)) {
@@ -58,12 +59,16 @@ class WorkoutCompleteFragment : Fragment() {
                             workoutDto = viewModel.getOriginalWorkout()
                         )
                     findNavController().navigate(action)
+
+                    return true
                 } else if (menuItem.title == resources.getString(R.string.overwrite_existing)) {
                     val action =
                         WorkoutCompleteFragmentDirections.actionWorkoutCompleteFragmentToOverwriteExistingWorkoutDialog(
                             workoutDto = viewModel.getOriginalWorkout()
                         )
                     findNavController().navigate(action)
+
+                    return true
                 }
 
                 return false
@@ -73,11 +78,10 @@ class WorkoutCompleteFragment : Fragment() {
         return binding.root
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
     override fun onResume() {
         super.onResume()
+
+        if(AdsManager.hasUserUpgraded)
+            upgradeToProButton.visibility = View.GONE
     }
 }

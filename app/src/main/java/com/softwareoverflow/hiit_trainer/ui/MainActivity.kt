@@ -2,11 +2,11 @@ package com.softwareoverflow.hiit_trainer.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -18,12 +18,15 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -32,7 +35,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private lateinit var adsManager: AdsManager
-    private lateinit var prefs: SharedPreferences
 
     private lateinit var billingClient: BillingViewModel
 
@@ -40,9 +42,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO - show some information about what will be collected etc.
+        UserConsentManager(this)
+
         adsManager = AdsManager(this, bannerAdvert)
-        prefs = getSharedPreferences("settings", MODE_PRIVATE);
 
         navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
@@ -72,6 +74,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         billingClient = ViewModelProvider(this).get(BillingViewModel::class.java)
         billingClient.userHasUpgraded.observe(this, Observer {
             adsManager.setUserUpgraded(it)
+
+            if(it)
+                upgradeToProButton.visibility = View.GONE
         })
 
         NavigationUI.setupWithNavController(navView, navController)
@@ -138,6 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (::billingClient.isInitialized)
             billingClient.queryPurchases()
 
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getBoolean("firstRun", true)) {
             AdsManager.isFirstRun = true
             prefs.edit().putBoolean("firstRun", false).apply()

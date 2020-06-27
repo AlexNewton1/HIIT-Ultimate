@@ -10,7 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class RetryableInterstitialAd(context: Context, adUnitId: String)  {
+class RetryableInterstitialAd(context: Context, adUnitId: String, private val request: AdRequest)  {
 
     private val maxRetryCount = 3
     private var retryCount = 0
@@ -40,7 +40,7 @@ class RetryableInterstitialAd(context: Context, adUnitId: String)  {
             }
         }
 
-        ad.loadAd(AdRequest.Builder().build())
+        ad.loadAd(request)
     }
 
     fun setOnClosedAction(onClose: () -> Unit) {
@@ -54,7 +54,7 @@ class RetryableInterstitialAd(context: Context, adUnitId: String)  {
             Timber.i("Advert failed to load. Retry count: $retryCount")
             CoroutineScope(job).launch {
                 delay(retryCount * 1000L)
-                ad.loadAd(AdRequest.Builder().build())
+                ad.loadAd(request)
             }
         } else {
             Timber.w("Retry advert load failed $maxRetryCount times. Aborting advert loading")

@@ -43,7 +43,6 @@ class ExerciseTypeCreatorPagerAdapterTest {
         checkAdapterValues(arrayListOf(4, 5, 6, 7, 1, 2, 3))
     }
 
-    // TODO work out how to fix these tests. loopForward / loopBackward both call notifyDatasetChanged which cannot be mocked
     /*@Test
     fun loopForward() {
         adapter.loopForward()

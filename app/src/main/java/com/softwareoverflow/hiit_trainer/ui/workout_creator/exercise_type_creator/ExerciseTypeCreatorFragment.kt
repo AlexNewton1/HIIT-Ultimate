@@ -46,13 +46,19 @@ class ExerciseTypeCreatorFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        // TODO - fix the name entry
-        // TODO - limit name length for workout name
         val etNameMaxLength = requireActivity().resources.getInteger(R.integer.et_name_length_max)
         binding.etExerciseTypeName.apply {
-            doBeforeTextChanged { text, start, count, after ->
-                if (etExerciseTypeName.length() >= etNameMaxLength && snackbar?.isShown != true)
-                    snackbar?.show()
+            doBeforeTextChanged { text, _, count, after ->
+                text?.let{
+                    val sizeChange = after - count
+                    val newTextLength = it.length + sizeChange
+                    if(newTextLength > etNameMaxLength) {
+                        if(snackbar?.isShown != true)
+                            snackbar?.show()
+
+                        etExerciseTypeName.setText(text) // Reset the text
+                    }
+                }
             }
         }
 
@@ -84,10 +90,7 @@ class ExerciseTypeCreatorFragment : Fragment() {
         if (snackbar == null) {
             snackbar = Snackbar.make(
                 etExerciseTypeName,
-                requireActivity().applicationContext.getString(
-                    R.string.char_limit_exceeded,
-                    context?.resources?.getInteger(R.integer.et_name_length_max)
-                ),
+                R.string.name_too_long_warning,
                 Snackbar.LENGTH_SHORT
             ).setAction(R.string.dismiss) {
                 snackbar?.dismiss()

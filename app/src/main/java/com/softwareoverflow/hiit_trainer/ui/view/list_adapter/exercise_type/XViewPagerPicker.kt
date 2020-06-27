@@ -100,7 +100,7 @@ class XViewPagerPicker @JvmOverloads constructor(
     }
 
     fun setColorByHex(colorHex: String?) {
-        // TODO - change this to be an interface!
+        // TODO FUTURE VERSION change this to avoid having to cast
         val adapter = (colorViewPager.adapter as ExerciseTypeCreatorPagerAdapter)
 
         colorHex?.let {
@@ -120,8 +120,4 @@ class XViewPagerPicker @JvmOverloads constructor(
         return iconViewPager.adapter!!.getItemId(iconViewPager.currentItem).toInt()
     }
 
-    /*
-    TODO investigate use cases architecture further as a potential alternative to the DTO model
-    TODO create some initial data for the database.
-     */
 }

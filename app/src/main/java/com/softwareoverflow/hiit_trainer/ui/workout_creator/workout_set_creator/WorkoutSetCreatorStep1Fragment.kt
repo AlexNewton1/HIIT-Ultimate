@@ -1,6 +1,5 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,6 @@ import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecorati
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypePickerListAdapter
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.fragment_workout_set_creator_step_1.*
-
 
 /**
  * Allows the user to select from the list of saved [com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO] objects.
@@ -47,10 +45,10 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         binding.viewModel = workoutSetViewModel
 
         binding.exerciseTypePickerList.apply {
-            adapter = ExerciseTypePickerListAdapter(object:
+            adapter = ExerciseTypePickerListAdapter(object :
                 ISelectableEditableListEventListener {
                 override fun onItemSelected(selected: Long?) {
-                    workoutSetViewModel.selectedExerciseTypeId.value  = selected
+                    workoutSetViewModel.selectedExerciseTypeId.value = selected
                 }
 
                 override fun triggerItemDeletion(id: Long) {
@@ -73,9 +71,10 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         }
 
         workoutSetViewModel.unableToDeleteExerciseType.observe(viewLifecycleOwner, Observer {
-            if(!it.isNullOrBlank()) {
+            if (!it.isNullOrBlank()) {
                 val snackbar = Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
-                (snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)).maxLines = 3
+                (snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)).maxLines =
+                    3
                 snackbar.show()
 
                 workoutSetViewModel.unableToDeleteExerciseTypeWarningShown()
@@ -83,15 +82,17 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         })
 
         workoutSetViewModel.selectedExerciseTypeId.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                (exerciseTypePickerList.adapter as ExerciseTypePickerListAdapter).notifyItemSelected(it)
+            it?.let {
+                (exerciseTypePickerList.adapter as ExerciseTypePickerListAdapter).notifyItemSelected(
+                    it
+                )
             }
         })
 
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
-            it?.let{
+            it?.let {
                 val adapter = (exerciseTypePickerList.adapter as ExerciseTypePickerListAdapter)
-                adapter.submitDTOs(it){
+                adapter.submitDTOs(it) {
                     workoutSetViewModel.selectedExerciseTypeId.value?.let {
                         adapter.notifyItemSelected(it)
                     }
@@ -111,14 +112,15 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
                 return@setOnClickListener
             }
 
-            Snackbar.make(requireView(), R.string.select_exercise_type, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), R.string.select_exercise_type, Snackbar.LENGTH_SHORT)
+                .show()
         }
 
         binding.sortButton.setOnClickListener {
             workoutSetViewModel.changeSortOrder()
         }
 
-        binding.nameSearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        binding.nameSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -132,7 +134,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         return binding.root
     }
 
-    fun createOrEditExerciseType(){
+    fun createOrEditExerciseType() {
         findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
     }
 
@@ -140,34 +142,5 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         super.onStart()
 
         hideKeyboard(requireActivity())
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // TODO investigate some form of animation of the items
-/*        val lac = LayoutAnimationController(
-            AnimationUtils.loadAnimation(
-                activity,
-                R.anim.up_from_bottom
-            ), 0.5f
-        ) //0.5f == time between appearance of listview items.
-
-        exerciseTypePickerList.layoutAnimation = lac
-
-        exerciseTypePickerList.startLayoutAnimation()*/
-
-        /*var clickSpacing = 50L
-        exerciseTypePickerList.itemAnimator?.let {
-            clickSpacing = it.changeDuration
-            Timber.d("anim: setting clickSpacing to be $clickSpacing")
-        }
-
-        // Cause some animation when loading the page
-        lifecycleScope.launch {
-            sortButton.callOnClick()
-            delay(clickSpacing)
-            sortButton.callOnClick()
-        }*/
     }
 }

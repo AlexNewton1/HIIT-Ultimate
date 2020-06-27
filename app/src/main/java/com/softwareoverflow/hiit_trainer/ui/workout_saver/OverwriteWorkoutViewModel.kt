@@ -14,6 +14,8 @@ class OverwriteWorkoutViewModel(
     val dto: WorkoutDTO
 ) : WorkoutSaverViewModel(billingViewModel, workoutRepo, dto) {
 
+    // TODO FUTURE VERSION Dialog shows with nothing inside when no workouts saved in the database. Find a way to prevent the user accessing the Overwrite option when no workouts exist
+
     private val _savedWorkouts = workoutRepo.getAllWorkouts()
     private val _existingWorkouts = MediatorLiveData<List<WorkoutOverwriteDomainObject>>();
     val existingWorkouts: LiveData<List<WorkoutOverwriteDomainObject>>
@@ -22,7 +24,6 @@ class OverwriteWorkoutViewModel(
     private val _currentSelectedId = MutableLiveData(dto.id)
     val currentSelectedId: LiveData<Long?>
         get() = _currentSelectedId
-
 
     init {
         _existingWorkouts.addSource(_savedWorkouts) { workouts ->
@@ -48,11 +49,7 @@ class OverwriteWorkoutViewModel(
 
     fun saveWorkout() {
         val idToSave = currentSelectedId.value
-        if (idToSave == null) {
-            // TODO show snackbar or something
-        } else {
-            dto.id = idToSave
-        }
+        dto.id = idToSave
 
         super.saveWorkout(isOverwriting = true)
     }

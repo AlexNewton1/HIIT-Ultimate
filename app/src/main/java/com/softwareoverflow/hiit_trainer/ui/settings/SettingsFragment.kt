@@ -6,24 +6,40 @@ import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
+import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_screen, rootKey)
 
-        val preparationSetTime = findPreference<DropDownPreference>("key_preparation_set_time")!!
+        val personalizedAds = findPreference<SwitchPreference>(getString(R.string.key_personalized_ads_enabled))!!
+        personalizedAds.isVisible = !AdsManager.hasUserUpgraded
+
+        personalizedAds.setOnPreferenceChangeListener { _, newValue ->
+            UserConsentManager.setPersonalizedAds(requireContext(), newValue == true)
+            true
+        }
+
+        val analytics = findPreference<SwitchPreference>(getString(R.string.key_analytics_enabled))!!
+        analytics.setOnPreferenceChangeListener { _, newValue ->
+            UserConsentManager.setAnalytics(requireContext(), newValue == true)
+            true
+        }
+
+        val preparationSetTime = findPreference<DropDownPreference>(getString(R.string.key_preparation_set_time))!!
         val preparationSetEnabled =
-            findPreference<SwitchPreference>("key_preparation_set_enabled")!!
+            findPreference<SwitchPreference>(getString(R.string.key_preparation_set_enabled))!!
 
         preparationSetTime.isVisible = preparationSetEnabled.isChecked
-        preparationSetEnabled.setOnPreferenceChangeListener { preference, newValue ->
+        preparationSetEnabled.setOnPreferenceChangeListener { _, newValue ->
             preparationSetTime.isVisible = newValue == true
 
             true
         }
 
-        val finalSecondsBeep = findPreference<MultiSelectListPreference>("key_final_seconds_beep")!!
+        val finalSecondsBeep = findPreference<MultiSelectListPreference>(resources.getString(R.string.key_final_seconds_vocal))!!
 
         val values = resources.getStringArray(R.array.final_seconds_beep_entry_values).toHashSet()
         finalSecondsBeep.summary = getValueSummary(finalSecondsBeep.getPersistedStringSet(values))
@@ -36,8 +52,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun getValueSummary(values: Set<*>): String {
-        if (values.isEmpty())
-            return getString(R.string.final_seconds_beep_summary)
+        return if (values.isEmpty())
+            getString(R.string.final_seconds_beep_summary)
         else {
             val sb = StringBuilder()
 
@@ -49,7 +65,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     sb.append(", ")
             }
 
-            return sb.toString()
+            sb.toString()
         }
     }
 

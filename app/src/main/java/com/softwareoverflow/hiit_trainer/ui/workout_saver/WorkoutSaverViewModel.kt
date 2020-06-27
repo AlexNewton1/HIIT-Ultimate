@@ -32,6 +32,10 @@ open class WorkoutSaverViewModel(
     val noWorkoutSlotsRemainingWarning: LiveData<Boolean>
         get() = _noWorkoutSlotsRemainingWarning
 
+    private val _nameTooLongWarning = MutableLiveData(false)
+    val nameTooLongWarning: LiveData<Boolean>
+        get() = _nameTooLongWarning
+
     private val numWorkoutsSaved: MutableLiveData<Int> = MutableLiveData(Int.MAX_VALUE)
 
     init {
@@ -48,9 +52,18 @@ open class WorkoutSaverViewModel(
         _noWorkoutSlotsRemainingWarning.value = false
     }
 
+    fun nameTooLongWarningShown(){
+        _nameTooLongWarning.value = false
+    }
+
     open fun saveWorkout(isOverwriting: Boolean = false) {
         if (!isOverwriting && numWorkoutsSaved.value!!.toInt() >= billingViewModel.getMaxWorkoutSlots()) {
             _noWorkoutSlotsRemainingWarning.value = true
+            return
+        }
+
+        if(newWorkoutName.value!!.length > 30){
+            _nameTooLongWarning.value = true
             return
         }
 

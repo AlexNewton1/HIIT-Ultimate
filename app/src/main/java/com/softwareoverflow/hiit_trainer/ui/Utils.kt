@@ -20,7 +20,7 @@ val Int.dpToPx: Int
 
 fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
     val sp = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    val isEnabled = sp.getBoolean("key_preparation_set_enabled", true)
+    val isEnabled = sp.getBoolean(context.getString(R.string.key_preparation_set_enabled), true)
 
     if(isEnabled){
         return WorkoutSetDTO(
@@ -30,7 +30,7 @@ fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
                 "icon_heart_pulse",
                 "#FF000000"
             ),
-            sp.getString("key_preparation_set_time", "5")!!.toInt(),
+            sp.getString(context.getString(R.string.key_preparation_set_time), "5")!!.toInt(),
             0,
             1,
             0

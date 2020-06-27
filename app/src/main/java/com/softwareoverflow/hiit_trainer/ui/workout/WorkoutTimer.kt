@@ -5,7 +5,12 @@ import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 
-class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, private val observer: IWorkoutObserver) {
+class WorkoutTimer(
+    context: Context,
+    workout: WorkoutDTO,
+    hasPrepSet: Boolean,
+    private val observer: IWorkoutObserver
+) {
 
     private lateinit var timer: CountDownTimer
     private var millisecondsRemaining: Long = workout.getDuration() * 1000L
@@ -33,13 +38,13 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, p
         millisecondsRemaining =
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
-        if(millisecondsRemaining <= 0 ){
+        if (millisecondsRemaining <= 0) {
             _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
             observer.onFinish()
             return
         }
 
-        val currentSound = _soundManager.isMuted()
+        val currentSound = _soundManager.playSound
         _soundManager.toggleSound(false) // Mute all noises when skipping through
         startNextWorkoutSection()
         _soundManager.toggleSound(currentSound)
@@ -77,7 +82,7 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, p
     }
 
     /** Allows muting / un-muting **/
-    fun toggleSound(playSound: Boolean){
+    fun toggleSound(playSound: Boolean) {
         _soundManager.toggleSound(playSound)
     }
 
@@ -97,7 +102,15 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, p
                         (millisRemainingInSection / 1000).toInt()
                     )
 
-                    if (millisRemainingInSection <= 3000L && currentSection != WorkoutSection.WORK ) {
+                    if (currentSection == WorkoutSection.WORK) {
+                        when (millisRemainingInSection / 1000) {
+                            15L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_15)
+                            10L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_10)
+                            5L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_5)
+                        }
+                    }
+
+                    if (millisRemainingInSection <= 3000L) {
                         _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
                     }
                 }
@@ -112,21 +125,20 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, p
     }
 
     private fun startNextWorkoutSection() {
-        if(currentSection == WorkoutSection.PREPARE){
+        if (currentSection == WorkoutSection.PREPARE) {
             // Begin the workout
             currentSection = WorkoutSection.WORK
 
-            if(workoutSets.hasNext())
+            if (workoutSets.hasNext())
                 currentSet = workoutSets.next()
             millisRemainingInSection = getCurrentSetWorkTime()
-        }
-        else if (currentRep == currentSet.numReps) {
+        } else if (currentRep == currentSet.numReps) {
             if (currentSection == WorkoutSection.RECOVER) {
                 // Start the new workout set
                 currentRep = 1
                 currentSection = WorkoutSection.WORK
 
-                if(workoutSets.hasNext())
+                if (workoutSets.hasNext())
                     currentSet = workoutSets.next()
 
                 millisRemainingInSection = getCurrentSetWorkTime()
@@ -155,12 +167,12 @@ class WorkoutTimer(context: Context, workout: WorkoutDTO, hasPrepSet: Boolean, p
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
-    fun start(){
+    fun start() {
         isRunning = true
         timer.start()
     }
 
-    fun cancel(){
+    fun cancel() {
         _soundManager.onDestroy()
         timer.cancel()
     }

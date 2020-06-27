@@ -79,7 +79,7 @@ class LoadSavedWorkoutFragment : Fragment() {
         )
 
         viewModel.workouts.observe(viewLifecycleOwner, Observer {
-            // TODO fix having to cast this - it's not very nice!
+            // TODO FUTURE VERSION - find a way to avoid having to cast this
             it?.let {
                 (listSavedWorkouts.adapter as SavedWorkoutListAdapter).submitList(it.toMutableList())
             }
@@ -103,6 +103,4 @@ class LoadSavedWorkoutFragment : Fragment() {
 
         return binding.root
     }
-
-    // TODO add some form of animation to the views when first displayed. Rise up, come down, slide in etc
 }

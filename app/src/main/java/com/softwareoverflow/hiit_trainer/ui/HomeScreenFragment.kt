@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentHomeScreenBinding
+import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 
@@ -28,6 +29,10 @@ class HomeScreenFragment : Fragment() {
             false
         )
         binding.lifecycleOwner = this
+
+        if(!UserConsentManager.consentEverGiven){
+            findNavController().navigate(R.id.action_homeScreenFragment_to_userConsentDialog)
+        }
 
         return binding.root
     }

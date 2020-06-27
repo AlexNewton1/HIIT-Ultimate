@@ -141,6 +141,8 @@ class BillingRepository private constructor(private val application: Application
         return false
     }
 
+    private var retryCount: Int = 0
+
     /**
      * This is the callback for when connection to the Play [BillingClient] has been successfully
      * established. It might make sense to get [SkuDetails] and [Purchases][Purchase] at this point.
@@ -149,19 +151,20 @@ class BillingRepository private constructor(private val application: Application
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 Timber.d("onBillingSetupFinished successfully")
+                retryCount = 0
+
                 querySkuDetailsAsync(BillingClient.SkuType.INAPP, INAPP_SKUS)
                 queryPurchasesAsync()
             }
-            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                //Some apps may choose to make decisions based on this knowledge.
-                // TODO look at this
-                Timber.d(billingResult.debugMessage)
-            }
             else -> {
-                //do nothing. Someone else will connect it through retry policy.
-                //May choose to send to server though
-                // TODO look at this
-                Timber.d(billingResult.debugMessage)
+                if(++retryCount < 3) {
+                    CoroutineScope(Job()).launch {
+                        delay(retryCount * 1000L) // Back off timeout
+                        connectToPlayBillingService()
+                    }
+                }
+
+                Timber.e(billingResult.debugMessage)
             }
         }
     }
@@ -231,10 +234,8 @@ class BillingRepository private constructor(private val application: Application
                         validPurchases.add(purchase)
                     }
                 } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
+                    // Hopefully we won't end up in this state
                     Timber.d("Received a pending purchase of SKU: ${purchase.sku}")
-                    // TODO look at this
-                    // handle pending purchases, e.g. confirm with users about the pending
-                    // purchases, prompt them to complete it, etc.
                 }
             }
 

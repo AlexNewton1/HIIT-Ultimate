@@ -2,7 +2,6 @@
 <resources>
 
     <string-array name="et_colors">
-
         <item>#666666</item>
         <item>#FFFF3636</item>
         <item>#FD5C29</item>
@@ -16,26 +15,22 @@
         <item>#9C27B0</item>
         <item>#FFEA4DB0</item>
         <item>#FFFB3B5E</item>
-        <!-- TODO fix colours -->
     </string-array>
 
     <array name="et_icons">
         <item>@drawable/et_icon_flash</item>
         <item>@drawable/et_icon_heart</item>
-        <item>@drawable/icon_heart_pulse</item>
         <item>@drawable/et_icon_dumbbell</item>
+        <item>@drawable/et_icon_kettlebell</item>
+        <item>@drawable/et_icon_jump_rope</item>
         <item>@drawable/et_icon_weight_lift</item>
         <item>@drawable/et_icon_run</item>
-
-
-        <!-- TODO replace below icons with the correct ones -->
-        <item>@drawable/icon_recover</item>
-        <item>@drawable/icon_repeat</item>
-        <item>@drawable/icon_fire</item>
-        <item>@drawable/icon_timer</item>
-        <item>@drawable/icon_tick</item>
-        <item>@drawable/icon_rest</item>
-        <item>@drawable/icon_plus</item>
+        <item>@drawable/et_icon_squat</item>
+        <item>@drawable/et_icon_high_knees</item>
+        <item>@drawable/et_icon_star_jump</item>
+        <item>@drawable/et_icon_plank</item>
+        <item>@drawable/et_icon_sit_up</item>
+        <item>@drawable/et_icon_hollow_body</item>
     </array>
 
     <string-array name="preparation_set_entries">

@@ -7,6 +7,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -38,8 +39,9 @@ class MoveAndScaleAnimationFactory {
             duration = animDuration
             addUpdateListener { animation -> updateValues(animation.animatedFraction) }
 
-            // TODO - can I get property (e.g alpha) from a view by the name "alpha" or some equivalent, to simply create many animations with a from, to and view object and start them all together.
-            // TODO - otherwise this class is becoming slightly god-classy as it's controlling multiple views simultaneously
+            /* TODO FUTURE VERSION can I get property (e.g alpha) from a view by the name "alpha" or some equivalent, to simply create many animations with a from, to and view object and start them all together.
+                otherwise this class is becoming slightly god-classy as it's controlling multiple views simultaneously
+             */
         }
     }
 
@@ -105,14 +107,17 @@ class MoveAndScaleAnimationFactory {
         this.toAlpha = toAlpha
     }
 
-    // TODO update the issue with the flash at the end of the animation
     fun create(doOnEndAction: (() -> Unit)?): ValueAnimator = _animator.apply{
         doOnEnd {
             doOnEndAction?.invoke()
+
             CoroutineScope(Dispatchers.Main).launch {
+                delay(250)
+                viewToAlpha?.alpha = 1f
+
                 // Delay the resetting of values to allow the custom end action to complete
-                //viewToAlpha?.alpha = 1f
-                updateValues(0f)
+                delay(200)
+                updateValues(0F)
             }
         }
     }

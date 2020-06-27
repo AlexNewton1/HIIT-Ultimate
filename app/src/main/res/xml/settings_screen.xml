@@ -7,7 +7,7 @@
 
         <SwitchPreference
             app:defaultValue="true"
-            app:key="key_preparation_set_enabled"
+            app:key="@string/key_preparation_set_enabled"
             app:summary="@string/preparation_set_summary"
             app:title="@string/preparation_set_enabled" />
 
@@ -15,7 +15,7 @@
             app:defaultValue="5"
             app:entries="@array/preparation_set_entries"
             app:entryValues="@array/preparation_set_entry_values"
-            app:key="key_preparation_set_time"
+            app:key="@string/key_preparation_set_time"
             app:title="@string/preparation_set_time"
             app:useSimpleSummaryProvider="true" />
 
@@ -29,9 +29,27 @@
             app:dialogTitle="@string/final_seconds_beep"
             app:entries="@array/final_seconds_beep_entries"
             app:entryValues="@array/final_seconds_beep_entry_values"
-            app:key="key_final_seconds_beep"
+            app:defaultValue="@array/final_seconds_beep_entry_values"
+            app:key="@string/key_final_seconds_vocal"
             app:summary="@string/final_seconds_beep_summary"
             app:title="@string/final_seconds_beep" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:allowDividerAbove="true"
+        app:title="@string/privacy">
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/key_personalized_ads_enabled"
+            app:title="@string/personalized_ads_enabled" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/key_analytics_enabled"
+            app:title="@string/analytics_enabled"
+            app:summary="@string/analytics_enabled_summary"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

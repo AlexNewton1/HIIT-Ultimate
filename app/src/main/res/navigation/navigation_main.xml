@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_homeScreenFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_userConsentDialog"
+            app:destination="@id/userConsentDialog" />
     </fragment>
     <navigation
         android:id="@+id/nav_workout_creator"
@@ -166,5 +169,13 @@
         <argument
             android:name="workoutDto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </dialog>
+    <dialog
+        android:id="@+id/userConsentDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.consent.UserConsentDialog"
+        android:label="UserConsentDialog" >
+        <action
+            android:id="@+id/action_userConsentDialog_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
     </dialog>
 </navigation>

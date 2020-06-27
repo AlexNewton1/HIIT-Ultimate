@@ -7,7 +7,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
-import timber.log.Timber
 
 abstract class SaveWorkoutDialog : FadedDialogBase() {
 
@@ -34,10 +33,9 @@ abstract class SaveWorkoutDialog : FadedDialogBase() {
 
         val noWorkoutSlots = Snackbar.make(
             parentFragment?.view ?: requireView(),
-            "No free workout slots remaining. Overwrite an existing workout or upgrade to PRO.",
+            getString(R.string.no_free_workout_slots_warning),
             Snackbar.LENGTH_LONG
-        ).setAction("Upgrade") {
-            Timber.d("UPGRADE: its clicked")
+        ).setAction(R.string.upgrade) {
             viewModel.upgrade(requireActivity())
         }.addCallback(object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -46,21 +44,31 @@ abstract class SaveWorkoutDialog : FadedDialogBase() {
                 viewModel.noWorkoutSlotsWarningShown()
             }
         })
+
         viewModel.noWorkoutSlotsRemainingWarning.observe(viewLifecycleOwner, Observer {
             if (it) {
                 noWorkoutSlots.show()
             }
 
             it?.let {
-                // Not cancellable while showing upgrade snackbar
-                //requireDialog().setCanceledOnTouchOutside(!it)
-
                 val window = requireDialog().window
                 if (it) window?.setFlags(
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 )
                 else window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }
+        })
+
+        viewModel.nameTooLongWarning.observe(viewLifecycleOwner, Observer {
+            if (it) {
+               Snackbar.make(
+                    parentFragment?.view ?: requireView(),
+                    getString(R.string.name_too_long_warning),
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+                viewModel.nameTooLongWarningShown()
             }
         })
 

@@ -115,6 +115,20 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
 
         if (_currentRep.value != currentRep)
             _currentRep.value = currentRep
+
+        // Show the up next icon for prepare / recover
+        if ((section == WorkoutSection.PREPARE || section == WorkoutSection.RECOVER) &&
+            _upNextExerciseType.value == null
+        ) {
+
+            val workoutSets = _workout.value?.workoutSets!!
+            val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
+
+            if (currentWorkoutSetIndex != workoutSets.size) {
+                _upNextExerciseType.value = workoutSets[currentWorkoutSetIndex].exerciseTypeDTO
+                _showUpNextLabel.value = true
+            }
+        }
     }
 
     /** Decrements the main on-screen timer and the remaining time**/
@@ -125,14 +139,7 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
         // Show the upcoming exercise type
         val workoutSets = _workout.value?.workoutSets!!
         val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
-        if ((_currentSection.value == WorkoutSection.RECOVER || _currentSection.value == WorkoutSection.PREPARE) && sectionTimeRemaining <= 10) {
-            if (_upNextExerciseType.value == null) {
-                if (currentWorkoutSetIndex != workoutSets.size) {
-                    _upNextExerciseType.value = workoutSets[currentWorkoutSetIndex].exerciseTypeDTO
-                    _showUpNextLabel.value = true
-                }
-            }
-
+        if ((_currentSection.value == WorkoutSection.RECOVER || _currentSection.value == WorkoutSection.PREPARE)) {
             if (sectionTimeRemaining <= 3 && _animateUpNextExerciseType.value == false) {
                 _animateUpNextExerciseType.value = true
                 _showUpNextLabel.value = false

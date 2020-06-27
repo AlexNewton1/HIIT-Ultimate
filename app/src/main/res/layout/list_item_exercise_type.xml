@@ -20,10 +20,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/colorFade"
-            android:background="@drawable/bg_rounded_lozenge"
             android:layout_width="0dp"
-            android:translationZ="-1dp"
             android:layout_height="0dp"
+            android:background="@drawable/bg_rounded_lozenge"
+            android:translationZ="-1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +53,7 @@
             android:maxLength="@integer/et_name_length_max"
             android:padding="@dimen/fragment_padding"
             android:text="@{dto.dto.name}"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/exerciseTypeIcon"
             app:layout_constraintStart_toStartOf="@+id/exerciseTypeIcon"

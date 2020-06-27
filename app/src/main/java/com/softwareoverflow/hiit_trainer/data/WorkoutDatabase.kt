@@ -45,7 +45,9 @@ abstract class WorkoutDatabase : RoomDatabase() {
                         WorkoutDatabase::class.java,
                         DATABASE_NAME
                     )
-                        .fallbackToDestructiveMigration() // TODO - work out how migrations work when required to prevent destruction and recreation of DB
+                        .createFromAsset("DefaultWorkoutDatabase.db")
+                        // TODO FUTURE VERSION work out how migrations work when required to prevent destruction and recreation of DB
+                        .fallbackToDestructiveMigration()
                         .build()
 
                     INSTANCE = instance
