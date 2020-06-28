@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
-import timber.log.Timber
 
 class WorkoutTimer(
     context: Context,
@@ -120,8 +119,6 @@ class WorkoutTimer(
 
                 millisRemainingInSection -= tickInterval
                 millisecondsRemaining -= tickInterval
-                Timber.d("WorkoutTimer: $millisUntilFinished")
-
             }
         }
     }

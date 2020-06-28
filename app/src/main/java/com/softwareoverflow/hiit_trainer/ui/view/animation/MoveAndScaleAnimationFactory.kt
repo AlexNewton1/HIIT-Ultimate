@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class MoveAndScaleAnimationFactory {
 
@@ -34,7 +33,6 @@ class MoveAndScaleAnimationFactory {
     private var toAlpha: Float? = null
 
     private val _animator: ValueAnimator by lazy {
-        Timber.d("Anim: Creating ValueAnimator")
         ValueAnimator.ofFloat(_floatAmount).apply {
             duration = animDuration
             addUpdateListener { animation -> updateValues(animation.animatedFraction) }
@@ -63,8 +61,6 @@ class MoveAndScaleAnimationFactory {
         textViewToScale?.pivotX = 0f
         textViewToScale?.scaleX = getIntermediateValue(1f, 1.1f, fraction) ?: textViewToScale!!.scaleX
         textViewToScale?.scaleY = getIntermediateValue(1f, 1.1f, fraction) ?: textViewToScale!!.scaleY
-
-        Timber.d("Anim: Set text size to ${textViewToScale?.textSize} at fraction $fraction")
     }
 
     private fun getIntermediateValue(from: Float?, to: Float?, fraction: Float): Float? {
@@ -86,7 +82,6 @@ class MoveAndScaleAnimationFactory {
     }
 
     fun setMoveY(fromY: Float, toY: Float) {
-        Timber.d("anim: fromY = $fromY, toY=$toY")
         this.fromY = fromY
         this.toY = toY
     }

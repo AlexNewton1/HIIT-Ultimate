@@ -16,7 +16,7 @@ class WorkoutMediaManager(context: Context) {
     private val playVocal5: Boolean
 
     var playSound = true
-    private set
+        private set
 
     private var isReady = false
 
@@ -105,15 +105,15 @@ class WorkoutMediaManager(context: Context) {
             WorkoutSound.SOUND_WORKOUT_COMPLETE ->
                 _soundPool.play(soundWorkoutComplete, 1f, 1f, 10, 0, 1f)
             WorkoutSound.SOUND_VOCAL_15 ->
-                if(playVocal15) _soundPool.play(soundVocal15, 1f, 1f, 10, 0, 1f)
+                if (playVocal15) _soundPool.play(soundVocal15, 1f, 1f, 10, 0, 1f)
             WorkoutSound.SOUND_VOCAL_10 ->
-                if(playVocal10) _soundPool.play(soundVocal10, 1f, 1f, 10, 0, 1f)
+                if (playVocal10) _soundPool.play(soundVocal10, 1f, 1f, 10, 0, 1f)
             WorkoutSound.SOUND_VOCAL_5 ->
-                if(playVocal5) _soundPool.play(soundVocal5, 1f, 1f, 10, 0, 1f)
+                if (playVocal5) _soundPool.play(soundVocal5, 1f, 1f, 10, 0, 1f)
         }
     }
 
     fun onDestroy() {
-         _soundPool.release()
+        _soundPool.release()
     }
 }
