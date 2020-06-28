@@ -300,9 +300,7 @@ class BillingRepository private constructor(private val application: Application
      * unnecessary. @see [Security]
      */
     private fun isSignatureValid(purchase: Purchase): Boolean {
-        return Security.verifyPurchase(
-            Security.BASE_64_ENCODED_PUBLIC_KEY, purchase.originalJson, purchase.signature
-        )
+        return Security.verifyPurchase(purchase.originalJson, purchase.signature)
     }
 
     /**
@@ -329,7 +327,7 @@ class BillingRepository private constructor(private val application: Application
                     }
                 }
                 else -> {
-                    Timber.d(billingResult.debugMessage)
+                    Timber.w(billingResult.debugMessage)
                 }
             }
         }

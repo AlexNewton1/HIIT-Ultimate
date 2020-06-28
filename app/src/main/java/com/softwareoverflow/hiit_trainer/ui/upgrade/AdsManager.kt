@@ -79,6 +79,9 @@ class AdsManager(private val context: Context, private val bannerAd: AdView) {
 
     fun setUserUpgraded(upgraded: Boolean) {
         hasUserUpgraded = upgraded
+
+        if(upgraded)
+            hideBanner()
     }
 
     fun hideBanner() {

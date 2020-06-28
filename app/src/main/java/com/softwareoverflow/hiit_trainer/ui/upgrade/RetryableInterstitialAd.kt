@@ -4,15 +4,12 @@ import android.content.Context
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 class RetryableInterstitialAd(context: Context, adUnitId: String, private val request: AdRequest)  {
 
-    private val maxRetryCount = 3
+    private val maxRetryCount = 5
     private var retryCount = 0
 
     private val ad = InterstitialAd(context)
@@ -54,7 +51,10 @@ class RetryableInterstitialAd(context: Context, adUnitId: String, private val re
             Timber.i("Advert failed to load. Retry count: $retryCount")
             CoroutineScope(job).launch {
                 delay(retryCount * 1000L)
-                ad.loadAd(request)
+
+                withContext(Dispatchers.Main) {
+                    ad.loadAd(request)
+                }
             }
         } else {
             Timber.w("Retry advert load failed $maxRetryCount times. Aborting advert loading")

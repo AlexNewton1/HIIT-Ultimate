@@ -105,5 +105,7 @@
     <string name="key_analytics_enabled">key_analytics_enabled</string>
     <string name="privacy">Privacy</string>
     <string name="analytics_enabled_summary">Send anonymized analytics to help us improve</string>
+    <string name="continue_to_step_2">Continue to Step 2</string>
+    <string name="add_exercise_set_to_workout">Add exercise set to workout</string>
 
 </resources>

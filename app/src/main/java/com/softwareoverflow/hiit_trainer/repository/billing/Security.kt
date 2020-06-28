@@ -17,6 +17,7 @@ package com.softwareoverflow.hiit_trainer.repository.billing
 
 import android.text.TextUtils
 import android.util.Base64
+import com.softwareoverflow.hiit_trainer.BuildConfig
 import timber.log.Timber
 import java.io.IOException
 import java.security.*
@@ -65,19 +66,10 @@ object Security {
      * want to make it easy for an attacker to replace the public key with one
      * of their own and then fake messages from the server.
      */
-
-    // TODO INSERT CORRECT KEY
-    // TODO SEE ABOVE - OBFUSCATE by loading it through BuildConfig
-    val _BASE_64_ENCODED_PUBLIC_KEY = "" /*(e.g.) "4 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArEaiCq7os9cmF+i564+pIOiSOVZa/LRzu0K79Dg6wKWjnJ1PkHAa4ZOJ81KrxyFk3q3UiJ3lNsTCdW216+KKdKp+ " +
-            "2 YCOFLssN+4FKjFBqY9lJbm6uuxZ9cPugMOTVFrVlmreYyhIY4jysfo4+LeyEmB7D20X7M+7diCRBEIsOY9lA2neOtD6j0BR4rhLGR3xjN0LGrhCCdbw42+eIkc/awbY7FypLMJjbAmEnNBe1tlOxxX6ZgspwAlY8XjnX83 " +
-            "3 2lxxHdnuJKSPGtYCQLSt/LYc/go90/kc/U+oPtQy/KgCiQEcKeIL1a6AB294JDogkHuqRIeXIu1n4sAfzGcshrJQIDAQAB" */
-
-    val BASE_64_ENCODED_PUBLIC_KEY = transformKey(_BASE_64_ENCODED_PUBLIC_KEY)
-
-    private fun transformKey(s: String) : String{
+    private fun getBase64EncodedPublicKey() : String{
         val parts = mutableListOf<String>()
 
-        val split = s.split(" ")
+        val split = BuildConfig.IAB_PUBLIC_KEY.split(" ")
         for(i in 0 until split.count() step 2){
 
             val reversed = reverseCase(split[i + 1])
@@ -118,7 +110,8 @@ object Security {
      * is invalid
      */
     @Throws(IOException::class)
-    fun verifyPurchase(base64PublicKey: String, signedData: String, signature: String): Boolean {
+    fun verifyPurchase(signedData: String, signature: String): Boolean {
+        val base64PublicKey = getBase64EncodedPublicKey()
         if ((TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey)
                     || TextUtils.isEmpty(signature))
         ) {

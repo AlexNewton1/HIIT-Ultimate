@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
                     adsManager.hideBanner()
                 }
+                R.id.userConsentDialog -> adsManager.hideBanner()
                 R.id.upgradeDialog -> adsManager.hideBanner()
                 R.id.settingsFragment -> {
                     adsManager.hideBanner()
