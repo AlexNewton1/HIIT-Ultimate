@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -26,7 +25,6 @@ import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -75,11 +73,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         billingClient = ViewModelProvider(this).get(BillingViewModel::class.java)
         billingClient.userHasUpgraded.observe(this, Observer {
             adsManager.setUserUpgraded(it)
-
-            if(it) {
-                upgradeToProIcon.visibility = View.GONE
-                upgradeToProButton.visibility = View.GONE
-            }
         })
 
         NavigationUI.setupWithNavController(navView, navController)

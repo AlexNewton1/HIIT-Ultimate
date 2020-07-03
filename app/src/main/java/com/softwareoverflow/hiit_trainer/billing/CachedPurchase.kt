@@ -16,7 +16,10 @@
 
 package com.softwareoverflow.hiit_trainer.billing
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import com.android.billingclient.api.Purchase
 
 /**
@@ -57,11 +60,6 @@ class CachedPurchase(val data: Purchase) {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
-
-    @Ignore
-    val purchaseToken = data.purchaseToken
-    @Ignore
-    val sku = data.sku
 
     override fun equals(other: Any?): Boolean {
         return when (other) {

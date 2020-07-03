@@ -9,6 +9,7 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * ViewModel for creating / editing workouts.
@@ -39,6 +40,12 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
                 _workout.value = WorkoutDTO()
 
             LoadingSpinner.hideLoadingIcon()
+        }
+    }
+
+    fun getNumSavedWorkouts() :Int {
+        return runBlocking {
+            return@runBlocking repo.getWorkoutCount()
         }
     }
 
@@ -100,3 +107,4 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
         _workoutSet.value = null
     }
 }
+

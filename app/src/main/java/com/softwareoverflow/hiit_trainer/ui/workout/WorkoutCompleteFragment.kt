@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutCompleteBinding
-import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
+import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
-import kotlinx.android.synthetic.main.fragment_workout_complete.*
 
 class WorkoutCompleteFragment : Fragment() {
 
@@ -31,6 +31,9 @@ class WorkoutCompleteFragment : Fragment() {
             false
         )
         binding.lifecycleOwner = this
+
+        val billingClient = ViewModelProvider(requireActivity()).get(BillingViewModel::class.java)
+        binding.billing = billingClient
 
         binding.upgradeToProButton.setOnClickListener {
             val action =
@@ -76,14 +79,5 @@ class WorkoutCompleteFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        if(AdsManager.hasUserUpgraded) {
-            upgradeToProIcon.visibility = View.GONE
-            upgradeToProButton.visibility = View.GONE
-        }
     }
 }

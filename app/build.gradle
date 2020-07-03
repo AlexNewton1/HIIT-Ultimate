@@ -7,13 +7,13 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
     defaultConfig {
         applicationId "com.softwareoverflow.hiit_trainer"
         minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
+        targetSdkVersion 30
+        versionCode 3
         versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -103,6 +103,7 @@ dependencies {
     implementation 'io.github.yavski:fab-speed-dial:1.0.6'
 
     // Monetization
+    implementation 'com.android.billingclient:billing:3.0.0'
     implementation 'com.android.billingclient:billing-ktx:3.0.0'
     implementation 'com.google.android.gms:play-services-ads:19.2.0'
     implementation 'com.google.android.ads.consent:consent-library:1.0.8'

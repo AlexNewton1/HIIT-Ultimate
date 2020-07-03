@@ -94,7 +94,7 @@ class WorkoutCreatorFragment : Fragment() {
             // This causes IllegalArgumentException as the save workout dialog is still on screen. Catch these exceptions and do nothing.
             try {
                 findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
-            } catch (ex: IllegalArgumentException){
+            } catch (ex: IllegalArgumentException) {
                 // Do nothing
             }
         }
@@ -129,6 +129,15 @@ class WorkoutCreatorFragment : Fragment() {
                         )
                     findNavController().navigate(action)
                 } else if (menuItem.title == resources.getString(R.string.overwrite_existing)) {
+                    if (viewModel.getNumSavedWorkouts() == 0) {
+                        Snackbar.make(
+                            requireView(),
+                            getString(R.string.no_saved_workouts),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        return false
+                    }
+
                     val action =
                         WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToOverwriteExistingWorkoutDialog(
                             workoutDto = viewModel.workout.value!!

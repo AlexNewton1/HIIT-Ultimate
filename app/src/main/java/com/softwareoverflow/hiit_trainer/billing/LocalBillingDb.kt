@@ -24,7 +24,6 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [
-        AugmentedSkuDetails::class,
         CachedPurchase::class,
         ProUpgrade::class
     ],
@@ -35,7 +34,6 @@ import androidx.room.TypeConverters
 abstract class LocalBillingDb : RoomDatabase() {
     abstract fun purchaseDao(): PurchaseDao
     abstract fun entitlementsDao(): EntitlementsDao
-    abstract fun skuDetailsDao(): AugmentedSkuDetailsDao
 
     companion object {
         @Volatile

@@ -2,6 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="billing"
+            type="com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -32,6 +41,7 @@
             android:id="@+id/upgradeToProIcon"
             android:layout_width="@dimen/fab_size_padded"
             android:layout_height="@dimen/fab_size_padded"
+            android:visibility="@{billing.userHasUpgraded ? View.INVISIBLE : View.VISIBLE}"
             app:colorHex='@{"#D81B60"}'
             app:iconName='@{"icon_pro"}'
             app:layout_constraintBottom_toTopOf="@+id/upgradeToProButton"
@@ -44,12 +54,13 @@
             android:id="@+id/upgradeToProButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/fab_size_padded"
             android:background="@drawable/bg_rounded_lozenge_primary"
             android:gravity="center"
             android:padding="16dp"
             android:text="@string/upgrade_to_pro"
             android:textSize="25sp"
-            android:layout_marginBottom="@dimen/fab_size_padded"
+            android:visibility="@{billing.userHasUpgraded ? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -57,11 +68,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <io.github.yavski.fabspeeddial.FabSpeedDial
-            android:elevation="10dp"
             android:id="@+id/saveSpeedDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
+            android:elevation="10dp"
             app:fabDrawable="@drawable/icon_save_options"
             app:fabGravity="bottom_start"
             app:fabMenu="@menu/save_options"

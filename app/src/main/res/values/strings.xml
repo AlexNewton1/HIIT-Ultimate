@@ -107,5 +107,6 @@
     <string name="analytics_enabled_summary">Send anonymized analytics to help us improve</string>
     <string name="continue_to_step_2">Continue to Step 2</string>
     <string name="add_exercise_set_to_workout">Add exercise set to workout</string>
+    <string name="no_saved_workouts">No saved workouts exist. Please save as a new workout.</string>
 
 </resources>

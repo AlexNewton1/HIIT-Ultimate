@@ -46,6 +46,7 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
     private val viewModelScope = CoroutineScope(Job() + Dispatchers.Main)
     private val repository: BillingRepository = BillingRepository.getInstance(application)
 
+
     init {
         repository.startDataSourceConnections()
 

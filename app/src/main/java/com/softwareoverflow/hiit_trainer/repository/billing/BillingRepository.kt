@@ -19,14 +19,13 @@ package com.softwareoverflow.hiit_trainer.repository.billing
 import android.app.Activity
 import android.app.Application
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.android.billingclient.api.*
-import com.softwareoverflow.hiit_trainer.billing.AugmentedSkuDetails
 import com.softwareoverflow.hiit_trainer.billing.Entitlement
 import com.softwareoverflow.hiit_trainer.billing.LocalBillingDb
 import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.Upgrades.INAPP_SKUS
+import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.Upgrades.PRO_UPGRADE
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
@@ -70,17 +69,12 @@ class BillingRepository private constructor(private val application: Application
      * The data that lives here should be refreshed at regular intervals so that it reflects what's
      * in the Google Play Store.
      */
-    private lateinit var localCacheBillingClient: LocalBillingDb
+    private val localCacheBillingClient: LocalBillingDb = LocalBillingDb.getInstance(application)
 
     /**
      * This list tells clients what in-app products are available for sale
      */
-    private val _inAppSkuDetailsListLiveData: LiveData<List<AugmentedSkuDetails>> by lazy {
-        if (!::localCacheBillingClient.isInitialized) {
-            localCacheBillingClient = LocalBillingDb.getInstance(application)
-        }
-        localCacheBillingClient.skuDetailsDao().getInappSkuDetails()
-    }
+    private val _inAppSkuDetailsMap = hashMapOf<String, SkuDetails>()
 
     /**
      * Tracks whether this user is entitled to the PRO features. This call returns data from the app's
@@ -89,19 +83,14 @@ class BillingRepository private constructor(private val application: Application
      * cache to make sure it's always up-to-date. However, onBillingSetupFinished already called
      * queryPurchasesAsync for you; so no need.
      */
-    val proUpgradeLiveData: LiveData<ProUpgrade> by lazy {
-        if (!::localCacheBillingClient.isInitialized) {
-            localCacheBillingClient = LocalBillingDb.getInstance(application)
-        }
-        localCacheBillingClient.entitlementsDao().getProUpgrade()
-    }
+    val proUpgradeLiveData = localCacheBillingClient.entitlementsDao().getProUpgrade()
 
     /**
      * Gets the number of allowed workout slots for the user.
      * This is unlimited for PRO users, and limited for FREE users
      */
     fun getMaxWorkoutSlots(): Int {
-        return if(proUpgradeLiveData.value?.entitled == true) Int.MAX_VALUE else 3
+        return if (proUpgradeLiveData.value?.entitled == true) Int.MAX_VALUE else 3
     }
 
     /**
@@ -115,7 +104,6 @@ class BillingRepository private constructor(private val application: Application
     fun startDataSourceConnections() {
         Timber.d("startDataSourceConnections")
         instantiateAndConnectToPlayBillingService()
-        localCacheBillingClient = LocalBillingDb.getInstance(application)
     }
 
     fun endDataSourceConnections() {
@@ -150,21 +138,24 @@ class BillingRepository private constructor(private val application: Application
     override fun onBillingSetupFinished(billingResult: BillingResult) {
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
+
                 Timber.d("onBillingSetupFinished successfully")
                 retryCount = 0
 
-                querySkuDetailsAsync(BillingClient.SkuType.INAPP, INAPP_SKUS)
+                querySkuDetailsAsync()
                 queryPurchasesAsync()
             }
             else -> {
-                if(++retryCount < 3) {
+                Timber.w("Failed to connect... response code ${billingResult.responseCode}")
+                if (++retryCount < 3) {
                     CoroutineScope(Job()).launch {
                         delay(retryCount * 1000L) // Back off timeout
+
                         connectToPlayBillingService()
                     }
                 }
 
-                Timber.e(billingResult.debugMessage)
+                Timber.e("FAILURE ${billingResult.debugMessage}")
             }
         }
     }
@@ -285,11 +276,9 @@ class BillingRepository private constructor(private val application: Application
     private fun disburseNonConsumableEntitlement(purchase: Purchase) =
         CoroutineScope(Job() + Dispatchers.IO).launch {
             when (purchase.sku) {
-                Upgrades.PRO_UPGRADE -> {
+                PRO_UPGRADE -> {
                     val proUpgrade = ProUpgrade(true)
                     insert(proUpgrade)
-                    localCacheBillingClient.skuDetailsDao()
-                        .insertOrUpdate(purchase.sku, proUpgrade.mayPurchase())
                 }
             }
             localCacheBillingClient.purchaseDao().delete(purchase)
@@ -310,19 +299,15 @@ class BillingRepository private constructor(private val application: Application
      *
      * The result is passed to [onSkuDetailsResponse]
      */
-    private fun querySkuDetailsAsync(
-        @BillingClient.SkuType skuType: String,
-        skuList: List<String>) {
-        val params = SkuDetailsParams.newBuilder().setSkusList(skuList).setType(skuType).build()
-        Timber.d("querySkuDetailsAsync for $skuType")
+    private fun querySkuDetailsAsync() {
+        val params = SkuDetailsParams.newBuilder().setSkusList(INAPP_SKUS).setType(BillingClient.SkuType.INAPP).build()
+        Timber.d("querySkuDetailsAsync")
         playStoreBillingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
                     if (skuDetailsList.orEmpty().isNotEmpty()) {
                         skuDetailsList!!.forEach {
-                            CoroutineScope(Job() + Dispatchers.IO).launch {
-                                localCacheBillingClient.skuDetailsDao().insertOrUpdate(it)
-                            }
+                            _inAppSkuDetailsMap[it.sku] = it
                         }
                     }
                 }
@@ -333,22 +318,14 @@ class BillingRepository private constructor(private val application: Application
         }
     }
 
-    /**
-     * This is the function to call when user wishes to make a purchase. This function will
-     * launch the Google Play Billing flow. The response to this call is returned in
-     * [onPurchasesUpdated]
-     */
-    private fun launchBillingFlow(activity: Activity, augmentedSkuDetails: AugmentedSkuDetails) =
-        launchBillingFlow(activity, SkuDetails(augmentedSkuDetails.originalJson!!))
-
     private fun launchBillingFlow(activity: Activity, skuDetails: SkuDetails) {
         val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build()
-        playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
+       playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
     }
 
-    fun upgradeToPro(activity: Activity){
-        val skuDetails = _inAppSkuDetailsListLiveData.value?.single { it.sku ==  Upgrades.PRO_UPGRADE}
-        if(skuDetails == null)
+    fun upgradeToPro(activity: Activity) {
+        val skuDetails = _inAppSkuDetailsMap[PRO_UPGRADE]
+        if (skuDetails == null)
             throw NoSuchElementException("Unable to find purchase for sku '${Upgrades.PRO_UPGRADE}'")
         else
             launchBillingFlow(activity, skuDetails)
