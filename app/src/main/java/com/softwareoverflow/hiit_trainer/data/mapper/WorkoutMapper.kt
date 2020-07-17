@@ -14,14 +14,16 @@ fun Workout.toDTO(): WorkoutDTO {
     return WorkoutDTO(
         workout.id,
         workout.name,
-        workoutSets.toWorkoutSetDTO()
+        workoutSets.toWorkoutSetDTO(),
+        workout.numReps,
+        workout.recoveryTime
     )
 }
 
 fun List<Workout>.toDTO() = this.map{ it.toDTO() }
 
 fun WorkoutDTO.toWorkoutEntity(): WorkoutEntity {
-    return WorkoutEntity(this.id, this.name)
+    return WorkoutEntity(this.id, this.name, this.numReps, this.recoveryTime)
 }
 
 fun List<WorkoutSetDTO>.toWorkoutSetEntity(workoutId: Long): List<WorkoutSetEntity> {

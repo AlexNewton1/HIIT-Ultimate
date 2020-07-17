@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
+import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypePickerListAdapter
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
@@ -44,16 +45,24 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
 
+        if (!workoutViewModel.isNewWorkoutSet) {
+            (requireActivity() as MainActivity).supportActionBar?.title =
+                getString(R.string.nav_set_editor_step_1)
+        }
+
         binding.exerciseTypePickerList.apply {
             adapter = ExerciseTypePickerListAdapter(object :
-                ISelectableEditableListEventListener {
-                override fun onItemSelected(selected: Long?) {
-                    workoutSetViewModel.selectedExerciseTypeId.value = selected
+                IEditableListEventListener {
+                override fun onItemSelected(id: Long?) {
+                    workoutSetViewModel.selectedExerciseTypeId.value = id
                 }
 
                 override fun triggerItemDeletion(id: Long) {
                     workoutSetViewModel.selectedExerciseTypeId.value = null
-                    workoutSetViewModel.deleteExerciseTypeById(id)
+                    workoutSetViewModel.deleteExerciseTypeById(
+                        id,
+                        workoutViewModel.workout.value!!.workoutSets
+                    )
                 }
 
                 override fun triggerItemEdit(id: Long) {

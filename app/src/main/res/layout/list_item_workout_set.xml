@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/fab_size"
+        android:id="@+id/selectOnClick"
         android:background="@drawable/bg_rounded_lozenge">
 
         <View

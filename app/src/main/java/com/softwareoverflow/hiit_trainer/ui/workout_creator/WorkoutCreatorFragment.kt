@@ -1,17 +1,19 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_creator
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.activity.addCallback
+import androidx.core.view.get
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutCreatorBinding
 import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
@@ -20,6 +22,7 @@ import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSet
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
 import kotlinx.android.synthetic.main.fragment_workout_creator.*
 import kotlinx.android.synthetic.main.fragment_workout_creator.view.*
+
 
 class WorkoutCreatorFragment : Fragment() {
 
@@ -39,18 +42,35 @@ class WorkoutCreatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_workout_creator, container, false)
+        val binding = DataBindingUtil.inflate<FragmentWorkoutCreatorBinding>(
+            inflater,
+            R.layout.fragment_workout_creator,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
-        view.listWorkoutSets.adapter =
-            WorkoutSetListAdapter()
-        view.listWorkoutSets.addItemDecoration(
+        setupUnsavedChangesDialog()
+
+        binding.workoutRepeaterFAB.setOnClickListener {
+            findNavController().navigate(R.id.action_workoutCreatorFragment_to_repeatWorkoutDialog)
+        }
+
+        binding.listWorkoutSets.adapter = WorkoutSetListAdapter()
+        binding.listWorkoutSets.addItemDecoration(
             SpacedListDecoration(
                 requireContext()
             )
         )
 
-        (view.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object :
+        (binding.listWorkoutSets.adapter as WorkoutSetListAdapter).setEventListener(object :
             IEditableOrderedListEventListener {
+
+            /** The item has been clicked. Take the user straight to the edit page **/
+            override fun onItemSelected(id: Long?) {
+                triggerItemEdit(id!!)
+            }
 
             /** (Effectively) swaps the WorkoutSet at position [fromPosition] and [toPosition] */
             override fun triggerItemChangePosition(fromPosition: Int, toPosition: Int) {
@@ -87,7 +107,7 @@ class WorkoutCreatorFragment : Fragment() {
             }
         })
 
-        view.createNewWorkoutSetButton.setOnClickListener {
+        binding.createNewWorkoutSetButton.setOnClickListener {
             viewModel.setWorkoutSetToEdit(null)
 
             // If the snackbar for no remaining save slots is showing, clicks are registered on the screen.
@@ -99,7 +119,7 @@ class WorkoutCreatorFragment : Fragment() {
             }
         }
 
-        view.startWorkoutButton.setOnClickListener {
+        binding.startWorkoutButton.setOnClickListener {
             if (viewModel.workout.value!!.workoutSets.isEmpty())
                 noSetsSnackbar.show()
             else {
@@ -108,12 +128,21 @@ class WorkoutCreatorFragment : Fragment() {
                         workoutDto = viewModel.workout.value
                     )
 
-                // Show an advert and then naviage to the workout
+                // Show an advert and then navigate to the workout
                 AdsManager.showAdBeforeWorkout {
                     findNavController().navigate(action)
                 }
             }
         }
+
+        setupSaveSpeedDial(binding.root)
+
+        return binding.root
+    }
+
+    private fun setupSaveSpeedDial(view: View) {
+        view.saveSpeedDial.y =
+            view.saveSpeedDial.y - resources.getDimension(R.dimen.fab_size_padded)
 
         view.saveSpeedDial.setMenuListener(object : SimpleMenuListenerAdapter() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -147,10 +176,45 @@ class WorkoutCreatorFragment : Fragment() {
 
                 return false
             }
-        }
-        )
+        })
+    }
 
-        return view
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.action_bar_save, menu)
+
+        menu[0].setOnMenuItemClickListener {
+            if (!saveSpeedDial.isMenuOpen)
+                saveSpeedDial.openMenu()
+            else
+                saveSpeedDial.closeMenu()
+
+            true
+        }
+    }
+
+    private fun setupUnsavedChangesDialog() {
+        val showUnsavedChangesWarning =
+            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+                .getBoolean(getString(R.string.pref_unsaved_changes_warning), true)
+        if (!showUnsavedChangesWarning)
+            viewModel.setUnsavedChangesWarningAccepted()
+
+        viewModel.forceNavigateUp.observe(viewLifecycleOwner, Observer {
+            if (it)
+                findNavController().navigateUp()
+        })
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, true) {
+            if (viewModel.showUnsavedChangesWarning)
+                findNavController().navigate(R.id.action_workoutCreatorFragment_to_unsavedChangesWarningDialog)
+            else
+                findNavController().navigateUp()
+        }
     }
 
     override fun onStart() {
@@ -162,4 +226,6 @@ class WorkoutCreatorFragment : Fragment() {
             Snackbar.LENGTH_SHORT
         )
     }
+
+
 }

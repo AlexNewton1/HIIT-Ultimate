@@ -39,9 +39,12 @@ class WorkoutSetListAdapter :
         private var clickedPosition: Int = -1
 
         override fun onClick(view: View, item: WorkoutSetDTO, position: Int, isLongClick: Boolean) {
-            if(!isLongClick) return
-
             clickedPosition = position
+
+            if(!isLongClick) {
+                eventListener?.onItemSelected(clickedPosition.toLong())
+                return
+            }
 
             /* TODO FUTURE VERSION, find a way of enabling / disabling the move up / move down menu items based on position.
                 This was attempted by changing the interface, although the viewHolders aren't recreated so passing static values to them

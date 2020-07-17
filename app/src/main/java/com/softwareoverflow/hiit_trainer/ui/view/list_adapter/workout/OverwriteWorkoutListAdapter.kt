@@ -12,11 +12,11 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingViewHolderBase
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 
 class OverwriteWorkoutListAdapter(
     private val context: Context,
-    eventListener: ISelectableEditableListEventListener
+    eventListener: IEditableListEventListener
 ) :
     DataBindingAdapter<WorkoutOverwriteDomainObject>(
         DiffCallback(),
@@ -42,7 +42,7 @@ class OverwriteWorkoutListAdapter(
         val item = getItem(position)
 
         val editText = holder.itemView.findViewById<EditText>(R.id.workoutNameET)
-        val checkBox = holder.itemView.findViewById<CheckBox>(R.id.savedWorkoutSelect)
+        val checkBox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
 
         editText.doAfterTextChanged { text ->
             if(item.dto.id == currentlySelectedId)
@@ -51,7 +51,7 @@ class OverwriteWorkoutListAdapter(
 
         holder.itemView.findViewById<ConstraintLayout>(R.id.selectOnClick).setOnClickListener {
             editText.requestFocus()
-            checkBox.findViewById<CheckBox>(R.id.savedWorkoutSelect).isChecked = true
+            checkBox.findViewById<CheckBox>(R.id.checkbox).isChecked = true
 
             clickListener?.onClick(it, item, position, false)
         }
@@ -110,7 +110,7 @@ class OverwriteWorkoutListAdapter(
             try {notifyItemChanged(oldPosition)} catch (ex: IllegalStateException) {} // Swallow ex
     }
 
-    class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :
+    class AdapterClickListener(private val eventListener: IEditableListEventListener?) :
         IAdapterOnClickListener<WorkoutOverwriteDomainObject> {
 
         override fun onClick(

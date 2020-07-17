@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -28,22 +27,35 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
     val workoutSet: WorkoutSetDTO
         get() = _workoutSet.value ?: WorkoutSetDTO()
 
+    var isNewWorkoutSet = true
+        private set
+
+    var showUnsavedChangesWarning = true
+        private set
+    private var _forceNavigateUp = MutableLiveData(false)
+    val forceNavigateUp: LiveData<Boolean>
+        get() = _forceNavigateUp
+
     init {
         viewModelScope.launch {
-            LoadingSpinner.showLoadingIcon()
-
             if (id > 0L)
                 _workout.value = repo.getWorkoutById(id).apply {
                     this.workoutSets.sortBy { it.orderInWorkout }
                 }
             else
                 _workout.value = WorkoutDTO()
-
-            LoadingSpinner.hideLoadingIcon()
         }
     }
 
-    fun getNumSavedWorkouts() :Int {
+    fun setUnsavedChangesWarningAccepted() {
+        showUnsavedChangesWarning = false
+    }
+
+    fun forceNavigateUp(){
+        _forceNavigateUp.value = true
+    }
+
+    fun getNumSavedWorkouts(): Int {
         return runBlocking {
             return@runBlocking repo.getWorkoutCount()
         }
@@ -73,12 +85,14 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
     }
 
     fun setWorkoutSetToEdit(position: Int?) {
-        if(position == null) {
+        if (position == null) {
             _workoutSetIndex = null
             _workoutSet.value = null
+            isNewWorkoutSet = true
         } else {
             _workoutSetIndex = position
             _workoutSet.value = _workout.value!!.workoutSets[position]
+            isNewWorkoutSet = false
         }
     }
 
@@ -105,6 +119,14 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
 
         _workoutSetIndex = null
         _workoutSet.value = null
+    }
+
+    fun setRepeatCount(repeatCount: Int, recoveryTime: Int){
+        val workoutToEdit = workout.value!!
+        workoutToEdit.numReps = repeatCount
+        workoutToEdit.recoveryTime = recoveryTime
+
+        _workout.value = workoutToEdit
     }
 }
 

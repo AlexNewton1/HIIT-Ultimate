@@ -7,17 +7,17 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
+import com.softwareoverflow.hiit_trainer.ui.getFullWorkoutSets
 import com.softwareoverflow.hiit_trainer.ui.getWorkoutCompleteExerciseType
-import com.softwareoverflow.hiit_trainer.ui.getWorkoutPrepSet
 import kotlinx.coroutines.launch
 
 class WorkoutViewModel(application: Application, private val workoutDto: WorkoutDTO) :
     AndroidViewModel(application) {
 
     private val _workout = MutableLiveData<WorkoutDTO>()
-    private val _mutableWorkout = MediatorLiveData<WorkoutDTO>()
+    //private val _mutableWorkout = MediatorLiveData<WorkoutDTO>()
     val workout: LiveData<WorkoutDTO>
-        get() = _mutableWorkout
+        get() = _workout
 
     private val _currentWorkoutSet = MutableLiveData<WorkoutSetDTO?>()
     val currentWorkoutSet: LiveData<WorkoutSetDTO?>
@@ -52,9 +52,6 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
     val animateUpNextExerciseType: LiveData<Boolean>
         get() = _animateUpNextExerciseType
 
-    var hasPrepSet = false
-        private set
-
     // region user controls
     private val _soundOn = MutableLiveData(true)
     val soundOn: LiveData<Boolean>
@@ -71,22 +68,6 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
     //endregion
 
     init {
-        _mutableWorkout.addSource(_workout) {
-            it?.let {
-                val prepSet = getWorkoutPrepSet(application)
-                if (prepSet != null && it.workoutSets[0] != prepSet) {
-                    hasPrepSet = true
-
-                    it.workoutSets.add(0, prepSet)
-                    _upNextExerciseType.value = it.workoutSets[1].exerciseTypeDTO
-                    _showUpNextLabel.value = true
-                    _currentSection.value = WorkoutSection.PREPARE
-                }
-
-                _mutableWorkout.value = it
-            }
-        }
-
         viewModelScope.launch {
             // Copy the workout and deep copy the workout set list so as to not change the original
             _workout.value = workoutDto.copy(
@@ -122,10 +103,10 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
         ) {
 
             val workoutSets = _workout.value?.workoutSets!!
-            val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
+            val nextWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
 
-            if (currentWorkoutSetIndex != workoutSets.size) {
-                _upNextExerciseType.value = workoutSets[currentWorkoutSetIndex].exerciseTypeDTO
+            if (nextWorkoutSetIndex != workoutSets.size) {
+                _upNextExerciseType.value = workoutSets[nextWorkoutSetIndex].exerciseTypeDTO
                 _showUpNextLabel.value = true
             }
         }
@@ -137,7 +118,7 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
         _sectionTimeRemaining.value = sectionTimeRemaining
 
         // Show the upcoming exercise type
-        val workoutSets = _workout.value?.workoutSets!!
+        val workoutSets = _workout.value?.getFullWorkoutSets(getApplication<Application>().applicationContext)!!
         val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
         if ((_currentSection.value == WorkoutSection.RECOVER || _currentSection.value == WorkoutSection.PREPARE)) {
             if (sectionTimeRemaining <= 3 && _animateUpNextExerciseType.value == false) {

@@ -8,5 +8,7 @@ class WorkoutEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
 
-    var name: String = ""
+    var name: String = "",
+    var numReps: Int = 1,
+    var recoveryTime: Int = 120
 )

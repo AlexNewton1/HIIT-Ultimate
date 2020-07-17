@@ -18,16 +18,25 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutBinding
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.getDuration
+import com.softwareoverflow.hiit_trainer.ui.getFullWorkoutSets
+import com.softwareoverflow.hiit_trainer.ui.getWorkoutPrepSet
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.view.animation.MoveAndScaleAnimationFactory
 import kotlinx.android.synthetic.main.fragment_workout.*
+import timber.log.Timber
 
 class WorkoutFragment : Fragment(), IWorkoutObserver {
 
     private val args: WorkoutFragmentArgs by navArgs()
 
     private val viewModel: WorkoutViewModel by navGraphViewModels(R.id.workoutFragment) {
-        WorkoutViewModelFactory(requireActivity().application, requireContext(), args.workoutId, args.workoutDto)
+        WorkoutViewModelFactory(
+            requireActivity().application,
+            requireContext(),
+            args.workoutId,
+            args.workoutDto
+        )
     }
 
     private var timer: WorkoutTimer? = null
@@ -53,7 +62,15 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         viewModel.workout.observe(viewLifecycleOwner, object : Observer<WorkoutDTO> {
             override fun onChanged(dto: WorkoutDTO?) {
                 dto?.let {
-                    timer = WorkoutTimer(requireContext(), it, viewModel.hasPrepSet, this@WorkoutFragment)
+                    var duration = it.getDuration()
+                    getWorkoutPrepSet(requireContext())?.let { prepSet ->
+                        duration += prepSet.workTime!!
+                    }
+
+                    timer = WorkoutTimer(
+                        requireContext(),
+                        duration, it.getFullWorkoutSets(requireContext()), this@WorkoutFragment
+                    )
                     timer!!.start()
 
                     // We only want to observe when the workout is first initialised as not null. Remove the observer.
@@ -74,7 +91,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         })
 
         viewModel.isPaused.observe(viewLifecycleOwner, Observer {
-                timer?.togglePause(it)
+            timer?.togglePause(it)
         })
 
         currentSectionLabelAnimation =
@@ -106,7 +123,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
                     binding.currentExerciseTypeName.textSize
                 )
                 setAlphaAnimation(binding.currentExerciseTypeView, 1f, 0f)
-            }.create(){
+            }.create() {
             }
         }
 
@@ -114,6 +131,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     }
 
     override fun onTimerTick(workoutRemaining: Int, workoutSectionRemaining: Int) {
+        Timber.d("Timer: WorkoutFragment: $workoutRemaining")
         viewModel.updateTimers(workoutRemaining, workoutSectionRemaining)
     }
 
@@ -129,10 +147,13 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
     }
 
     override fun onFinish() {
-        if(!isWorkoutFinished) {
+        if (!isWorkoutFinished) {
             isWorkoutFinished = true
 
-            val action = WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
+            timer?.cancel()
+
+            val action =
+                WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
             AdsManager.showAdAfterWorkout() {
                 findNavController().navigate(action)
             }
@@ -143,5 +164,4 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
         timer?.cancel()
         super.onDestroy()
     }
-
 }

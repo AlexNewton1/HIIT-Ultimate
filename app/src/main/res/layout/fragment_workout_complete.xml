@@ -71,13 +71,13 @@
             android:id="@+id/saveSpeedDial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="top|end"
             android:elevation="10dp"
             app:fabDrawable="@drawable/icon_save_options"
-            app:fabGravity="bottom_start"
+            app:fabGravity="top_end"
             app:fabMenu="@menu/save_options"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:miniFabBackgroundTint="@color/colorPrimary"
             app:miniFabDrawableTint="@android:color/white" />
 

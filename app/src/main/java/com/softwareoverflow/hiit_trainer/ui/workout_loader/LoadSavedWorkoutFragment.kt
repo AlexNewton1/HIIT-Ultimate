@@ -13,7 +13,7 @@ import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutLoaderBinding
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.SavedWorkoutListAdapter
 import kotlinx.android.synthetic.main.fragment_workout_loader.*
@@ -43,12 +43,12 @@ class LoadSavedWorkoutFragment : Fragment() {
             requireContext()
         ).apply {
             setEventListener(object :
-                ISelectableEditableListEventListener {
-                override fun onItemSelected(selected: Long?) {
-                    if(selected != null) {
+                IEditableListEventListener {
+                override fun onItemSelected(id: Long?) {
+                    if(id != null) {
                         val action =
                             LoadSavedWorkoutFragmentDirections.actionLoadSavedWorkoutFragmentToWorkoutFragment(
-                                workoutId = selected
+                                workoutId = id
                             )
                         // Navigate after the advert is closed
                         AdsManager.showAdBeforeWorkout {

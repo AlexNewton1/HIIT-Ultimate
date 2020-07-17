@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
-import kotlinx.android.synthetic.main.fragment_user_consent.view.*
+import kotlinx.android.synthetic.main.dialog_user_consent.view.*
 
 class UserConsentDialog : FadedDialogBase() {
 
@@ -17,7 +17,7 @@ class UserConsentDialog : FadedDialogBase() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_user_consent, container, false)
+        val view = inflater.inflate(R.layout.dialog_user_consent, container, false)
 
         isCancelable = false
 

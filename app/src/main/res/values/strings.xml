@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">HiiT IT: HIIT &amp; Tabata Timer</string>
+    <string name="app_name">HiiT iT: HIIT &amp; Tabata Timer</string>
     <string name="nav_about">About HIIT Trainer</string>
     <string name="nav_saved_workouts">Saved Workouts</string>
     <string name="nav_workout">Workout</string>
     <string name="nav_set_creator_step_1">Create Workout Set (Step 1)</string>
+    <string name="nav_set_editor_step_1">Edit Workout Set (Step 1)</string>
     <string name="nav_set_creator_step_2">Create Workout Set (Step 2)</string>
+    <string name="nav_set_editor_step_2">Edit Workout Set (Step 2)</string>
     <string name="nav_et_creator">Create Exercise Type</string>
 
     <string name="create_new_exercise_type">Create New Exercise Type</string>
@@ -23,7 +25,7 @@
     <string name="cancel">Cancel</string>
     <string name="ellipsis">…</string>
 
-    <string name="add_workout_set_hint">No Workout sets found. Add some using the button above.</string>
+    <string name="add_workout_set_hint">No workout sets found. Add some using the button above.</string>
 
     <string name="start_workout">Start Workout</string>
 
@@ -46,7 +48,7 @@
         \u2022 Advert Free\n\u2022 Unlimited Saved Workout Slots\n\u2022 Access to all future PRO features
     </string>
     <string name="upgrade_now">Upgrade Now</string>
-    <string name="upgrade" />
+    <string name="upgrade">Upgrade</string>
 
     <string name="create_new_workout">Create New Workout</string>
     <string name="load_saved_workout">Load Saved Workout</string>
@@ -108,5 +110,23 @@
     <string name="continue_to_step_2">Continue to Step 2</string>
     <string name="add_exercise_set_to_workout">Add exercise set to workout</string>
     <string name="no_saved_workouts">No saved workouts exist. Please save as a new workout.</string>
+    <string name="no_saved_workouts_found">No Saved Workouts!</string>
 
+    <string name="pref_unsaved_changes_warning">pref_unsaved_changes_warning</string>
+    <string name="unsaved_changes_warning">Any unsaved changes will be lost</string>
+    <string name="dont_show_again">Don\'t show again</string>
+    <string name="continue_anyway">Continue Anyway</string>
+    <string name="close">Close</string>
+    <string name="workout_set_help">Creating A Workout Set</string>
+    <string name="workout_set_help_details">Workout Sets are cycles of work &amp; rest phases with a recovery time at the end.\n\nFor example, with 3 repititions:</string><!--<![CDATA[A workout set is comprised of a work phase followed by a rest phase, repeated for a number of cycles. The recovery time replaces the rest time on the last cycle.\n\nFor example, with 3 repititions:]]></string> !-->
+
+    <string name="workout_num_reps">%1$dx</string>
+    <string name="workout_recovery_time">, %1$ds recovery</string>
+    <string name="application_icon">application icon</string>
+    <string name="times">times</string>
+    <string name="with">with</string>
+    <string name="s_rest_in_between">s rest in between</string>
+    <string name="recovery_default">120</string>
+    <string name="complete_workout">Complete Workout</string>
+    <string name="repeat_workout">Repeat Workout</string>
 </resources>

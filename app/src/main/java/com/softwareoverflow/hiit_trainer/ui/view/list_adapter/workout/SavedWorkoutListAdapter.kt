@@ -8,10 +8,7 @@ import androidx.core.content.ContextCompat
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DiffCallbackBase
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.*
 
 class SavedWorkoutListAdapter(private val context: Context) :
     DataBindingAdapter<WorkoutLoaderDomainObject>(
@@ -33,16 +30,27 @@ class SavedWorkoutListAdapter(private val context: Context) :
             "#000000" // Black
     }
 
-    fun setEventListener(listener: ISelectableEditableListEventListener) {
+    fun setEventListener(listener: IEditableListEventListener) {
         AdapterClickListener.setEventListener(listener)
+    }
+
+    override fun onBindViewHolder(
+        holder: DataBindingViewHolderBase<WorkoutLoaderDomainObject>,
+        position: Int
+    ) {
+        super.onBindViewHolder(holder, position)
+
+        holder.itemView.findViewById<View>(R.id.startWorkoutButton)?.setOnClickListener {
+            clickListener?.onClick(it, getItem(position), position, false)
+        }
     }
 
     class AdapterClickListener : IAdapterOnClickListener<WorkoutLoaderDomainObject>,
         PopupMenu.OnMenuItemClickListener {
         companion object {
-            private var eventListener: ISelectableEditableListEventListener? = null
+            private var eventListener: IEditableListEventListener? = null
 
-            fun setEventListener(listener: ISelectableEditableListEventListener) {
+            fun setEventListener(listener: IEditableListEventListener) {
                 eventListener = listener
             }
         }
@@ -55,12 +63,22 @@ class SavedWorkoutListAdapter(private val context: Context) :
             position: Int,
             isLongClick: Boolean
         ) {
-            if (isLongClick && item.type == WorkoutLoaderDomainObjectType.USER) {
+            if (item.type == WorkoutLoaderDomainObjectType.USER) {
                 clickedItem = item.dto
-                IconPopupMenuBuilder(view.context, view).apply {
-                    setOnMenuItemClickListener(this@AdapterClickListener)
-                    setMenuResource(R.menu.workout_actions)
-                }.build().show()
+                when {
+                    isLongClick -> {
+                        IconPopupMenuBuilder(view.context, view).apply {
+                            setOnMenuItemClickListener(this@AdapterClickListener)
+                            setMenuResource(R.menu.workout_actions)
+                        }.build().show()
+                    }
+                    view.id == R.id.startWorkoutButton -> {
+                        eventListener?.onItemSelected(item.dto.id)
+                    }
+                    else -> {
+                        eventListener?.triggerItemEdit(clickedItem.id!!)
+                    }
+                }
             } else {
                 eventListener?.onItemSelected(item.dto.id)
             }

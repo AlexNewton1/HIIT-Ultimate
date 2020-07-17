@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.doBeforeTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -76,10 +77,16 @@ class ExerciseTypeCreatorFragment : Fragment() {
                     etViewPagerPicker.getIconId(),
                     etViewPagerPicker.getColorId()
                 )
-
-                findNavController().navigateUp()
             }
         }
+
+        workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
+            if(viewModel.newExerciseTypeSaved) {
+                val latestId = it.maxBy { et -> et.id!! }!!.id!!
+                workoutSetViewModel.setChosenExerciseTypeId(latestId)
+                findNavController().navigate(R.id.action_exerciseTypeCreator_to_workoutSetCreator)
+            }
+        })
 
         return binding.root
     }

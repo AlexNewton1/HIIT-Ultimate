@@ -30,7 +30,7 @@
 
         <CheckBox
             android:padding="2dp"
-            android:id="@+id/savedWorkoutSelect"
+            android:id="@+id/checkbox"
             android:layout_width="@dimen/half_fab_size"
             android:layout_height="@dimen/half_fab_size"
             android:button="@drawable/checkbox_circle"
@@ -50,10 +50,10 @@
             android:layout_marginStart="8dp"
             android:background="@android:color/transparent"
             android:text="@{dto.dto.name}"
-            app:layout_constraintBottom_toBottomOf="@+id/savedWorkoutSelect"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/savedWorkoutSelect"
-            app:layout_constraintTop_toTopOf="@+id/savedWorkoutSelect" />
+            app:layout_constraintStart_toEndOf="@+id/checkbox"
+            app:layout_constraintTop_toTopOf="@+id/checkbox" />
 
         <View
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
             android:visibility="@{dto.selected ? View.VISIBLE : View.GONE}"
             tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/savedWorkoutSelect"
+            app:layout_constraintStart_toEndOf="@+id/checkbox"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

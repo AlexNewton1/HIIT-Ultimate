@@ -22,7 +22,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -71,13 +70,10 @@ class BillingViewModel(application: Application) : AndroidViewModel(application)
 
     fun purchasePro(activity: Activity) {
         try {
-            LoadingSpinner.showLoadingIcon()
             repository.upgradeToPro(activity)
         } catch (e: NoSuchElementException) {
             Timber.w(e, "Unable to upgrade to pro.")
         }
-
-        LoadingSpinner.hideLoadingIcon()
     }
 
     fun getMaxWorkoutSlots(): Int = repository.getMaxWorkoutSlots()

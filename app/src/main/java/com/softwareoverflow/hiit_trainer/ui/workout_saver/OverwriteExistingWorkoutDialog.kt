@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.DialogOverwriteExistingWorkoutBinding
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.OverwriteWorkoutListAdapter
 import kotlinx.android.synthetic.main.dialog_overwrite_existing_workout.*
@@ -34,9 +34,9 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
 
         val listAdapter = OverwriteWorkoutListAdapter(
             requireContext(),
-            object : ISelectableEditableListEventListener {
-                override fun onItemSelected(selected: Long?) {
-                    overwriteExistingViewModel.setCurrentlySelectedId(selected)
+            object : IEditableListEventListener {
+                override fun onItemSelected(id: Long?) {
+                    overwriteExistingViewModel.setCurrentlySelectedId(id)
                 }
 
                 // There is no option for deleting or editing at this stage.

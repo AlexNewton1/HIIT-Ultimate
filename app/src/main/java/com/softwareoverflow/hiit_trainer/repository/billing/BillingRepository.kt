@@ -398,7 +398,7 @@ class BillingRepository private constructor(private val application: Application
      * subsets: INAPP_SKUS and SUBS_SKUS
      */
     private object Upgrades {
-        const val PRO_UPGRADE = "upgrade_to_pro" // TODO make sure this matches correctly
+        const val PRO_UPGRADE = "upgrade_to_pro"
 
         val INAPP_SKUS = listOf(PRO_UPGRADE)
     }

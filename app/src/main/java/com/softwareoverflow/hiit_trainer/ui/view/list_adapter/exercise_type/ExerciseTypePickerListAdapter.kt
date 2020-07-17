@@ -9,9 +9,9 @@ import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.ui.view.IconPopupMenuBuilder
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.DataBindingAdapter
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IAdapterOnClickListener
-import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.ISelectableEditableListEventListener
+import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 
-class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventListener) :
+class ExerciseTypePickerListAdapter(eventListener: IEditableListEventListener) :
     DataBindingAdapter<ExerciseTypeListDomainObject>(
         DiffCallback(),
         AdapterClickListener(eventListener)
@@ -49,7 +49,7 @@ class ExerciseTypePickerListAdapter(eventListener: ISelectableEditableListEventL
 
     private fun getPositionFromId(id: Long): Int = currentList.indexOfFirst { it.dto.id == id }
 
-    class AdapterClickListener(private val eventListener: ISelectableEditableListEventListener?) :
+    class AdapterClickListener(private val eventListener: IEditableListEventListener?) :
         IAdapterOnClickListener<ExerciseTypeListDomainObject>,
         PopupMenu.OnMenuItemClickListener {
 

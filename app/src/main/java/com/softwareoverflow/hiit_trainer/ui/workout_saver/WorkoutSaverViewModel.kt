@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
 
 
@@ -52,7 +51,7 @@ open class WorkoutSaverViewModel(
         _noWorkoutSlotsRemainingWarning.value = false
     }
 
-    fun nameTooLongWarningShown(){
+    fun nameTooLongWarningShown() {
         _nameTooLongWarning.value = false
     }
 
@@ -62,7 +61,7 @@ open class WorkoutSaverViewModel(
             return
         }
 
-        if(newWorkoutName.value!!.length > 30){
+        if (newWorkoutName.value!!.length > 30) {
             _nameTooLongWarning.value = true
             return
         }
@@ -73,17 +72,12 @@ open class WorkoutSaverViewModel(
         } else {
             workout.name = name
             viewModelScope.launch {
-                LoadingSpinner.showLoadingIcon()
-
                 val workoutSets = workout.workoutSets
                 for (i in 0 until workoutSets.size) {
                     workoutSets[i].orderInWorkout = i
                 }
 
                 workoutRepo.createOrUpdateWorkout(workout)
-
-                LoadingSpinner.hideLoadingIcon()
-
                 _workoutSaved.value = true
             }
         }

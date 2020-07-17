@@ -2,26 +2,27 @@ package com.softwareoverflow.hiit_trainer.ui.workout
 
 import android.content.Context
 import android.os.CountDownTimer
-import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
-import com.softwareoverflow.hiit_trainer.ui.getDuration
+import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import timber.log.Timber
 
 class WorkoutTimer(
     context: Context,
-    workout: WorkoutDTO,
-    hasPrepSet: Boolean,
+    workoutDurationSeconds: Int,
+    _workoutSets: List<WorkoutSetDTO>,
     private val observer: IWorkoutObserver
 ) {
 
     private lateinit var timer: CountDownTimer
-    private var millisecondsRemaining: Long = workout.getDuration() * 1000L
+    private var millisecondsRemaining: Long = workoutDurationSeconds * 1000L
 
     private val _soundManager: WorkoutMediaManager = WorkoutMediaManager(context)
 
     private var isRunning = false
     private var isPaused: Boolean = false
 
-    private var workoutSets = workout.workoutSets.iterator()
-    private var currentSection = if (hasPrepSet) WorkoutSection.PREPARE else WorkoutSection.WORK
+    private var workoutSets = _workoutSets.iterator()
+    private var currentSection: WorkoutSection
     private var currentSet = workoutSets.next()
     private var currentSetIndex = 0
     private var currentRep = 1
@@ -29,6 +30,14 @@ class WorkoutTimer(
 
     init {
         createTimer(millisecondsRemaining)
+
+        val hasPrepSet =
+            currentSet.exerciseTypeDTO!!.name == context.getString(R.string.get_ready) &&
+                    currentSet.exerciseTypeDTO!!.id == null
+        currentSection =
+            if (hasPrepSet) WorkoutSection.PREPARE
+            else WorkoutSection.WORK
+
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
     }
 
@@ -37,6 +46,8 @@ class WorkoutTimer(
         millisecondsRemaining -= millisRemainingInSection
         millisecondsRemaining =
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
+
+        Timber.d("Timer: WorkoutTimer: OnSkip: ${millisecondsRemaining / 1000}")
 
         if (millisecondsRemaining <= 0) {
             _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
@@ -99,6 +110,8 @@ class WorkoutTimer(
             }
 
             override fun onTick(millisUntilFinished: Long) {
+                Timber.d("Timer: Timer: ${millisecondsRemaining / 1000}")
+
                 observer.onTimerTick(
                     (millisecondsRemaining / 1000).toInt(),
                     (millisRemainingInSection / 1000).toInt()

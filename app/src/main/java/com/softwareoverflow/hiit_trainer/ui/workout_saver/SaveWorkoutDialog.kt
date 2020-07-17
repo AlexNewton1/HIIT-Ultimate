@@ -1,6 +1,5 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_saver
 
-import android.view.WindowManager
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -28,35 +27,6 @@ abstract class SaveWorkoutDialog : FadedDialogBase() {
             if (it) {
                 emptyNameWarning.show()
                 viewModel.emptyNameWarningShown()
-            }
-        })
-
-        val noWorkoutSlots = Snackbar.make(
-            parentFragment?.view ?: requireView(),
-            getString(R.string.no_free_workout_slots_warning),
-            Snackbar.LENGTH_LONG
-        ).setAction(R.string.upgrade) {
-            viewModel.upgrade(requireActivity())
-        }.addCallback(object : Snackbar.Callback() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-
-                viewModel.noWorkoutSlotsWarningShown()
-            }
-        })
-
-        viewModel.noWorkoutSlotsRemainingWarning.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                noWorkoutSlots.show()
-            }
-
-            it?.let {
-                val window = requireDialog().window
-                if (it) window?.setFlags(
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                )
-                else window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }
         })
 

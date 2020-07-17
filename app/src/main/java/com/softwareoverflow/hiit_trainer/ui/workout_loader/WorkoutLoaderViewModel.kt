@@ -5,7 +5,6 @@ import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
 import kotlinx.coroutines.launch
 
@@ -36,14 +35,10 @@ class WorkoutLoaderViewModel(
         _workoutsSorted.addSource(_searchFilter, _workoutsSortedChangeObserver)
 
         viewModelScope.launch {
-            LoadingSpinner.showLoadingIcon()
-
             _workoutsSorted.addSource(_workouts) {
                 initialized = true
                 _workoutsSorted.value = getWorkoutsToDisplay()
             }
-
-            LoadingSpinner.hideLoadingIcon()
         }
     }
 
@@ -85,9 +80,7 @@ class WorkoutLoaderViewModel(
 
     fun deleteWorkout(id: Long) {
         viewModelScope.launch {
-            LoadingSpinner.showLoadingIcon()
             workoutRepo.deleteWorkoutById(id)
-            LoadingSpinner.hideLoadingIcon()
         }
     }
 }

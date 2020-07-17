@@ -12,7 +12,7 @@ import com.softwareoverflow.hiit_trainer.data.entity.WorkoutSetEntity
 
 @Database(
     entities = [WorkoutEntity::class, WorkoutSetEntity::class, ExerciseTypeEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class WorkoutDatabase : RoomDatabase() {
@@ -46,8 +46,7 @@ abstract class WorkoutDatabase : RoomDatabase() {
                         DATABASE_NAME
                     )
                         .createFromAsset("DefaultWorkoutDatabase.db")
-                        // TODO FUTURE VERSION work out how migrations work when required to prevent destruction and recreation of DB
-                        .fallbackToDestructiveMigration()
+                        .addMigrations(WorkoutDatabaseMigrator.MIGRATION_1_2)
                         .build()
 
                     INSTANCE = instance

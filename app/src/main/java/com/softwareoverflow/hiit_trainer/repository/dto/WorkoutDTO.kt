@@ -7,5 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class WorkoutDTO (
     var id: Long? = null,
     var name: String = "",
-    var workoutSets: MutableList<WorkoutSetDTO> = ArrayList()
+    var workoutSets: MutableList<WorkoutSetDTO> = ArrayList(),
+    var numReps: Int = 1,
+    var recoveryTime: Int = 120
 ) : Parcelable

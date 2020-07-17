@@ -5,7 +5,6 @@ import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.SortOrder
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.coroutines.launch
 
 class WorkoutSetCreatorViewModel(
@@ -26,7 +25,7 @@ class WorkoutSetCreatorViewModel(
 
     var selectedExerciseTypeId = MutableLiveData<Long?>(workoutSetToEdit.exerciseTypeDTO?.id)
 
-    private val _unableToDeleteExerciseType = MutableLiveData("");
+    private val _unableToDeleteExerciseType = MutableLiveData("")
     val unableToDeleteExerciseType : LiveData<String>
         get() = _unableToDeleteExerciseType
 
@@ -82,17 +81,20 @@ class WorkoutSetCreatorViewModel(
         workoutSet.value!!.exerciseTypeDTO = exerciseType
     }
 
-    fun deleteExerciseTypeById(id: Long) {
+    fun deleteExerciseTypeById(id: Long, currentWorkoutSets: List<WorkoutSetDTO>) {
         viewModelScope.launch {
-            LoadingSpinner.showLoadingIcon()
-
             val exerciseType = allExerciseTypes.value!!.first { it.id == id }
+
+            val currentExerciseTypes = currentWorkoutSets.map { it.exerciseTypeDTO!! }
+            if(currentExerciseTypes.contains(exerciseType)){
+                _unableToDeleteExerciseType.value = "Unable to delete Exercise Type. It's used in this workout!"
+                return@launch
+            }
+
             try {
                 repo.deleteExerciseType(exerciseType)
             } catch (ex: IllegalStateException) {
                 _unableToDeleteExerciseType.value = ex.message
-            } finally {
-                LoadingSpinner.hideLoadingIcon()
             }
         }
     }

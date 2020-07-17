@@ -55,6 +55,12 @@
             <action
                 android:id="@+id/action_workoutCreatorFragment_to_workoutFragment"
                 app:destination="@id/workoutFragment" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_unsavedChangesWarningDialog"
+                app:destination="@id/unsavedChangesWarningDialog" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_repeatWorkoutDialog"
+                app:destination="@id/repeatWorkoutDialog" />
         </fragment>
         <navigation
             android:id="@+id/nav_workout_set_creator"
@@ -63,7 +69,13 @@
                 android:id="@+id/exerciseTypeCreator"
                 android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator.ExerciseTypeCreatorFragment"
                 android:label="@string/nav_et_creator"
-                tools:layout="@layout/fragment_exercise_type_creator" />
+                tools:layout="@layout/fragment_exercise_type_creator" >
+                <action
+                    android:id="@+id/action_exerciseTypeCreator_to_workoutSetCreator"
+                    app:destination="@id/workoutSetCreator"
+                    app:popUpTo="@id/exerciseTypeCreator"
+                    app:popUpToInclusive="true" />
+            </fragment>
             <fragment
                 android:id="@+id/exerciseTypePickerFragment"
                 android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep1Fragment"
@@ -84,8 +96,23 @@
                 <action
                     android:id="@+id/action_workoutSetCreator_to_workoutCreatorHomeFragment"
                     app:destination="@id/workoutCreatorFragment" />
+                <action
+                    android:id="@+id/action_workoutSetCreator_to_workoutSetCreatorHelpFragment"
+                    app:destination="@id/workoutSetCreatorHelpFragment" />
             </fragment>
+            <dialog
+                android:id="@+id/workoutSetCreatorHelpFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorHelpFragment"
+                android:label="WorkoutSetCreatorHelpFragment" />
         </navigation>
+        <dialog
+            android:id="@+id/unsavedChangesWarningDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.UnsavedChangesWarningDialog"
+            android:label="UnsavedChangesWarningDialog" />
+        <dialog
+            android:id="@+id/repeatWorkoutDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout.RepeatWorkoutDialog"
+            android:label="RepeatWorkoutDialog" />
     </navigation>
     <fragment
         android:id="@+id/workoutFragment"

@@ -4,11 +4,10 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.lifecycle.Observer
@@ -23,7 +22,6 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
-import com.softwareoverflow.hiit_trainer.ui.view.LoadingSpinner
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -68,6 +66,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     adsManager.showBanner()
                 }
             }
+
+            if(destination.id == R.id.workoutFragment)
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            else
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
         billingClient = ViewModelProvider(this).get(BillingViewModel::class.java)
@@ -89,6 +92,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    /**
+     * Provides support for NavigationUI navigateUp on back press, and provides any custom actions
+     */
+    override fun onSupportNavigateUp(): Boolean {
+        val controller = findNavController(R.id.myNavHostFragment)
+
+        return when (controller.currentDestination?.id) {
+            R.id.workoutCompleteFragment -> {
+                controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
+                true
+            }
+            R.id.workoutCreatorFragment -> {
+                onBackPressed()
+                true
+            }
+            else -> NavigationUI.navigateUp(navController, appBarConfiguration)
+        }
+    }
+
+    override fun onBackPressed() {
+        val controller = findNavController(R.id.myNavHostFragment)
+        if (controller.currentDestination?.id == R.id.workoutCompleteFragment) {
+            controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun launchEmailFeedback(){
         val i = Intent(Intent.ACTION_SENDTO).apply {
             type = "text/plain"
@@ -103,33 +134,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 "There are no email clients installed.",
                 Toast.LENGTH_SHORT
             ).show()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.action_bar_menu, menu)
-        LoadingSpinner.initialise(menu!![0], applicationContext)
-        return true
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val controller = findNavController(R.id.myNavHostFragment)
-
-        return when (controller.currentDestination?.id) {
-            R.id.workoutCompleteFragment -> {
-                controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
-                true
-            }
-            else -> NavigationUI.navigateUp(navController, appBarConfiguration)
-        }
-    }
-
-    override fun onBackPressed() {
-        val controller = findNavController(R.id.myNavHostFragment)
-        if (controller.currentDestination?.id == R.id.workoutCompleteFragment) {
-            controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
-        } else {
-            super.onBackPressed()
         }
     }
 

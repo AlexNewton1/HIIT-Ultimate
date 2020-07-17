@@ -2,16 +2,17 @@ package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep2Binding
+import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
+import timber.log.Timber
 
 /**
  * Allows user to input values for the [com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO] (e.g. work time, rest time etc)
@@ -33,6 +34,10 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = workoutSetViewModel
 
+        if(!workoutCreatorViewModel.isNewWorkoutSet) {
+            (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.nav_set_editor_step_1)
+        }
+
         binding.createWorkoutSetButton.setOnClickListener {
             // At the point we try and add this workout set to the workout, it should not be null. Throw NPE if it is ever null
             workoutCreatorViewModel.addOrUpdateWorkoutSet(workoutSetViewModel.workoutSet.value!!)
@@ -40,6 +45,20 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.d("SetCreator onCreateOptionsMenu $menu")
+        inflater.inflate(R.menu.action_bar_help, menu)
+
+        menu[0].setOnMenuItemClickListener { findNavController().navigate(R.id.action_workoutSetCreator_to_workoutSetCreatorHelpFragment)
+            true
+        }
     }
 }
  

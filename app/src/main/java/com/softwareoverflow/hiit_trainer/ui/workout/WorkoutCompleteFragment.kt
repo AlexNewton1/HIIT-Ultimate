@@ -1,10 +1,8 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +12,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutCompleteBinding
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter
+import kotlinx.android.synthetic.main.fragment_workout_creator.*
 
 class WorkoutCompleteFragment : Fragment() {
 
@@ -54,6 +53,7 @@ class WorkoutCompleteFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        binding.saveSpeedDial.y = binding.saveSpeedDial.y - resources.getDimension(R.dimen.fab_size_padded)
         binding.saveSpeedDial.setMenuListener(object : SimpleMenuListenerAdapter() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 if (menuItem.title == requireContext().getString(R.string.save_as)) {
@@ -79,5 +79,23 @@ class WorkoutCompleteFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.action_bar_save, menu)
+
+        menu[0].setOnMenuItemClickListener {
+            if(!saveSpeedDial.isMenuOpen)
+                saveSpeedDial.openMenu()
+            else
+                saveSpeedDial.closeMenu()
+
+            true
+        }
     }
 }

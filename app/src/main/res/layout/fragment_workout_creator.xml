@@ -1,69 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.workout_creator.WorkoutCreatorFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listWorkoutSets"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:paddingBottom="@dimen/double_fab_size_padded"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <import type="android.view.View" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createNewWorkoutSetButton"
-        android:layout_width="@dimen/fab_size"
-        android:layout_height="@dimen/fab_size"
-        android:layout_marginBottom="@dimen/fab_size_padded"
-        android:src="@drawable/icon_plus"
-        app:layout_constraintBottom_toBottomOf="@+id/listWorkoutSets"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel" />
+    </data>
 
-    <TextView
-        android:id="@+id/noSetsTextHint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/add_workout_set_hint"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createNewWorkoutSetButton" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.workout_creator.WorkoutCreatorFragment">
 
-    <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:elevation="100dp"
-        android:id="@+id/saveSpeedDial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        app:fabDrawable="@drawable/icon_save_options"
-        app:fabGravity="bottom_start"
-        app:fabMenu="@menu/save_options"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:miniFabBackgroundTint="@color/colorPrimary"
-        app:miniFabDrawableTint="@android:color/white" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listWorkoutSets"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:paddingBottom="@dimen/double_fab_size_padded"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/startWorkoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:src="@android:drawable/ic_media_play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createNewWorkoutSetButton"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_marginBottom="@dimen/fab_size_padded"
+            android:src="@drawable/icon_plus"
+            app:layout_constraintBottom_toBottomOf="@+id/listWorkoutSets"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/noSetsTextHint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/add_workout_set_hint"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createNewWorkoutSetButton" />
+
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/saveSpeedDial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:backgroundTint="@color/colorPrimary"
+            android:elevation="100dp"
+            app:fabDrawable="@drawable/icon_save_options"
+            app:fabGravity="top_end"
+            app:fabMenu="@menu/save_options"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:miniFabBackgroundTint="@color/colorPrimary"
+            app:miniFabDrawableTint="@android:color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/startWorkoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@android:drawable/ic_media_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/workoutRepeaterFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/icon_repeat_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/workoutNumRepsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text= "@{String.format(@string/workout_num_reps, viewModel.workout.numReps)}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/workoutRepeaterFAB"
+            app:layout_constraintStart_toEndOf="@+id/workoutRepeaterFAB"
+            app:layout_constraintTop_toTopOf="@+id/workoutRepeaterFAB" />
+
+        <TextView
+            android:id="@+id/workoutRecoveryTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.workout.numReps == 1 ? View.GONE : View.VISIBLE}"
+            android:text= "@{String.format(@string/workout_recovery_time, viewModel.workout.recoveryTime)}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/workoutRepeaterFAB"
+            app:layout_constraintStart_toEndOf="@+id/workoutNumRepsText"
+            app:layout_constraintTop_toTopOf="@+id/workoutRepeaterFAB" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
