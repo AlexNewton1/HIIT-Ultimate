@@ -10,11 +10,11 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/DialogTheme_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@drawable/bg_rounded_lozenge">
+        android:background="@drawable/bg_rounded_lozenge"
+        android:theme="@style/DialogTheme_transparent">
 
         <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
             android:id="@+id/circularIconImageView"
@@ -31,7 +31,6 @@
             android:layout_marginStart="8dp"
             android:maxLines="1"
             android:text="@string/save_new_workout"
-            android:textColor="@android:color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/circularIconImageView"
             app:layout_constraintStart_toEndOf="@+id/circularIconImageView"
@@ -45,7 +44,6 @@
             android:layout_marginTop="8dp"
             android:labelFor="@id/workoutNameET"
             android:text="@string/workout_name"
-            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/circularIconImageView" />
 
@@ -70,7 +68,6 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
             android:text="@string/cancel"
-            android:textColor="@android:color/white"
             app:layout_constraintEnd_toStartOf="@+id/saveButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +80,6 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
             android:text="@string/save"
-            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/cancelButton"

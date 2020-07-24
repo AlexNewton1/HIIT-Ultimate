@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import com.softwareoverflow.hiit_trainer.ui.SortOrder
+import com.softwareoverflow.hiit_trainer.ui.utils.SortOrder
 import kotlinx.coroutines.launch
 
 class WorkoutSetCreatorViewModel(

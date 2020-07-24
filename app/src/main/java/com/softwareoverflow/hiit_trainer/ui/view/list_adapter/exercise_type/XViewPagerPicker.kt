@@ -7,8 +7,8 @@ import androidx.core.content.res.getResourceIdOrThrow
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.getColorId
-import com.softwareoverflow.hiit_trainer.ui.getDrawableId
+import com.softwareoverflow.hiit_trainer.ui.utils.getColorId
+import com.softwareoverflow.hiit_trainer.ui.utils.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypeCreatorPagerAdapter.Companion
 import kotlinx.android.synthetic.main.x_view_pager_picker.view.*
 

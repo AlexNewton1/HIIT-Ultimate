@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
 
         // Prevent nav gesture if not on start destination
-        navController.addOnDestinationChangedListener { controller, destination, bundle ->
+        navController.addOnDestinationChangedListener { controller, destination, _ ->
             // Lock / unlock the navigation drawer
             when (destination.id) {
                 controller.graph.startDestination -> {
@@ -100,7 +100,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         return when (controller.currentDestination?.id) {
             R.id.workoutCompleteFragment -> {
-                controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
+                onBackPressed()
+                //controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
                 true
             }
             R.id.workoutCreatorFragment -> {
@@ -108,15 +109,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             else -> NavigationUI.navigateUp(navController, appBarConfiguration)
-        }
-    }
-
-    override fun onBackPressed() {
-        val controller = findNavController(R.id.myNavHostFragment)
-        if (controller.currentDestination?.id == R.id.workoutCompleteFragment) {
-            controller.navigate(R.id.action_workoutCompleteFragment_to_homeScreenFragment)
-        } else {
-            super.onBackPressed()
         }
     }
 

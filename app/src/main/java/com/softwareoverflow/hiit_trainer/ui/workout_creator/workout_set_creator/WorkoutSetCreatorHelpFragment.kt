@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.DialogHelpWorkoutSetCreatorBinding
-import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
+import com.softwareoverflow.hiit_trainer.ui.view.FadedDialogBase
 
 class WorkoutSetCreatorHelpFragment : FadedDialogBase() {
 

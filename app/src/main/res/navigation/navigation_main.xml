@@ -130,7 +130,6 @@
         <action
             android:id="@+id/action_workoutFragment_to_workoutCompleteFragment"
             app:destination="@id/workoutCompleteFragment"
-            app:popUpTo="@id/workoutCompleteFragment"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
@@ -163,16 +162,18 @@
             android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
             app:destination="@+id/upgradeDialog" />
         <action
-            android:id="@+id/action_workoutCompleteFragment_to_homeScreenFragment"
-            app:destination="@id/homeScreenFragment"
-            app:popUpTo="@id/homeScreenFragment"
-            app:popUpToInclusive="false" />
-        <action
             android:id="@+id/action_workoutCompleteFragment_to_saveNewWorkoutDialog"
             app:destination="@id/saveNewWorkoutDialog" />
         <action
             android:id="@+id/action_workoutCompleteFragment_to_overwriteExistingWorkoutDialog"
             app:destination="@id/overwriteExistingWorkoutDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_unsavedWorkoutWarningDialog"
+            app:destination="@id/unsavedWorkoutWarningDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment"
+            app:launchSingleTop="true" />
     </fragment>
     <dialog
         android:id="@+id/upgradeDialog"
@@ -205,4 +206,8 @@
             android:id="@+id/action_userConsentDialog_to_homeScreenFragment"
             app:destination="@id/homeScreenFragment" />
     </dialog>
+    <dialog
+        android:id="@+id/unsavedWorkoutWarningDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout.UnsavedWorkoutWarningDialog"
+        android:label="UnsavedWorkoutWarningDialog" />
 </navigation>

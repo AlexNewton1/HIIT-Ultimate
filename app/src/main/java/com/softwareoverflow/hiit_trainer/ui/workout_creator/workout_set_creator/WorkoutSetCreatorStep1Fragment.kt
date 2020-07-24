@@ -16,7 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
 import com.softwareoverflow.hiit_trainer.ui.MainActivity
-import com.softwareoverflow.hiit_trainer.ui.hideKeyboard
+import com.softwareoverflow.hiit_trainer.ui.utils.hideKeyboard
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypePickerListAdapter

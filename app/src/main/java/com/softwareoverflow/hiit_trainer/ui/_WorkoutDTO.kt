@@ -41,6 +41,10 @@ fun WorkoutDTO.getFullWorkoutSets(context: Context) : List<WorkoutSetDTO> {
         updatedWorkoutSets.addAll(this.workoutSets)
     }
 
+    updatedWorkoutSets.forEachIndexed { i, dto ->
+        dto.orderInWorkout = i
+    }
+
     val prepSet = getWorkoutPrepSet(context)
     if(prepSet != null){
         updatedWorkoutSets.add(0, prepSet)

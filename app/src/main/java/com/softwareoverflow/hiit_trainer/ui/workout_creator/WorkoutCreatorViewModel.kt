@@ -86,13 +86,26 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
 
     fun setWorkoutSetToEdit(position: Int?) {
         if (position == null) {
-            _workoutSetIndex = null
-            _workoutSet.value = null
             isNewWorkoutSet = true
+
+            // Default the values to the previous WorkoutSet when creating a new WorkoutSet
+            _workoutSet.value = WorkoutSetDTO().apply {
+                val existingSets = _workout.value?.workoutSets
+                if(existingSets?.any() == true){
+                    val mostRecentSet = existingSets.last()
+                    workTime = mostRecentSet.workTime
+                    restTime = mostRecentSet.restTime
+                    numReps = mostRecentSet.numReps
+                    recoverTime = mostRecentSet.recoverTime
+                }
+            }
+
+            _workoutSetIndex = null
         } else {
+            isNewWorkoutSet = false
+
             _workoutSetIndex = position
             _workoutSet.value = _workout.value!!.workoutSets[position]
-            isNewWorkoutSet = false
         }
     }
 

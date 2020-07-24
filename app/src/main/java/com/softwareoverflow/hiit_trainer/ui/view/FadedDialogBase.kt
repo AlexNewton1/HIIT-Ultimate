@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui
+package com.softwareoverflow.hiit_trainer.ui.view
 
 import android.graphics.Color
 import android.graphics.Point
@@ -9,6 +9,7 @@ import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.utils.dpToPx
 
 open class FadedDialogBase : DialogFragment() {
 

@@ -89,25 +89,24 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/workoutNumRepsText"
+            android:id="@+id/durationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/startWorkoutButton"
+            app:layout_constraintEnd_toStartOf="@+id/startWorkoutButton"
+            app:layout_constraintTop_toTopOf="@+id/startWorkoutButton" />
+
+        <TextView
+            android:id="@+id/workoutRepeatText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text= "@{String.format(@string/workout_num_reps, viewModel.workout.numReps)}"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/workoutRepeaterFAB"
             app:layout_constraintStart_toEndOf="@+id/workoutRepeaterFAB"
-            app:layout_constraintTop_toTopOf="@+id/workoutRepeaterFAB" />
-
-        <TextView
-            android:id="@+id/workoutRecoveryTimeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.workout.numReps == 1 ? View.GONE : View.VISIBLE}"
-            android:text= "@{String.format(@string/workout_recovery_time, viewModel.workout.recoveryTime)}"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/workoutRepeaterFAB"
-            app:layout_constraintStart_toEndOf="@+id/workoutNumRepsText"
             app:layout_constraintTop_toTopOf="@+id/workoutRepeaterFAB" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

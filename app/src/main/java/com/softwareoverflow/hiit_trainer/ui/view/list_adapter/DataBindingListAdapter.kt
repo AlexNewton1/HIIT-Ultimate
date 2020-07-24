@@ -8,7 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.getColorId
+import com.softwareoverflow.hiit_trainer.ui.utils.getColorId
 
 /**
  * Helper class to help with the boilerplate code for using data binding in a [ListAdapter] with [DiffUtil]

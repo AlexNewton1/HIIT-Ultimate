@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
+import com.softwareoverflow.hiit_trainer.ui.view.FadedDialogBase
 
 abstract class SaveWorkoutDialog : FadedDialogBase() {
 

@@ -87,6 +87,7 @@
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="number"
+            android:maxLength="3"
             android:text="@string/recovery_default"
             app:layout_constraintEnd_toStartOf="@+id/textView16"
             app:layout_constraintHorizontal_bias="0.5"

@@ -21,7 +21,7 @@ class ExerciseTypeViewModel(
     val iconName = Transformations.map(_exerciseType) { it?.iconName }
     val colorHex = Transformations.map(_exerciseType) { it?.colorHex }
 
-    var newExerciseTypeSaved = false
+    var exerciseTypeSaved = false
         private set
 
     fun createOrUpdateExerciseType(context: Context, name: String, iconId: Int, colorId: Int) {
@@ -32,9 +32,9 @@ class ExerciseTypeViewModel(
 
         // Launch in the workoutSetCreatorViewModel scope as that will persist longer and allow the application to go back to the WorkoutSetCreator wizard
         viewModelScope.launch {
-            newExerciseTypeSaved = true
-            val newId = repository.createOrUpdateExerciseType(exerciseType)
+            exerciseTypeSaved = true
 
+            val newId = repository.createOrUpdateExerciseType(exerciseType)
             workoutSetCreatorViewModel.selectedExerciseTypeId.value = newId
         }
     }

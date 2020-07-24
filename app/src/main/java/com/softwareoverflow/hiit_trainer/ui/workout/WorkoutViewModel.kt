@@ -19,6 +19,10 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
     val workout: LiveData<WorkoutDTO>
         get() = _workout
 
+    private val _fullWorkoutSets by lazy{
+        _workout.value?.getFullWorkoutSets(application.applicationContext)!!
+    }
+
     private val _currentWorkoutSet = MutableLiveData<WorkoutSetDTO?>()
     val currentWorkoutSet: LiveData<WorkoutSetDTO?>
         get() = _currentWorkoutSet
@@ -67,6 +71,22 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
 
     //endregion
 
+    // region unsaved workout warning
+    var showUnsavedChangesWarning = true
+        private set
+    private var _forceNavigateUp = MutableLiveData(false)
+    val forceNavigateUp: LiveData<Boolean>
+        get() = _forceNavigateUp
+
+    fun setUnsavedChangesWarningAccepted() {
+        showUnsavedChangesWarning = false
+    }
+
+    fun forceNavigateUp(){
+        _forceNavigateUp.value = true
+    }
+    // endregion
+
     init {
         viewModelScope.launch {
             // Copy the workout and deep copy the workout set list so as to not change the original
@@ -102,11 +122,10 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
             _upNextExerciseType.value == null
         ) {
 
-            val workoutSets = _workout.value?.workoutSets!!
-            val nextWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
+            val nextWorkoutSetIndex = _fullWorkoutSets.indexOf(currentWorkoutSet.value) + 1
 
-            if (nextWorkoutSetIndex != workoutSets.size) {
-                _upNextExerciseType.value = workoutSets[nextWorkoutSetIndex].exerciseTypeDTO
+            if (nextWorkoutSetIndex != _fullWorkoutSets.size) {
+                _upNextExerciseType.value = _fullWorkoutSets[nextWorkoutSetIndex].exerciseTypeDTO
                 _showUpNextLabel.value = true
             }
         }
@@ -118,14 +137,13 @@ class WorkoutViewModel(application: Application, private val workoutDto: Workout
         _sectionTimeRemaining.value = sectionTimeRemaining
 
         // Show the upcoming exercise type
-        val workoutSets = _workout.value?.getFullWorkoutSets(getApplication<Application>().applicationContext)!!
-        val currentWorkoutSetIndex = workoutSets.indexOf(currentWorkoutSet.value) + 1
+        val currentWorkoutSetIndex = _fullWorkoutSets.indexOf(currentWorkoutSet.value) + 1
         if ((_currentSection.value == WorkoutSection.RECOVER || _currentSection.value == WorkoutSection.PREPARE)) {
             if (sectionTimeRemaining <= 3 && _animateUpNextExerciseType.value == false) {
                 _animateUpNextExerciseType.value = true
                 _showUpNextLabel.value = false
             }
-        } else if (currentWorkoutSetIndex == workoutSets.size && _currentRep.value == _currentWorkoutSet.value!!.numReps) {
+        } else if (currentWorkoutSetIndex == _fullWorkoutSets.size && _currentRep.value == _currentWorkoutSet.value!!.numReps) {
             _showUpNextLabel.value = true
             _upNextExerciseType.value = getWorkoutCompleteExerciseType(getApplication())
         }

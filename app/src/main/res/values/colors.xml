@@ -8,7 +8,7 @@
     <color name="background">#CDDADD</color>
 
     <color name="work">#FF7043</color>
-    <color name="rest">#B18000</color>
+    <color name="rest">#9169eb</color>
     <color name="numReps">#66BB6A</color>
     <color name="recover">#42A5F5</color>
 </resources>

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.*
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
-import com.softwareoverflow.hiit_trainer.ui.SortOrder
+import com.softwareoverflow.hiit_trainer.ui.utils.SortOrder
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
 import kotlinx.coroutines.launch
 

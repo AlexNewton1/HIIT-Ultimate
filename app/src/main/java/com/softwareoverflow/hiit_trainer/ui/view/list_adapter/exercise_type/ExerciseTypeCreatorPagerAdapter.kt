@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.takeN
+import com.softwareoverflow.hiit_trainer.ui.utils.takeN
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
 
 class ExerciseTypeCreatorPagerAdapter(

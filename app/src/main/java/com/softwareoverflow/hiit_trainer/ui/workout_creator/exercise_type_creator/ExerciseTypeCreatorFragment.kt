@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.widget.doBeforeTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -81,9 +82,8 @@ class ExerciseTypeCreatorFragment : Fragment() {
         }
 
         workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
-            if(viewModel.newExerciseTypeSaved) {
-                val latestId = it.maxBy { et -> et.id!! }!!.id!!
-                workoutSetViewModel.setChosenExerciseTypeId(latestId)
+            if(viewModel.exerciseTypeSaved) {
+                workoutSetViewModel.setChosenExerciseTypeId(workoutSetViewModel.selectedExerciseTypeId.value!!)
                 findNavController().navigate(R.id.action_exerciseTypeCreator_to_workoutSetCreator)
             }
         })
@@ -93,6 +93,8 @@ class ExerciseTypeCreatorFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        requireActivity().window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         if (snackbar == null) {
             snackbar = Snackbar.make(

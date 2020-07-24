@@ -16,7 +16,7 @@
 
     <string name="work_time">Work Time</string>
     <string name="rest_time">Rest Time</string>
-    <string name="num_reps"># Repititions</string>
+    <string name="num_reps"># Cycles</string>
     <string name="recovery_time">Recovery TIme</string>
 
     <string name="dismiss">Dismiss</string>
@@ -113,15 +113,18 @@
     <string name="no_saved_workouts_found">No Saved Workouts!</string>
 
     <string name="pref_unsaved_changes_warning">pref_unsaved_changes_warning</string>
+    <string name="pref_unsaved_workout_warning">pref_unsaved_workout_warning</string>
     <string name="unsaved_changes_warning">Any unsaved changes will be lost</string>
+    <string name="unsaved_workout_warning">Have you saved your workout?</string>
+    <string name="unsaved_workout_warning_details">If you haven\'t saved your workout it will be lost.</string>
     <string name="dont_show_again">Don\'t show again</string>
     <string name="continue_anyway">Continue Anyway</string>
     <string name="close">Close</string>
     <string name="workout_set_help">Creating A Workout Set</string>
     <string name="workout_set_help_details">Workout Sets are cycles of work &amp; rest phases with a recovery time at the end.\n\nFor example, with 3 repititions:</string><!--<![CDATA[A workout set is comprised of a work phase followed by a rest phase, repeated for a number of cycles. The recovery time replaces the rest time on the last cycle.\n\nFor example, with 3 repititions:]]></string> !-->
 
-    <string name="workout_num_reps">%1$dx</string>
-    <string name="workout_recovery_time">, %1$ds recovery</string>
+    <string name="workout_recovery_time_full">%1$dx,\n%2$ds recovery</string>
+    <string name="duration_text">Duration:\n%1$s</string>
     <string name="application_icon">application icon</string>
     <string name="times">times</string>
     <string name="with">with</string>
@@ -129,4 +132,6 @@
     <string name="recovery_default">120</string>
     <string name="complete_workout">Complete Workout</string>
     <string name="repeat_workout">Repeat Workout</string>
+    <string name="missing_values">Please ensure all fields contain a value.</string>
+    <string name="workout_set_values_zero_warning">\'Work Time\', \'Rest Time\' &amp; \'# Cycles\' must be greater than 0.</string>
 </resources>

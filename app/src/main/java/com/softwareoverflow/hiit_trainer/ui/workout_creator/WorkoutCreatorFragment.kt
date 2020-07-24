@@ -15,7 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutCreatorBinding
 import com.softwareoverflow.hiit_trainer.ui.MainActivity
+import com.softwareoverflow.hiit_trainer.ui.getFormattedDuration
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
+import com.softwareoverflow.hiit_trainer.ui.utils.hideKeyboard
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
@@ -99,6 +101,21 @@ class WorkoutCreatorFragment : Fragment() {
                 else
                     noSetsTextHint.visibility = View.GONE
 
+                durationText.text = getString(R.string.duration_text, it.getFormattedDuration())
+
+                val formattedDuration =
+                    if (it.numReps > 1) {
+                        requireContext().getString(
+                            R.string.workout_recovery_time_full,
+                            it.numReps,
+                            it.recoveryTime
+                        )
+                    } else {
+                        "1x"
+                    }
+                workoutRepeatText.text = formattedDuration
+
+
                 (requireActivity() as MainActivity).supportActionBar?.title =
                     if (it.name.isBlank())
                         getString(R.string.create_your_workout)
@@ -177,6 +194,11 @@ class WorkoutCreatorFragment : Fragment() {
                 return false
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideKeyboard(requireActivity())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

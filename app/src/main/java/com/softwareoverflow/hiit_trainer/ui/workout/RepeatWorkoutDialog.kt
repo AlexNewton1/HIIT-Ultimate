@@ -10,7 +10,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.DialogRepeatWorkoutBinding
-import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
+import com.softwareoverflow.hiit_trainer.ui.view.FadedDialogBase
 import com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorViewModel
 import kotlinx.android.synthetic.main.dialog_repeat_workout.*
 
@@ -43,7 +43,7 @@ class RepeatWorkoutDialog : FadedDialogBase() {
             if (recovery.isBlank()) {
                 Snackbar.make(
                     requireParentFragment().requireView(),
-                    "Please enter values",
+                    getString(R.string.missing_values),
                     Snackbar.LENGTH_SHORT
                 ).show()
 

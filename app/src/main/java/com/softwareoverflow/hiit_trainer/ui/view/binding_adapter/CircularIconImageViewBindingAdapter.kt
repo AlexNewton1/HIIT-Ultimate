@@ -2,7 +2,7 @@ package com.softwareoverflow.hiit_trainer.ui.view.binding_adapter
 
 import android.graphics.Color
 import androidx.databinding.BindingAdapter
-import com.softwareoverflow.hiit_trainer.ui.getDrawableId
+import com.softwareoverflow.hiit_trainer.ui.utils.getDrawableId
 import com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
 
 @BindingAdapter("colorHex")

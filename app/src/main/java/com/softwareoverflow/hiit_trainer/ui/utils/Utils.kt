@@ -1,4 +1,4 @@
-package com.softwareoverflow.hiit_trainer.ui
+package com.softwareoverflow.hiit_trainer.ui.utils
 
 import android.app.Activity
 import android.content.Context

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.ui.FadedDialogBase
+import com.softwareoverflow.hiit_trainer.ui.view.FadedDialogBase
 import com.softwareoverflow.hiit_trainer.ui.view.binding_adapter.setIconByName
 import kotlinx.android.synthetic.main.dialog_upgrade.view.*
 

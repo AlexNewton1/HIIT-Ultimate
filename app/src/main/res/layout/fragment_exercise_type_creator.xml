@@ -46,7 +46,7 @@
             android:autofillHints="no"
             android:gravity="center"
             android:hint="@string/exercise_type_name"
-            android:inputType="text"
+            android:inputType="text|textCapWords"
             android:backgroundTint="@color/colorPrimaryFaded"
             android:text="@{viewModel.exerciseTypeName}"
             app:layout_constraintBottom_toBottomOf="parent"
