@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -68,13 +69,14 @@
             app:miniFabBackgroundTint="@color/colorPrimary"
             app:miniFabDrawableTint="@android:color/white" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.softwareoverflow.hiit_trainer.ui.view.ColorChangeDisabledFAB
             android:id="@+id/startWorkoutButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:src="@android:drawable/ic_media_play"
+            app:enabled="@{viewModel.workout.workoutSets.size() > 0}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

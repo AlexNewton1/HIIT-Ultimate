@@ -36,11 +36,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:contentDescription="@string/content_desc_sort_alphabetically"
             android:id="@+id/sortButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/content_desc_sort_alphabetically"
             android:src="@{(viewModel.sortOrder == SortOrder.ASC) ? @drawable/icon_sort_alph_asc : @drawable/icon_sort_alph_desc }"
             app:layout_constraintBottom_toBottomOf="@+id/view2"
             app:layout_constraintDimensionRatio="W,1:1"
@@ -86,14 +86,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fragment_padding"
             android:gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/create_new_exercise_type"
             android:labelFor="@id/createNewExerciseTypeFAB"
+            android:text="@string/create_new_exercise_type"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/createNewExerciseTypeFAB"
             app:layout_constraintStart_toEndOf="@id/createNewExerciseTypeFAB"
             app:layout_constraintTop_toTopOf="@+id/createNewExerciseTypeFAB" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.softwareoverflow.hiit_trainer.ui.view.ColorChangeDisabledFAB
             android:id="@+id/workoutSetCreatorGoToStep2Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +101,7 @@
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/continue_to_step_2"
             android:src="@drawable/icon_arrow_right"
+            app:enabled="@{viewModel.selectedExerciseTypeId != null}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
