@@ -121,7 +121,7 @@
     <string name="continue_anyway">Continue Anyway</string>
     <string name="close">Close</string>
     <string name="workout_set_help">Creating A Workout Set</string>
-    <string name="workout_set_help_details">Workout Sets are cycles of work &amp; rest phases with a recovery time at the end.\n\nFor example, with 3 repititions:</string><!--<![CDATA[A workout set is comprised of a work phase followed by a rest phase, repeated for a number of cycles. The recovery time replaces the rest time on the last cycle.\n\nFor example, with 3 repititions:]]></string> !-->
+    <string name="workout_set_help_details">Workout Sets are cycles of work &amp; rest phases with a recovery time at the end.\n\nFor example, with 3 cycles:</string>
 
     <string name="workout_recovery_time_full">%1$dx,\n%2$ds recovery</string>
     <string name="duration_text">Duration:\n%1$s</string>
