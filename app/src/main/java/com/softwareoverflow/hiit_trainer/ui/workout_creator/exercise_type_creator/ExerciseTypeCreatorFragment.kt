@@ -81,9 +81,12 @@ class ExerciseTypeCreatorFragment : Fragment() {
             }
         }
 
-        workoutSetViewModel.allExerciseTypes.observe(viewLifecycleOwner, Observer {
-            if(viewModel.exerciseTypeSaved) {
-                workoutSetViewModel.setChosenExerciseTypeId(workoutSetViewModel.selectedExerciseTypeId.value!!)
+        viewModel.newExerciseTypeSaved.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                workoutSetViewModel.selectedExerciseTypeId.value = it
+                workoutSetViewModel.setChosenExerciseTypeId(it)
+
+                viewModel.savedExerciseTypeHandled()
                 findNavController().navigate(R.id.action_exerciseTypeCreator_to_workoutSetCreator)
             }
         })

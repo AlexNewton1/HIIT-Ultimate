@@ -2,6 +2,8 @@ package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
@@ -52,8 +54,8 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (workTime.text.toString().toInt() == 0 || restTime.text.toString()
-                    .toInt() == 0 || numReps.text.toString().toInt() == 0
+            if (workTime.text.toString().toInt() == 0  || numReps.text.toString().toInt() == 0 ||
+                (numReps.text.toString().toInt() > 1 && restTime.text.toString().toInt() == 0)
             ) {
                 Snackbar.make(
                     requireView(),
@@ -67,6 +69,27 @@ class WorkoutSetCreatorStep2Fragment : Fragment() {
             workoutCreatorViewModel.addOrUpdateWorkoutSet(workoutSetViewModel.workoutSet.value!!)
             findNavController().popBackStack(R.id.workoutCreatorFragment, false)
         }
+
+        binding.numReps.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                try {
+                    val restTimeOccurs = p0.toString().toInt() > 1
+
+                    if(restTimeOccurs)
+                        restTimeIcon.setImageResource(R.drawable.icon_rest)
+                    else
+                        restTimeIcon.setImageResource(R.drawable.icon_rest_grey)
+
+                    restTime.isEnabled = restTimeOccurs
+                } catch (ex: NumberFormatException) {
+                    // Do nothing
+                }
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        })
 
         return binding.root
     }

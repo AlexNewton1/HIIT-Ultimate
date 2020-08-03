@@ -13,8 +13,8 @@ android {
         applicationId "com.softwareoverflow.hiit_trainer"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 8
+        versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions({
