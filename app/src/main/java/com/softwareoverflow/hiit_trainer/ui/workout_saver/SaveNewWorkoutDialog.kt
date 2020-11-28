@@ -19,7 +19,7 @@ class SaveNewWorkoutDialog : SaveWorkoutDialog() {
     private val args: SaveNewWorkoutDialogArgs by navArgs()
 
     private val saverViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.saveNewWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.workoutDto, true)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.dto, true)
     }
 
     override fun onCreateView(

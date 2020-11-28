@@ -123,7 +123,7 @@
             android:defaultValue="-1L"
             app:argType="long" />
         <argument
-            android:name="workoutDto"
+            android:name="dto"
             android:defaultValue="@null"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO"
             app:nullable="true" />
@@ -156,7 +156,7 @@
         android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutCompleteFragment"
         android:label="@string/workout_complete">
         <argument
-            android:name="workoutDto"
+            android:name="dto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
         <action
             android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
@@ -175,6 +175,10 @@
             app:destination="@id/homeScreenFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/homeScreenFragment" />
+        <argument
+            android:name="workoutId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
     <dialog
         android:id="@+id/upgradeDialog"
@@ -188,7 +192,7 @@
         android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
         android:label="SaveNewWorkoutDialog" >
         <argument
-            android:name="workoutDto"
+            android:name="dto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
     </dialog>
     <dialog
@@ -196,7 +200,7 @@
         android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.OverwriteExistingWorkoutDialog"
         android:label="OverwriteExistingWorkoutDialog" >
         <argument
-            android:name="workoutDto"
+            android:name="dto"
             app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
     </dialog>
     <dialog

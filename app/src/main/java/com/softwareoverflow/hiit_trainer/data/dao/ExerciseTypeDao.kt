@@ -30,7 +30,4 @@ interface ExerciseTypeDao :
 
         return insertedId
     }
-
-    @Query("SELECT workout.name FROM Workout workout JOIN WorkoutSet workoutSet WHERE workoutSet.exerciseTypeId = :exerciseTypeId ")
-    suspend fun getWorkoutNamesUsingExerciseType(exerciseTypeId: Long) : List<String>
 }

@@ -17,6 +17,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutSetCreatorStep1Binding
 import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.utils.hideKeyboard
+import com.softwareoverflow.hiit_trainer.ui.utils.safeNavigate
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.exercise_type.ExerciseTypePickerListAdapter
@@ -144,7 +145,7 @@ class WorkoutSetCreatorStep1Fragment : Fragment() {
     }
 
     fun createOrEditExerciseType() {
-        findNavController().navigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
+        findNavController().safeNavigate(R.id.action_exerciseTypePickerFragment_to_exerciseTypeCreator)
     }
 
     override fun onStart() {

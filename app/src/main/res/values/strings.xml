@@ -114,6 +114,7 @@
 
     <string name="pref_unsaved_changes_warning">pref_unsaved_changes_warning</string>
     <string name="pref_unsaved_workout_warning">pref_unsaved_workout_warning</string>
+    <string name="pref_review_last_ask">pref_review_last_ask</string>
     <string name="unsaved_changes_warning">Any unsaved changes will be lost</string>
     <string name="unsaved_workout_warning">Have you saved your workout?</string>
     <string name="unsaved_workout_warning_details">If you haven\'t saved your workout it will be lost.</string>

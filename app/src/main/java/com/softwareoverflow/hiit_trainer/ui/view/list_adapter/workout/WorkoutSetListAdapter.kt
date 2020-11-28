@@ -17,8 +17,6 @@ class WorkoutSetListAdapter :
         AdapterClickListener()
     ) {
 
-
-
     fun setEventListener(listener: IEditableOrderedListEventListener) = AdapterClickListener.setEventListener(listener)
 
     override fun getItemViewType(position: Int) = R.layout.list_item_workout_set

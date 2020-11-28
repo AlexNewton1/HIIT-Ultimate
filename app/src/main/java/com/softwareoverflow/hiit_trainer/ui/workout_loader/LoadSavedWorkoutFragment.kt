@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentWorkoutLoaderBinding
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
+import com.softwareoverflow.hiit_trainer.ui.utils.safeNavigate
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.SavedWorkoutListAdapter
@@ -55,7 +56,7 @@ class LoadSavedWorkoutFragment : Fragment() {
                             findNavController().navigate(action)
                         }
                     } else {
-                        findNavController().navigate(R.id.action_loadSavedWorkoutFragment_to_upgradeDialog)
+                        findNavController().safeNavigate(R.id.action_loadSavedWorkoutFragment_to_upgradeDialog)
                     }
                 }
 
@@ -86,7 +87,7 @@ class LoadSavedWorkoutFragment : Fragment() {
         })
 
         binding.sortButton.setOnClickListener {
-            viewModel.changeSortOrder();
+            viewModel.changeSortOrder()
         }
 
         binding.nameSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

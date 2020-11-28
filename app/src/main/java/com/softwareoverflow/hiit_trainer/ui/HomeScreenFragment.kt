@@ -14,6 +14,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.databinding.FragmentHomeScreenBinding
 import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
+import com.softwareoverflow.hiit_trainer.ui.utils.safeNavigate
 import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 
@@ -59,7 +60,7 @@ class HomeScreenFragment : Fragment() {
         )
 
         upgradeToProButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeScreenFragment_to_upgradeDialog)
+            findNavController().safeNavigate(R.id.action_homeScreenFragment_to_upgradeDialog)
         }
     }
 }

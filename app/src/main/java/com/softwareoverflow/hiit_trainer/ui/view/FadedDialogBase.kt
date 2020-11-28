@@ -5,6 +5,7 @@ import android.graphics.Point
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
@@ -17,7 +18,12 @@ open class FadedDialogBase : DialogFragment() {
         super.onResume()
 
         val displaySize = Point()
-        requireActivity().windowManager.defaultDisplay.getRealSize(displaySize)
+
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+             requireContext().display?.getRealSize(displaySize)
+         else
+            requireActivity().windowManager.defaultDisplay.getRealSize(displaySize)
 
         val window = requireDialog().window
         window?.setLayout(displaySize.x - 32.dpToPx, ConstraintLayout.LayoutParams.WRAP_CONTENT)

@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -21,8 +22,10 @@ class RetryableInterstitialAd(context: Context, adUnitId: String, private val re
     init {
         ad.adUnitId = adUnitId
         ad.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(p0: Int) {
+            override fun onAdFailedToLoad(p0: LoadAdError?) {
                 super.onAdFailedToLoad(p0)
+
+                Timber.w("InterstitialAd failed to load ${p0?.message}")
                 retryAdLoad()
             }
 

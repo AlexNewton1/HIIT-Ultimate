@@ -21,8 +21,9 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
     private val args: OverwriteExistingWorkoutDialogArgs by navArgs()
 
     private val _overwriteExistingViewModel by navGraphViewModels<WorkoutSaverViewModel>(R.id.overwriteExistingWorkoutDialog) {
-        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.workoutDto, false)
+        WorkoutSaverViewModelFactory(requireActivity().application, requireContext(), args.dto, false)
     }
+
     private val overwriteExistingViewModel: OverwriteWorkoutViewModel
         get() = _overwriteExistingViewModel as OverwriteWorkoutViewModel
 
@@ -64,7 +65,7 @@ class OverwriteExistingWorkoutDialog : SaveWorkoutDialog() {
 
             saveButton.setOnClickListener {
                 overwriteExistingViewModel.newWorkoutName.value =
-                    (recyclerView.adapter as OverwriteWorkoutListAdapter).updatedName;
+                    (recyclerView.adapter as OverwriteWorkoutListAdapter).updatedName
                 overwriteExistingViewModel.saveWorkout()
             }
 

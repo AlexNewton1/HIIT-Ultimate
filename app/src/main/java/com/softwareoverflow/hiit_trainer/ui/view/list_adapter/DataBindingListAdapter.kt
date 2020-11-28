@@ -29,23 +29,29 @@ abstract class DataBindingAdapter<T>(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, viewType, parent, false)
-        return DataBindingViewHolderBase(binding)
-    }
 
-    internal fun getPositionForItem(dto: T) =
-        currentList.indexOf(dto)
+        // Create the ViewHolder
+        val holder = DataBindingViewHolderBase<T>(binding)
 
-    override fun onBindViewHolder(holder: DataBindingViewHolderBase<T>, position: Int) {
-        val item = getItem(position)
-
+        // Set the relevant click listeners
         holder.itemView.findViewById<View>(R.id.selectOnClick)?.setOnClickListener {
+            val item = currentList[holder.layoutPosition]
             clickListener?.onClick(it, item, getPositionForItem(item), false)
         }
         holder.itemView.setOnLongClickListener {
+            val item = currentList[holder.layoutPosition]
             clickListener?.onClick(it, item, getPositionForItem(item), true)
             return@setOnLongClickListener true
         }
 
+        return holder
+    }
+
+    private fun getPositionForItem(dto: T) =
+        currentList.indexOf(dto)
+
+    override fun onBindViewHolder(holder: DataBindingViewHolderBase<T>, position: Int) {
+        val item = getItem(position)
         val color = getColorHexForItem(item)
         holder.bind(item, color.getColorId())
     }

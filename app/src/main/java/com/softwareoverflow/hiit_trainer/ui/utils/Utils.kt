@@ -5,14 +5,14 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.IdRes
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import timber.log.Timber
 import kotlin.math.abs
-
-val Int.pxToDp: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
 val Int.dpToPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
 
 fun String.getDrawableId(context: Context) =
     context.resources.getIdentifier(this, "drawable", context.packageName)
@@ -36,4 +36,28 @@ fun hideKeyboard(activity: Activity) {
             currentlyFocusedView.windowToken,
             InputMethodManager.HIDE_NOT_ALWAYS
         )
+}
+
+/**
+ * Allows 'safe' navigation.
+ * Prevents crash when navigation attempts to navigate to a destination unknown to the nav controller
+ * by catching all @exception [IllegalArgumentException].
+ */
+fun NavController.safeNavigate(@IdRes navId: Int) {
+    try {
+        this.navigate(navId)
+    } catch (ex: IllegalArgumentException) {
+        Timber.w(ex)
+    }
+}
+
+/**
+ * @see [safeNavigate]
+ */
+fun NavController.safeNavigate(action: NavDirections){
+    try {
+        this.navigate(action)
+    } catch (ex: IllegalArgumentException) {
+        Timber.w(ex)
+    }
 }

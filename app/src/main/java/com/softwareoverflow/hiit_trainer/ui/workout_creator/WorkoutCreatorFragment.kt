@@ -18,6 +18,7 @@ import com.softwareoverflow.hiit_trainer.ui.MainActivity
 import com.softwareoverflow.hiit_trainer.ui.getFormattedDuration
 import com.softwareoverflow.hiit_trainer.ui.upgrade.AdsManager
 import com.softwareoverflow.hiit_trainer.ui.utils.hideKeyboard
+import com.softwareoverflow.hiit_trainer.ui.utils.safeNavigate
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.IEditableOrderedListEventListener
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.SpacedListDecoration
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutSetListAdapter
@@ -56,7 +57,7 @@ class WorkoutCreatorFragment : Fragment() {
         setupUnsavedChangesDialog()
 
         binding.workoutRepeaterFAB.setOnClickListener {
-            findNavController().navigate(R.id.action_workoutCreatorFragment_to_repeatWorkoutDialog)
+            findNavController().safeNavigate(R.id.action_workoutCreatorFragment_to_repeatWorkoutDialog)
         }
 
         binding.listWorkoutSets.adapter = WorkoutSetListAdapter()
@@ -87,8 +88,7 @@ class WorkoutCreatorFragment : Fragment() {
             /** Triggers the edit of the item at the position [id] */
             override fun triggerItemEdit(id: Long) {
                 viewModel.setWorkoutSetToEdit(id.toInt())
-                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
-
+                findNavController().safeNavigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
             }
         })
 
@@ -126,14 +126,7 @@ class WorkoutCreatorFragment : Fragment() {
 
         binding.createNewWorkoutSetButton.setOnClickListener {
             viewModel.setWorkoutSetToEdit(null)
-
-            // If the snackbar for no remaining save slots is showing, clicks are registered on the screen.
-            // This causes IllegalArgumentException as the save workout dialog is still on screen. Catch these exceptions and do nothing.
-            try {
-                findNavController().navigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
-            } catch (ex: IllegalArgumentException) {
-                // Do nothing
-            }
+            findNavController().safeNavigate(R.id.action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment)
         }
 
         binding.startWorkoutButton.setOnClickListener {
@@ -142,12 +135,12 @@ class WorkoutCreatorFragment : Fragment() {
             else {
                 val action =
                     WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToWorkoutFragment(
-                        workoutDto = viewModel.workout.value
+                        dto = viewModel.workout.value
                     )
 
-                // Show an advert and then navigate to the workout
+                // Show an advert with callback to navigate to the workout
                 AdsManager.showAdBeforeWorkout {
-                    findNavController().navigate(action)
+                    findNavController().safeNavigate(action)
                 }
             }
         }
@@ -171,9 +164,9 @@ class WorkoutCreatorFragment : Fragment() {
                 if (menuItem.title == requireContext().getString(R.string.save_as)) {
                     val action =
                         WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToSaveNewWorkoutDialog(
-                            workoutDto = viewModel.workout.value!!
+                            dto = viewModel.workout.value!!
                         )
-                    findNavController().navigate(action)
+                    findNavController().safeNavigate(action)
                 } else if (menuItem.title == resources.getString(R.string.overwrite_existing)) {
                     if (viewModel.getNumSavedWorkouts() == 0) {
                         Snackbar.make(
@@ -186,9 +179,9 @@ class WorkoutCreatorFragment : Fragment() {
 
                     val action =
                         WorkoutCreatorFragmentDirections.actionWorkoutCreatorFragmentToOverwriteExistingWorkoutDialog(
-                            workoutDto = viewModel.workout.value!!
+                            dto = viewModel.workout.value!!
                         )
-                    findNavController().navigate(action)
+                    findNavController().safeNavigate(action)
                 }
 
                 return false
@@ -233,7 +226,7 @@ class WorkoutCreatorFragment : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, true) {
             if (viewModel.showUnsavedChangesWarning)
-                findNavController().navigate(R.id.action_workoutCreatorFragment_to_unsavedChangesWarningDialog)
+                findNavController().safeNavigate(R.id.action_workoutCreatorFragment_to_unsavedChangesWarningDialog)
             else
                 findNavController().navigateUp()
         }

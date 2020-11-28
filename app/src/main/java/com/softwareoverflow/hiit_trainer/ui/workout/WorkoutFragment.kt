@@ -35,7 +35,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             requireActivity().application,
             requireContext(),
             args.workoutId,
-            args.workoutDto
+            args.dto
         )
     }
 
@@ -153,7 +153,7 @@ class WorkoutFragment : Fragment(), IWorkoutObserver {
             timer?.cancel()
 
             val action =
-                WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!)
+                WorkoutFragmentDirections.actionWorkoutFragmentToWorkoutCompleteFragment(viewModel.workout.value!!, args.workoutId)
             AdsManager.showAdAfterWorkout() {
                 findNavController().navigate(action)
             }
