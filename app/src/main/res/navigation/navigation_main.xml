@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/homeScreenFragment">
+
+    <fragment
+        android:id="@+id/homeScreenFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.HomeScreenFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home_screen">
+        <action
+            android:id="@+id/action_homeScreenFragment_to_workoutCreatorHomeFragment"
+            app:destination="@id/nav_workout_creator">
+
+            <argument
+                android:name="workoutCreatorWorkoutId"
+                android:defaultValue="0L"
+                app:argType="long" />
+
+        </action>
+        <action
+            android:id="@+id/action_homeScreenFragment_to_loadSavedWorkoutFragment"
+            app:destination="@id/loadSavedWorkoutFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_upgradeDialog"
+            app:destination="@id/upgradeDialog" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeScreenFragment_to_userConsentDialog"
+            app:destination="@id/userConsentDialog" />
+    </fragment>
+    <navigation
+        android:id="@+id/nav_workout_creator"
+        app:startDestination="@id/workoutCreatorFragment">
+        <fragment
+            android:id="@+id/workoutCreatorFragment"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.WorkoutCreatorFragment"
+            android:label="@string/create_new_workout"
+            tools:layout="@layout/fragment_workout_creator">
+            <action
+                android:id="@+id/action_workoutCreatorHomeFragment_to_exerciseTypePickerFragment"
+                app:destination="@id/nav_workout_set_creator" />
+            <action android:id="@+id/action_workoutCreatorFragment_to_saveNewWorkoutDialog"
+                app:destination="@+id/saveNewWorkoutDialog" />
+            <action android:id="@+id/action_workoutCreatorFragment_to_overwriteExistingWorkoutDialog"
+                app:destination="@+id/overwriteExistingWorkoutDialog" />
+            <argument
+                android:name="workoutCreatorWorkoutId"
+                android:defaultValue="0L"
+                app:argType="long" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_workoutFragment"
+                app:destination="@id/workoutFragment" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_unsavedChangesWarningDialog"
+                app:destination="@id/unsavedChangesWarningDialog" />
+            <action
+                android:id="@+id/action_workoutCreatorFragment_to_repeatWorkoutDialog"
+                app:destination="@id/repeatWorkoutDialog" />
+        </fragment>
+        <navigation
+            android:id="@+id/nav_workout_set_creator"
+            app:startDestination="@id/exerciseTypePickerFragment">
+            <fragment
+                android:id="@+id/exerciseTypeCreator"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.exercise_type_creator.ExerciseTypeCreatorFragment"
+                android:label="@string/nav_et_creator"
+                tools:layout="@layout/fragment_exercise_type_creator" >
+                <action
+                    android:id="@+id/action_exerciseTypeCreator_to_workoutSetCreator"
+                    app:destination="@id/workoutSetCreator"
+                    app:popUpTo="@id/exerciseTypeCreator"
+                    app:popUpToInclusive="true" />
+            </fragment>
+            <fragment
+                android:id="@+id/exerciseTypePickerFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep1Fragment"
+                android:label="@string/nav_set_creator_step_1"
+                tools:layout="@layout/fragment_workout_set_creator_step_1">
+                <action
+                    android:id="@+id/action_exerciseTypePickerFragment_to_workoutSetCreator"
+                    app:destination="@id/workoutSetCreator" />
+                <action
+                    android:id="@+id/action_exerciseTypePickerFragment_to_exerciseTypeCreator"
+                    app:destination="@id/exerciseTypeCreator" />
+            </fragment>
+            <fragment
+                android:id="@+id/workoutSetCreator"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep2Fragment"
+                android:label="@string/nav_set_creator_step_2"
+                tools:layout="@layout/fragment_workout_set_creator_step_2">
+                <action
+                    android:id="@+id/action_workoutSetCreator_to_workoutCreatorHomeFragment"
+                    app:destination="@id/workoutCreatorFragment" />
+                <action
+                    android:id="@+id/action_workoutSetCreator_to_workoutSetCreatorHelpFragment"
+                    app:destination="@id/workoutSetCreatorHelpFragment" />
+            </fragment>
+            <dialog
+                android:id="@+id/workoutSetCreatorHelpFragment"
+                android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorHelpFragment"
+                android:label="WorkoutSetCreatorHelpFragment" />
+        </navigation>
+        <dialog
+            android:id="@+id/unsavedChangesWarningDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout_creator.UnsavedChangesWarningDialog"
+            android:label="UnsavedChangesWarningDialog" />
+        <dialog
+            android:id="@+id/repeatWorkoutDialog"
+            android:name="com.softwareoverflow.hiit_trainer.ui.workout.RepeatWorkoutDialog"
+            android:label="RepeatWorkoutDialog" />
+    </navigation>
+    <fragment
+        android:id="@+id/workoutFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout.WorkoutFragment"
+        android:label="@string/nav_workout">
+        <argument
+            android:name="workoutId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <argument
+            android:name="dto"
+            android:defaultValue="@null"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_workoutFragment_to_workoutCompleteFragment"
+            app:destination="@id/workoutCompleteFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/loadSavedWorkoutFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_loader.LoadSavedWorkoutFragment"
+        android:label="@string/nav_saved_workouts">
+        <action
+            android:id="@+id/action_loadSavedWorkoutFragment_to_workoutFragment"
+            app:destination="@id/workoutFragment" />
+        <action
+            android:id="@+id/action_loadSavedWorkoutFragment_to_nav_workout_creator"
+            app:destination="@id/nav_workout_creator">
+            <argument
+                android:name="workoutCreatorWorkoutId"
+                android:defaultValue="0L"
+                app:argType="long" />
+        </action>
+        <action
+            android:id="@+id/action_loadSavedWorkoutFragment_to_upgradeDialog"
+            app:destination="@id/upgradeDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/workoutCompleteFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_complete.WorkoutCompleteFragment"
+        android:label="@string/workout_complete">
+        <argument
+            android:name="dto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_upgradeDialog"
+            app:destination="@+id/upgradeDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_saveNewWorkoutDialog"
+            app:destination="@id/saveNewWorkoutDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_overwriteExistingWorkoutDialog"
+            app:destination="@id/overwriteExistingWorkoutDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_unsavedWorkoutWarningDialog"
+            app:destination="@id/unsavedWorkoutWarningDialog" />
+        <action
+            android:id="@+id/action_workoutCompleteFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/homeScreenFragment" />
+        <argument
+            android:name="workoutId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
+    <dialog
+        android:id="@+id/upgradeDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeDialog" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.softwareoverflow.hiit_trainer.ui.settings.SettingsFragment"
+        android:label="@string/settings" />
+    <dialog
+        android:id="@+id/saveNewWorkoutDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.SaveNewWorkoutDialog"
+        android:label="SaveNewWorkoutDialog" >
+        <argument
+            android:name="dto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </dialog>
+    <dialog
+        android:id="@+id/overwriteExistingWorkoutDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout_saver.OverwriteExistingWorkoutDialog"
+        android:label="OverwriteExistingWorkoutDialog" >
+        <argument
+            android:name="dto"
+            app:argType="com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO" />
+    </dialog>
+    <dialog
+        android:id="@+id/userConsentDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.consent.UserConsentDialog"
+        android:label="UserConsentDialog" >
+        <action
+            android:id="@+id/action_userConsentDialog_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/unsavedWorkoutWarningDialog"
+        android:name="com.softwareoverflow.hiit_trainer.ui.workout.UnsavedWorkoutWarningDialog"
+        android:label="UnsavedWorkoutWarningDialog" />
+</navigation>

@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class androidx.core.app.CoreComponentFactory { *; }
+
+-keepnames class com.softwareoverflow.hiit_trainer.repository.dto.** { *; }
+-keepnames class com.google.android.play.core.review.ReviewInfo

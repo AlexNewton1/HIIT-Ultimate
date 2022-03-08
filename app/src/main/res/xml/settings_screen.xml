@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:allowDividerBelow="true"
+        app:title="@string/preparation_set_enabled">
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/key_preparation_set_enabled"
+            app:summary="@string/preparation_set_summary"
+            app:title="@string/preparation_set_enabled" />
+
+        <DropDownPreference
+            app:defaultValue="5"
+            app:entries="@array/preparation_set_entries"
+            app:entryValues="@array/preparation_set_entry_values"
+            app:key="@string/key_preparation_set_time"
+            app:title="@string/preparation_set_time"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:allowDividerAbove="true"
+        app:title="@string/final_seconds_beep">
+
+        <MultiSelectListPreference
+            app:dialogTitle="@string/final_seconds_beep"
+            app:entries="@array/final_seconds_beep_entries"
+            app:entryValues="@array/final_seconds_beep_entry_values"
+            app:defaultValue="@array/final_seconds_beep_entry_values"
+            app:key="@string/key_final_seconds_vocal"
+            app:summary="@string/final_seconds_beep_summary"
+            app:title="@string/final_seconds_beep" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:allowDividerAbove="true"
+        app:title="@string/privacy">
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/key_personalized_ads_enabled"
+            app:title="@string/personalized_ads_enabled" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:key="@string/key_analytics_enabled"
+            app:title="@string/analytics_enabled"
+            app:summary="@string/analytics_enabled_summary"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

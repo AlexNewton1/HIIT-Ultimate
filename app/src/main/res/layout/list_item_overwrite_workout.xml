@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="dto"
+            type="com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutOverwriteDomainObject" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/selectOnClick"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/half_fab_size_padded"
+        android:background="@drawable/bg_rounded_lozenge">
+
+        <View
+            android:id="@+id/colorFade"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/half_fab_size_padded"
+            android:background="@drawable/bg_rounded_lozenge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:padding="2dp"
+            android:id="@+id/checkbox"
+            android:layout_width="@dimen/half_fab_size"
+            android:layout_height="@dimen/half_fab_size"
+            android:button="@drawable/checkbox_circle"
+            android:checked="@{dto.selected}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:checked="true" />
+
+        <EditText
+            android:inputType="text"
+            android:autofillHints="no"
+            android:hint="@string/workout_name"
+            android:id="@+id/workoutNameET"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:text="@{dto.dto.name}"
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/checkbox"
+            app:layout_constraintTop_toTopOf="@+id/checkbox" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_rounded_lozenge_selected"
+            android:visibility="@{dto.selected ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/checkbox"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

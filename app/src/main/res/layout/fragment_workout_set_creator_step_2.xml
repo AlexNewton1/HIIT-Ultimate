@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.workout_creator.workout_set_creator.WorkoutSetCreatorStep2Fragment">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator.WorkoutSetCreatorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/workTimeIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/work_time"
+            android:padding="16dp"
+            android:src="@drawable/icon_fire"
+            app:layout_constraintBottom_toTopOf="@+id/numRepsIcon"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/restTimeIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
+            tools:srcCompat="@drawable/icon_fire" />
+
+        <EditText
+            android:id="@+id/workTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:ems="3"
+            android:maxLength="3"
+            android:gravity="center"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@id/restTime"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/workTimeIcon"
+            app:layout_constraintEnd_toEndOf="@+id/workTimeIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@+id/workTimeIcon"
+            app:layout_constraintTop_toTopOf="@+id/workTimeIcon"
+            app:text="@={viewModel.workoutSet.workTime}"
+            tools:text="15" />
+
+        <TextView
+            android:id="@+id/workTimePickerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:labelFor="@+id/workTime"
+            android:text="@string/work_time"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/workTimeIcon"
+            app:layout_constraintEnd_toEndOf="@+id/workTime"
+            app:layout_constraintStart_toStartOf="@+id/workTime" />
+
+        <ImageView
+            android:id="@+id/restTimeIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/rest_time"
+            android:padding="16dp"
+            android:src="@drawable/icon_rest"
+            app:layout_constraintBottom_toTopOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/exerciseTypeIcon"
+            tools:srcCompat="@drawable/icon_rest" />
+
+        <EditText
+            android:id="@+id/restTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:ems="3"
+            android:maxLength="3"
+            android:gravity="center"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@id/numReps"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/workTimeIcon"
+            app:layout_constraintTop_toTopOf="@+id/restTimeIcon"
+            app:text="@={viewModel.workoutSet.restTime}"
+            tools:text="5" />
+
+        <TextView
+            android:id="@+id/restTimePickerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:labelFor="@+id/restTime"
+            android:text="@string/rest_time"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/restTimeIcon"
+            app:layout_constraintEnd_toEndOf="@+id/restTime"
+            app:layout_constraintStart_toStartOf="@+id/restTime" />
+
+        <ImageView
+            android:id="@+id/numRepsIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/num_reps"
+            android:padding="16dp"
+            android:src="@drawable/icon_repeat"
+            app:layout_constraintBottom_toTopOf="@+id/createWorkoutSetButton"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workTimeIcon"
+            tools:srcCompat="@drawable/icon_repeat" />
+
+        <EditText
+            android:id="@+id/numReps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:ems="3"
+            android:gravity="center"
+            android:maxLength="3"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@id/recoverTime"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
+            app:layout_constraintEnd_toEndOf="@+id/numRepsIcon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/numRepsIcon"
+            app:layout_constraintTop_toTopOf="@+id/numRepsIcon"
+            app:text="@={viewModel.workoutSet.numReps}"
+            tools:text="6" />
+
+        <TextView
+            android:id="@+id/numRepsPickerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:labelFor="@+id/numReps"
+            android:text="@string/num_reps"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/numRepsIcon"
+            app:layout_constraintEnd_toEndOf="@+id/numReps"
+            app:layout_constraintStart_toStartOf="@+id/numReps" />
+
+        <ImageView
+            android:id="@+id/recoverTimeIconIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/recovery_time"
+            android:padding="16dp"
+            android:src="@drawable/icon_recover"
+            app:layout_constraintBottom_toTopOf="@+id/createWorkoutSetButton"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/restTimeIcon"
+            tools:srcCompat="@drawable/icon_recover" />
+
+        <EditText
+            android:id="@+id/recoverTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="no"
+            android:ems="3"
+            android:gravity="center"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:maxLength="3"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/numRepsIcon"
+            app:layout_constraintTop_toTopOf="@+id/recoverTimeIconIcon"
+            app:text="@={viewModel.workoutSet.recoverTime}"
+            tools:text="120" />
+
+        <TextView
+            android:id="@+id/recoverTimePickerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:labelFor="@+id/recoverTime"
+            android:text="@string/recovery_time"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/recoverTimeIconIcon"
+            app:layout_constraintEnd_toEndOf="@+id/recoverTime"
+            app:layout_constraintStart_toStartOf="@+id/recoverTime" />
+
+        <com.softwareoverflow.hiit_trainer.ui.view.CircularIconImageView
+            android:id="@+id/exerciseTypeIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_circle"
+            app:colorHex="@{viewModel.workoutSet.exerciseTypeDTO.colorHex}"
+            app:iconName="@{viewModel.workoutSet.exerciseTypeDTO.iconName}"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/icon_fire" />
+
+        <TextView
+            text="@{viewModel.workoutSet.exerciseTypeDTO.name}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/exerciseTypeIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/exerciseTypeIcon"
+            app:layout_constraintTop_toTopOf="@+id/exerciseTypeIcon"
+            tools:text="Lunges" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createWorkoutSetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/add_exercise_set_to_workout"
+            android:src="@drawable/icon_tick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
