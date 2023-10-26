@@ -29,7 +29,6 @@ import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.Up
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
-import kotlin.NoSuchElementException
 
 /**
  * @param application the [Application] context

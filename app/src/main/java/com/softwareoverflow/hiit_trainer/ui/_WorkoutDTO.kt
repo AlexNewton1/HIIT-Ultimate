@@ -1,7 +1,6 @@
 package com.softwareoverflow.hiit_trainer.ui
 
 import android.content.Context
-import android.text.format.DateUtils
 import androidx.preference.PreferenceManager
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
@@ -17,11 +16,11 @@ fun WorkoutDTO.getDuration(): Int {
     for (i in 0 until workoutSets.size) {
         val workoutSet = workoutSets[i]
 
-        totalTime += (workoutSet.workTime!! + workoutSet.restTime!!) * workoutSet.numReps!!
-        totalTime -= workoutSet.restTime!! // There is no rest period at the end of a workout set
+        totalTime += (workoutSet.workTime + workoutSet.restTime) * workoutSet.numReps
+        totalTime -= workoutSet.restTime // There is no rest period at the end of a workout set
 
         if (i != workoutSets.size - 1)
-            totalTime += workoutSet.recoverTime!!
+            totalTime += workoutSet.recoverTime
     }
 
     totalTime += recoveryTime
@@ -31,7 +30,10 @@ fun WorkoutDTO.getDuration(): Int {
     return totalTime
 }
 
-fun WorkoutDTO.getFormattedDuration(): String = DateUtils.formatElapsedTime(this.getDuration().toLong())
+fun WorkoutDTO.getFormattedDuration(): String {
+    val duration = getDuration()
+    return String.format("%02d:%02d", duration / 60, duration % 60)
+}
 
 fun WorkoutDTO.getFullWorkoutSets(context: Context) : List<WorkoutSetDTO> {
     val updatedWorkoutSets = ArrayList(workoutSets)

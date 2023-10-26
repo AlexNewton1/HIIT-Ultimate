@@ -9,10 +9,17 @@
     <string name="nav_set_editor_step_2">Edit Workout Set (Step 2)</string>
     <string name="nav_et_creator">Create Exercise Type</string>
 
+    <string name="content_desc_app_icon">App Icon</string>
+    <string name="version">Version</string>
+
     <string name="create_new_exercise_type">Create New Exercise Type</string>
     <string name="error_name_required">Please enter a name.</string>
     <string name="char_limit_exceeded">Maximum length %1$02d characters.</string>
     <string name="select_exercise_type">Please select an exercise type.</string>
+
+    <string name="work">Work</string>
+    <string name="rest">Rest</string>
+    <string name="recover">Recover</string>
 
     <string name="work_time">Work Time</string>
     <string name="rest_time">Rest Time</string>
@@ -31,13 +38,16 @@
 
     <string name="exercise_type_name">Exercise Type Name…</string>
     <string name="workout_name">Workout Name:</string>
+    <string name="new_workout_name">New Workout Name…</string>
 
     <string name="save">Save</string>
     <string name="save_as">Save As…</string>
+    <string name="save_workout">Save Workout</string>
     <string name="save_new_workout">Save New Workout</string>
     <string name="overwrite_existing">Overwrite Existing</string>
     <string name="overwrite_existing_workout">Overwrite Existing Workout</string>
     <string name="workout_saved">Workout \'%1$s\' saved.</string>
+    <string name="workout_save_fail">Failed to save Workout</string>
     <string name="error_delete_et_prefix">Cannot delete exercise type \'%1$s\'. It is used by workout\u0020</string>
     <string name="error_delete_et_truncated">\u0020and others.</string>
     <string name="error_delete_et_postfix">\u0020Please edit or delete those workouts first.</string>
@@ -68,7 +78,12 @@
     <string name="content_desc_toggle_mute">Icon showing the current sound status. Used to mute / un-mute the workout sounds</string>
     <string name="content_desc_toggle_pause">Shows the current pause status. Toggles between paused an un-paused</string>
     <string name="content_desc_skip">Skip the current workout section</string>
-    <string name="content_desc_num_reps">UI icon indicating the current repetition</string>
+    <string name="content_desc_num_reps">Icon indicating the current repetition</string>
+    <string name="content_desc_work_time">Icon indicating the working period</string>
+    <string name="content_desc_rest_time">Icon indicating the resting period</string>
+    <string name="content_desc_recover_time">Icon indicating the recovery period</string>
+    <string name="content_desc_add_set_to_workout">Add Workout Set to your Workout</string>
+    <string name="content_desc_exercise_type">Exercise Type</string>
     <string name="create_your_workout">Create Your Workout</string>
     <string name="edit_your_workout">Edit Workout \'%1$s\'</string>
     <string name="error_no_workout_sets">Please add at least one Workout Set to your Workout</string>
@@ -90,15 +105,15 @@
     <string name="personalized_ads_enabled">Personalized Adverts</string>
     <string name="analytics_enabled">Send Analytics</string>
 
-    <string name="user_consent_details">
+    <string name="user_consent_details_1">
         This app is provided free by showing adverts.\n
         We use the following 3rd party services: \n\n
 
         \u2022 Google AdMob to show personalized adverts\n
         \u2022 Google Firebase for anonymized analytics and crash reporting\n\n
-        These services make your app experience better and allow us to keep improving this app.\nFull details are available in the <a href="https://sites.google.com/view/software-overflow/hiit-trainer-privacy-policy">privacy policy.</a>
-        \nWe care about your privacy and data security and you can manage your choices in the settings page at any time.
-    </string>
+        These services make your app experience better and allow us to keep improving this app.\nFull details are available in the\u0020</string>
+    <string name="privacy_policy">privacy policy</string>
+    <string name="user_consent_details_2">.\nWe care about your privacy and data security and you can manage your choices in the settings page at any time.</string>
     <string name="key_user_consent_given">user_consent_given</string>
     <string name="key_preparation_set_enabled">key_preparation_set_enabled</string>
     <string name="key_preparation_set_time">key_preparation_set_time</string>
@@ -125,7 +140,7 @@
     <string name="workout_set_help_details">Workout Sets are cycles of work &amp; rest phases with a recovery time at the end.\n\nFor example, with 3 cycles:</string>
 
     <string name="workout_recovery_time_full">%1$dx,\n%2$ds recovery</string>
-    <string name="duration_text">Duration:\n%1$s</string>
+    <string name="duration_text">Duration: %1$s</string>
     <string name="application_icon">application icon</string>
     <string name="times">times</string>
     <string name="with">with</string>
@@ -135,4 +150,6 @@
     <string name="repeat_workout">Repeat Workout</string>
     <string name="missing_values">Please ensure all fields contain a value.</string>
     <string name="workout_set_values_zero_warning">\'Work Time\', \'Rest Time\' &amp; \'# Cycles\' must be greater than 0.</string>
+
+    <string name="settings_saved">Settings Updated</string>
 </resources>

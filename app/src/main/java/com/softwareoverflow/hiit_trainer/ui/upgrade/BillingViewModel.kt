@@ -17,10 +17,7 @@ package com.softwareoverflow.hiit_trainer.ui.upgrade
 
 import android.app.Activity
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
+import androidx.lifecycle.ViewModel
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,21 +34,19 @@ import timber.log.Timber
  * object the rest of your Android team need to know about billing.
  *
  */
-class BillingViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val _proUpgradeLiveData: LiveData<ProUpgrade>
-    val userHasUpgraded :LiveData<Boolean>
+class BillingViewModel(application: Application) : ViewModel() {
 
     private val viewModelScope = CoroutineScope(Job() + Dispatchers.Main)
     private val repository: BillingRepository = BillingRepository.getInstance(application)
 
-
     init {
         repository.startDataSourceConnections()
 
-        _proUpgradeLiveData = repository.proUpgradeLiveData
-        userHasUpgraded = Transformations.map(_proUpgradeLiveData) {
-            it?.entitled ?: false
+        repository.proUpgradeLiveData.observeForever {
+
+            it?.let {
+                if(it.entitled) UpgradeManager.setUserUpgraded()
+            }
         }
     }
 

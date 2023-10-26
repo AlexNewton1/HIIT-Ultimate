@@ -52,6 +52,7 @@ class WorkoutTimer(
         if (millisecondsRemaining <= 0) {
             _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
             observer.onFinish()
+            timer.cancel()
             return
         }
 

@@ -77,7 +77,7 @@ object InAppReviewManager {
             // Update last ask time in case the user doesn't complete the review for any reason
             updateLastAskTime(context)
 
-            reviewManager.launchReviewFlow(activity, reviewInfo)
+            reviewManager.launchReviewFlow(activity, reviewInfo!!)
                 .addOnFailureListener {
                     Timber.w(it, "ReviewManager failed to complete review flow")
                 }.addOnCompleteListener {

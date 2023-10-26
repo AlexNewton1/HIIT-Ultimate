@@ -99,7 +99,7 @@ class WorkoutMediaManager(context: Context) {
             WorkoutSound.SOUND_RECOVER_START ->
                 _soundPool.play(soundRecoverStart, 1f, 1f, 9, 0, 1f)
             WorkoutSound.SOUND_321 ->
-                _soundPool.play(sound321, 0.7f, 0.7f, 9, 1, 2f)
+                _soundPool.play(sound321, 0.7f, 0.7f, 9, 0, 1f)
             WorkoutSound.SOUND_WORK_START ->
                 _soundPool.play(soundWorkStart, 1f, 1f, 10, 0, 1f)
             WorkoutSound.SOUND_WORKOUT_COMPLETE ->

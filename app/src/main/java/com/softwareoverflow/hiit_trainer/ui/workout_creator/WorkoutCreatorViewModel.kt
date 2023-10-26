@@ -1,59 +1,29 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_creator
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
-import kotlinx.coroutines.launch
+import com.softwareoverflow.hiit_trainer.ui.utils.compose.getDrawableId
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 
 /**
  * ViewModel for creating / editing workouts.
  *
- * @param repo the repository to use for loading the workout
- * @param id the Id of the workout to load, or null if creating new
+ * @param repo the repository to use for saving the workout
+ * @param dto the WorkoutDTO to edit
  */
-class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : ViewModel() {
+class WorkoutCreatorViewModel (private val repo: IWorkoutRepository, dto: WorkoutDTO, showSaveWarning: Boolean) :
+    ViewModel() {
 
-    private var _workout: MutableLiveData<WorkoutDTO> = MutableLiveData()
-    val workout: LiveData<WorkoutDTO>
-        get() = _workout
+    private var _workout: MutableStateFlow<WorkoutDTO> = MutableStateFlow(dto)
+    val workout: StateFlow<WorkoutDTO> get() = _workout
 
-    private var _workoutSetIndex: Int? = null
-    private val _workoutSet: MutableLiveData<WorkoutSetDTO> = MutableLiveData()
-    val workoutSet: WorkoutSetDTO
-        get() = _workoutSet.value ?: WorkoutSetDTO()
-
-    var isNewWorkoutSet = true
-        private set
-
-    var showUnsavedChangesWarning = true
-        private set
-    private var _forceNavigateUp = MutableLiveData(false)
-    val forceNavigateUp: LiveData<Boolean>
-        get() = _forceNavigateUp
-
-    init {
-        viewModelScope.launch {
-            if (id > 0L)
-                _workout.value = repo.getWorkoutById(id).apply {
-                    this.workoutSets.sortBy { it.orderInWorkout }
-                }
-            else
-                _workout.value = WorkoutDTO()
-        }
-    }
-
-    fun setUnsavedChangesWarningAccepted() {
-        showUnsavedChangesWarning = false
-    }
-
-    fun forceNavigateUp(){
-        _forceNavigateUp.value = true
-    }
+    val showUnsavedChangesWarning = showSaveWarning
 
     fun getNumSavedWorkouts(): Int {
         return runBlocking {
@@ -62,15 +32,25 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
     }
 
     fun removeWorkoutSetFromWorkout(position: Int) {
-        val workoutSets = _workout.value!!.workoutSets
-        val dto = workoutSets[position]
-        workoutSets.remove(dto)
+        val workoutSets = _workout.value.workoutSets.sortedBy { it.orderInWorkout }.toMutableList()
+        val dto = workoutSets.singleOrNull { it.orderInWorkout == position }
 
-        _workout.postValue(_workout.value) // Reassign the current value as the change is not automatically observed via LiveData
+        dto?.let {
+
+            workoutSets.remove(dto)
+            // Reduce all orderInWorkout values by 1
+            for (i in position until workoutSets.size)
+                workoutSets[i].orderInWorkout = workoutSets[i].orderInWorkout!! - 1
+
+
+            _workout.value =
+                _workout.value.copy(workoutSets = workoutSets.sortedBy { it.orderInWorkout }
+                    .toMutableList())
+        }
     }
 
     fun changeWorkoutSetOrder(fromPosition: Int, toPosition: Int) {
-        val currentWorkout = _workout.value!!.copy()
+        val currentWorkout = _workout.value.copy()
 
         if (fromPosition < 0 || toPosition < 0 ||
             fromPosition >= currentWorkout.workoutSets.size || toPosition >= currentWorkout.workoutSets.size
@@ -78,34 +58,35 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
             return // Just ignore any attempts to reorder items in an impossible fashion. See the [WorkoutSetListAdapter] for a to-do to stop this options being enabled.
 
         val workoutSets = currentWorkout.workoutSets
-        val dto = workoutSets.removeAt(fromPosition)
-        workoutSets.add(toPosition, dto)
+        val from = workoutSets.singleOrNull { it.orderInWorkout == fromPosition }
+        val to = workoutSets.singleOrNull { it.orderInWorkout == toPosition }
 
-        _workout.value = currentWorkout
+        if (from != null && to != null) {
+            from.orderInWorkout = toPosition
+            to.orderInWorkout = fromPosition
+        }
+
+        _workout.value =
+            _workout.value.copy(workoutSets = workoutSets.sortedBy { it.orderInWorkout }
+                .toMutableList())
     }
 
-    fun setWorkoutSetToEdit(position: Int?) {
+    fun getWorkoutSetToEdit(position: Int?): WorkoutSetDTO {
         if (position == null) {
-            isNewWorkoutSet = true
-
             // Default the values to the previous WorkoutSet when creating a new WorkoutSet
-            _workoutSet.value = WorkoutSetDTO().apply {
-                val existingSets = _workout.value?.workoutSets
-                if(existingSets?.any() == true){
+            return WorkoutSetDTO().apply {
+                val existingSets = _workout.value.workoutSets
+                if (existingSets.any()) {
                     val mostRecentSet = existingSets.last()
-                    workTime = mostRecentSet.workTime
-                    restTime = mostRecentSet.restTime
-                    numReps = mostRecentSet.numReps
-                    recoverTime = mostRecentSet.recoverTime
+
+                    this.workTime = mostRecentSet.workTime
+                    this.restTime = mostRecentSet.restTime
+                    this.numReps = mostRecentSet.numReps
+                    this.recoverTime = mostRecentSet.recoverTime
                 }
             }
-
-            _workoutSetIndex = null
         } else {
-            isNewWorkoutSet = false
-
-            _workoutSetIndex = position
-            _workoutSet.value = _workout.value!!.workoutSets[position]
+            return _workout.value.workoutSets[position]
         }
     }
 
@@ -114,32 +95,36 @@ class WorkoutCreatorViewModel(private val repo: IWorkoutRepository, id: Long) : 
      * If the workoutSet has an id not already in the list, the item will be appended to the list
      */
     fun addOrUpdateWorkoutSet(dto: WorkoutSetDTO) {
-        val currentWorkout = _workout.value!!.copy()
+        val currentWorkout = _workout.value.copy()
 
-        _workoutSetIndex.let {
+        dto.orderInWorkout.let {
             when {
                 it != null -> {
-                    val workoutSets = currentWorkout.workoutSets.toCollection(mutableListOf())
+                    val workoutSets =
+                        currentWorkout.workoutSets.sortedBy { dto -> dto.orderInWorkout }
+                            .toMutableList()
                     workoutSets.removeAt(it)
                     workoutSets.add(it, dto)
+
+                    currentWorkout.workoutSets = workoutSets
                 }
+
                 else -> {
+                    dto.orderInWorkout = currentWorkout.workoutSets.size
                     currentWorkout.workoutSets.add(dto)
                 }
             }
         }
-        _workout.postValue(currentWorkout)
-
-        _workoutSetIndex = null
-        _workoutSet.value = null
+        _workout.value = currentWorkout
     }
 
-    fun setRepeatCount(repeatCount: Int, recoveryTime: Int){
-        val workoutToEdit = workout.value!!
-        workoutToEdit.numReps = repeatCount
-        workoutToEdit.recoveryTime = recoveryTime
+    fun setRepeatCount(repeatCount: Int, recoveryTime: Int) {
+        _workout.value = _workout.value.copy(numReps = repeatCount, recoveryTime = recoveryTime)
+    }
 
-        _workout.value = workoutToEdit
+    @DrawableRes
+    fun nameToDrawableRes(name: String, context: Context): Int {
+        return getDrawableId(name, context)
     }
 }
 

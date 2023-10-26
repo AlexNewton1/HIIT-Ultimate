@@ -1,24 +1,21 @@
+
 package com.softwareoverflow.hiit_trainer.ui.workout_creator.workout_set_creator
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryFactory
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 
-class WorkoutSetCreatorViewModelFactory(
-    private val workoutSet: WorkoutSetDTO,
-    private val context: Context
-) :
-    ViewModelProvider.Factory {
+class WorkoutSetCreatorViewModelFactory(private val workoutSet: WorkoutSetDTO, private val context: Context) :
+    ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WorkoutSetCreatorViewModel::class.java)) {
-            val repo = WorkoutRepositoryFactory.getInstance(context)
-            return WorkoutSetCreatorViewModel(workoutSet, repo) as T
-        }
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+        val repo = WorkoutRepositoryFactory.getInstance(context)
 
-        throw IllegalArgumentException("Unknown ViewModel class")
+        // Making a copy of the workoutSet object here so we don't modify the original in the case of a later cancel / back press
+        return WorkoutSetCreatorViewModel(workoutSet.copy(), repo) as T
     }
 }

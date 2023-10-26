@@ -1,175 +1,201 @@
 package com.softwareoverflow.hiit_trainer.ui.workout
 
-import android.app.Application
+import android.content.Context
 import android.text.format.DateUtils
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 import com.softwareoverflow.hiit_trainer.ui.getFullWorkoutSets
-import com.softwareoverflow.hiit_trainer.ui.getWorkoutCompleteExerciseType
-import kotlinx.coroutines.launch
+import com.softwareoverflow.hiit_trainer.ui.getWorkoutPrepSet
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-class WorkoutViewModel(application: Application, private val workoutDto: WorkoutDTO) :
-    AndroidViewModel(application) {
+class WorkoutViewModel(
+    context: Context,
+    private val workoutDto: WorkoutDTO,
+    private val workoutCompleteExerciseType: ExerciseTypeDTO
+) : IWorkoutObserver,
+    ViewModel() {
 
-    private val _workout = MutableLiveData<WorkoutDTO>()
-    //private val _mutableWorkout = MediatorLiveData<WorkoutDTO>()
-    val workout: LiveData<WorkoutDTO>
-        get() = _workout
+    private val _workout = MutableStateFlow(workoutDto)
 
-    private val _fullWorkoutSets by lazy{
-        _workout.value?.getFullWorkoutSets(application.applicationContext)!!
+    val workout: StateFlow<WorkoutDTO> get() = _workout
+
+    private var timer: WorkoutTimer
+
+    private val _fullWorkoutSets by lazy {
+        _workout.value.getFullWorkoutSets(context.applicationContext)!!
     }
 
-    private val _currentWorkoutSet = MutableLiveData<WorkoutSetDTO?>()
-    val currentWorkoutSet: LiveData<WorkoutSetDTO?>
-        get() = _currentWorkoutSet
+    private var _uiState: MutableStateFlow<UiState>
+    val uiState: StateFlow<UiState> get() = _uiState
 
-    private val _currentRep = MutableLiveData(1)
-    var currentRepFormatted =
-        Transformations.map(_currentRep) { "$it/${_currentWorkoutSet.value?.numReps}" }
-
-    private val _sectionTimeRemaining = MutableLiveData(5)
-    val sectionTimeRemaining =
-        Transformations.map(_sectionTimeRemaining) { DateUtils.formatElapsedTime(it.toLong()) }
-
-    private val _workoutTimeRemaining = MutableLiveData(0)
-    val workoutTimeRemainingFormatted = Transformations.map(_workoutTimeRemaining) {
-        DateUtils.formatElapsedTime(it.toLong())
-    }
-
-    private val _currentSection: MutableLiveData<WorkoutSection> =
-        MutableLiveData(WorkoutSection.WORK)
-    val currentSection = Transformations.map(_currentSection) { it.toString() }
-
-    private val _upNextExerciseType = MutableLiveData<ExerciseTypeDTO?>(null)
-    val upNextExerciseType: LiveData<ExerciseTypeDTO?>
-        get() = _upNextExerciseType
-
-    private val _showUpNextLabel = MutableLiveData(false)
-    val showUpNextLabel: LiveData<Boolean>
-        get() = _showUpNextLabel
-
-    private val _animateUpNextExerciseType = MutableLiveData(false)
-    val animateUpNextExerciseType: LiveData<Boolean>
-        get() = _animateUpNextExerciseType
-
-    // region user controls
-    private val _soundOn = MutableLiveData(true)
-    val soundOn: LiveData<Boolean>
-        get() = _soundOn
-
-    private val _isPaused = MutableLiveData(false)
-    val isPaused: LiveData<Boolean>
-        get() = _isPaused
-
-    private val _skipSection = MutableLiveData(false)
-    val skipSection: LiveData<Boolean>
-        get() = _skipSection
-
-    //endregion
-
-    // region unsaved workout warning
-    var showUnsavedChangesWarning = true
-        private set
-    private var _forceNavigateUp = MutableLiveData(false)
-    val forceNavigateUp: LiveData<Boolean>
-        get() = _forceNavigateUp
-
-    fun setUnsavedChangesWarningAccepted() {
-        showUnsavedChangesWarning = false
-    }
-
-    fun forceNavigateUp(){
-        _forceNavigateUp.value = true
-    }
-    // endregion
+    private val _isFinished = MutableStateFlow(false)
+    val isWorkoutFinished: StateFlow<Boolean> get() = _isFinished
 
     init {
-        viewModelScope.launch {
-            // Copy the workout and deep copy the workout set list so as to not change the original
-            _workout.value = workoutDto.copy(
-                workoutSets = workoutDto.workoutSets.map { it.copy() }.toMutableList()
-            ).apply {
-                _currentWorkoutSet.value = this.workoutSets[0]
-                _currentRep.value = 1
-                _sectionTimeRemaining.value = _currentWorkoutSet.value!!.workTime
-                _workoutTimeRemaining.value = this.getDuration()
-            }
+        var duration = workoutDto.getDuration()
+        val allSets = workoutDto.getFullWorkoutSets(context.applicationContext)
+
+        val prepSet = getWorkoutPrepSet(context.applicationContext)
+        prepSet?.let {
+            duration += it.workTime
         }
+        val hasPrepSet = prepSet != null
+
+        _workout.value = _workout.value.copy(
+            workoutSets = allSets.toMutableList() // Deep copy the list so we don't end up saving the modified version
+        )
+
+        _uiState = MutableStateFlow(
+            UiState(
+                currentWorkoutSet = allSets.first(),
+                upNextExerciseType = if (prepSet != null) allSets.get(1).exerciseTypeDTO!! else null,
+                currentSection = if (hasPrepSet) WorkoutSection.PREPARE else WorkoutSection.WORK,
+                sectionTimeRemainingValue = allSets.first().workTime,
+                workoutTimeRemainingValue = _workout.value.getDuration(),
+                currentRepValue = 1,
+
+                isPaused = false,
+                isSoundOn = true
+            )
+        )
+
+        timer = WorkoutTimer(context.applicationContext, duration, allSets, this)
+        timer.start()
     }
 
-    fun updateValues(section: WorkoutSection, set: WorkoutSetDTO, currentRep: Int) {
-        if (_currentSection.value != section)
-            _currentSection.value = section
-
-        if (_currentWorkoutSet.value != set) {
-            _currentWorkoutSet.value = set
-
-            // Reset the up next icon as the set has just changed
-            _upNextExerciseType.value = null
-            _showUpNextLabel.value = false
-            _animateUpNextExerciseType.value = false
-        }
-
-        if (_currentRep.value != currentRep)
-            _currentRep.value = currentRep
-
-        // Show the up next icon for prepare / recover
-        if ((section == WorkoutSection.PREPARE || section == WorkoutSection.RECOVER) &&
-            _upNextExerciseType.value == null
-        ) {
-
-            val nextWorkoutSetIndex = _fullWorkoutSets.indexOf(currentWorkoutSet.value) + 1
-
-            if (nextWorkoutSetIndex != _fullWorkoutSets.size) {
-                _upNextExerciseType.value = _fullWorkoutSets[nextWorkoutSetIndex].exerciseTypeDTO
-                _showUpNextLabel.value = true
-            }
-        }
+    fun cancel() {
+        timer.cancel()
     }
 
-    /** Decrements the main on-screen timer and the remaining time**/
-    fun updateTimers(workoutTimeRemaining: Int, sectionTimeRemaining: Int) {
-        _workoutTimeRemaining.value = workoutTimeRemaining
-        _sectionTimeRemaining.value = sectionTimeRemaining
-
-        // Show the upcoming exercise type
-        val currentWorkoutSetIndex = _fullWorkoutSets.indexOf(currentWorkoutSet.value) + 1
-        if ((_currentSection.value == WorkoutSection.RECOVER || _currentSection.value == WorkoutSection.PREPARE)) {
-            if (sectionTimeRemaining <= 3 && _animateUpNextExerciseType.value == false) {
-                _animateUpNextExerciseType.value = true
-                _showUpNextLabel.value = false
-            }
-        } else if (currentWorkoutSetIndex == _fullWorkoutSets.size && _currentRep.value == _currentWorkoutSet.value!!.numReps) {
-            _showUpNextLabel.value = true
-            _upNextExerciseType.value = getWorkoutCompleteExerciseType(getApplication())
-        }
+    override fun onCleared() {
+        cancel()
+        super.onCleared()
     }
 
-    fun getOriginalWorkout(): WorkoutDTO = workoutDto
+    data class UiState(
+        val currentWorkoutSet: WorkoutSetDTO,
+        val upNextExerciseType: ExerciseTypeDTO?,
+        val currentSection: WorkoutSection,
+        val sectionTimeRemainingValue: Int,
+        val workoutTimeRemainingValue: Int,
+        val currentRepValue: Int,
+
+        val isPaused: Boolean,
+        val isSoundOn: Boolean
+    ) {
+        val currentExerciseType: ExerciseTypeDTO = currentWorkoutSet.exerciseTypeDTO!!
+
+        val sectionTimeRemaining: String = DateUtils.formatElapsedTime(
+            sectionTimeRemainingValue.toLong()
+        )
+
+        val workoutTimeRemaining: String = DateUtils.formatElapsedTime(
+            workoutTimeRemainingValue.toLong()
+        )
+
+        val currentRep: String = "${currentRepValue}/${currentWorkoutSet.numReps}"
+    }
 
     // region user controlled buttons
     fun toggleSound() {
-        _soundOn.apply {
-            value = !value!! // Looks a bit funky but simply switches the boolean value
-        }
+        _uiState.value = _uiState.value.copy(
+            isSoundOn = !_uiState.value.isSoundOn
+        )
+        timer.toggleSound(_uiState.value.isSoundOn)
     }
 
     fun togglePause() {
-        _isPaused.apply {
-            value = !value!! // Looks a bit funky but simply switches the boolean value
-        }
+        _uiState.value = _uiState.value.copy(
+            isPaused = !_uiState.value.isPaused
+        )
+        timer.togglePause(_uiState.value.isPaused)
     }
 
     fun skipSection() {
-        _skipSection.value = true
-    }
-
-    fun onSectionSkipped() {
-        _skipSection.value = false
+        timer.skip()
     }
     //endregion
+
+    //region IWorkoutObserver Overrides
+    override fun onTimerTick(workoutRemaining: Int, workoutSectionRemaining: Int) {
+        // Show the upcoming exercise type
+
+        val currentSet = _uiState.value.currentWorkoutSet
+        val currentSection = _uiState.value.currentSection
+
+
+        val currentIndex = _fullWorkoutSets.indexOf(currentSet)
+        var nextExerciseType = if (currentIndex < _fullWorkoutSets.size - 1)
+            _fullWorkoutSets[currentIndex + 1].exerciseTypeDTO else null
+        var showNextExerciseType = false
+
+        if ((currentSection == WorkoutSection.RECOVER || currentSection == WorkoutSection.PREPARE)) {
+            if (_uiState.value.sectionTimeRemainingValue <= 10) {
+                showNextExerciseType = true
+            }
+        } else if ((currentIndex == _fullWorkoutSets.size - 1) && uiState.value.currentRepValue == currentSet.numReps) {
+            showNextExerciseType = true
+            nextExerciseType = workoutCompleteExerciseType
+        }
+
+        _uiState.value = _uiState.value.copy(
+            sectionTimeRemainingValue = workoutSectionRemaining,
+            workoutTimeRemainingValue = workoutRemaining,
+            upNextExerciseType = if (showNextExerciseType) nextExerciseType else null
+        )
+    }
+
+    override fun onWorkoutSectionChange(
+        section: WorkoutSection,
+        currentSet: WorkoutSetDTO,
+        currentRep: Int
+    ) {
+
+        var sectionUiState = _uiState.value.currentSection
+        var workoutSetUiState = _uiState.value.currentWorkoutSet
+        var upNextExerciseTypeUiState = _uiState.value.upNextExerciseType
+        var repUiState = _uiState.value.currentRepValue
+
+        if (sectionUiState != section)
+            sectionUiState = section
+
+        if (workoutSetUiState != currentSet) {
+            workoutSetUiState = currentSet
+
+            // Reset the up next icon as the set has just changed
+            upNextExerciseTypeUiState = null
+        }
+
+        if (repUiState != currentRep)
+            repUiState = currentRep
+
+        // Show the up next icon for prepare / recover
+        if ((section == WorkoutSection.PREPARE || section == WorkoutSection.RECOVER) &&
+            upNextExerciseTypeUiState == null
+        ) {
+            val nextWorkoutSetIndex = _fullWorkoutSets.indexOf(workoutSetUiState) + 1
+
+            if (nextWorkoutSetIndex != _fullWorkoutSets.size) {
+                upNextExerciseTypeUiState = _fullWorkoutSets[nextWorkoutSetIndex].exerciseTypeDTO
+            }
+        }
+
+        _uiState.value = _uiState.value.copy(
+            currentWorkoutSet = workoutSetUiState,
+            currentSection = sectionUiState,
+            upNextExerciseType = upNextExerciseTypeUiState,
+            currentRepValue = repUiState,
+
+        )
+    }
+
+    override fun onFinish() {
+        _isFinished.value = true
+    }
+
+//endregion
 }

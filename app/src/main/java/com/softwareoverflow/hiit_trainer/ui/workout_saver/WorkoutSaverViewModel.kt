@@ -1,39 +1,42 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_saver
 
 import android.app.Activity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 
-open class WorkoutSaverViewModel(
+@HiltViewModel
+open class WorkoutSaverViewModel @Inject constructor(
     private val billingViewModel: BillingViewModel,
     private val workoutRepo: IWorkoutRepository,
-    val workout: WorkoutDTO
 ) : ViewModel() {
+    val savedWorkouts = workoutRepo.getAllWorkouts()
 
-    val newWorkoutName = MutableLiveData(workout.name)
+    private val _currentSelectedId = MutableStateFlow<Long?>(null)
+    val currentSelectedId: StateFlow<Long?> get() = _currentSelectedId
 
-    private val _emptyNameWarning = MutableLiveData(false)
-    val emptyNameWarning: LiveData<Boolean>
-        get() = _emptyNameWarning
+    private var isInitialized = false
 
-    private val _workoutSaved = MutableLiveData(false)
-    val workoutSaved: LiveData<Boolean>
-        get() = _workoutSaved
+    fun setCurrentlySelectedId(selected: Long?) {
+        _currentSelectedId.value = selected
+    }
 
-    private val _noWorkoutSlotsRemainingWarning = MutableLiveData(false)
-    val noWorkoutSlotsRemainingWarning: LiveData<Boolean>
-        get() = _noWorkoutSlotsRemainingWarning
-
-    private val _nameTooLongWarning = MutableLiveData(false)
-    val nameTooLongWarning: LiveData<Boolean>
-        get() = _nameTooLongWarning
+    fun initialize(idToOverwrite: Long?) {
+        if (!isInitialized) {
+            setCurrentlySelectedId(idToOverwrite)
+            isInitialized = true
+        }
+    }
 
     private val numWorkoutsSaved: MutableLiveData<Int> = MutableLiveData(Int.MAX_VALUE)
 
@@ -43,43 +46,40 @@ open class WorkoutSaverViewModel(
         }
     }
 
-    fun emptyNameWarningShown() {
-        _emptyNameWarning.value = false
+    fun canSaveNewWorkout(): Boolean {
+        val isNewWorkout = currentSelectedId.value == null
+        val maxSlots = billingViewModel.getMaxWorkoutSlots()
+        val noSlotsLeft = numWorkoutsSaved.value!!.toInt() >= maxSlots
+        return  !(isNewWorkout && noSlotsLeft)
     }
 
-    fun noWorkoutSlotsWarningShown() {
-        _noWorkoutSlotsRemainingWarning.value = false
-    }
-
-    fun nameTooLongWarningShown() {
-        _nameTooLongWarning.value = false
-    }
-
-    open fun saveWorkout(isOverwriting: Boolean = false) {
-        if (!isOverwriting && numWorkoutsSaved.value!!.toInt() >= billingViewModel.getMaxWorkoutSlots()) {
-            _noWorkoutSlotsRemainingWarning.value = true
-            return
+    open fun saveWorkout(
+        workout: WorkoutDTO,
+        newWorkoutName: String,
+        idToOverwrite: Long? = null
+    ): Boolean {
+        if (idToOverwrite == null && numWorkoutsSaved.value!!.toInt() >= billingViewModel.getMaxWorkoutSlots()) {
+            return false
         }
 
-        if (newWorkoutName.value!!.length > 30) {
-            _nameTooLongWarning.value = true
-            return
+        if (newWorkoutName.length > 30 || newWorkoutName.isBlank()) {
+            return false
         }
 
-        val name = newWorkoutName.value
-        if (name.isNullOrBlank()) {
-            _emptyNameWarning.value = true
-        } else {
-            workout.name = name
-            viewModelScope.launch {
-                val workoutSets = workout.workoutSets
-                for (i in 0 until workoutSets.size) {
-                    workoutSets[i].orderInWorkout = i
-                }
 
-                workoutRepo.createOrUpdateWorkout(workout)
-                _workoutSaved.value = true
-            }
+        val workoutSets = workout.workoutSets.sortedBy { it.orderInWorkout }.toMutableList()
+        for (i in 0 until workoutSets.size) {
+            workoutSets[i].orderInWorkout = i
+        }
+
+        val workoutToSave = workout.copy(
+            id = idToOverwrite,
+            name = newWorkoutName,
+            workoutSets = workoutSets
+        )
+        return runBlocking {
+            workoutRepo.createOrUpdateWorkout(workoutToSave)
+            return@runBlocking true
         }
     }
 

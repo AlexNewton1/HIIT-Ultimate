@@ -3,7 +3,7 @@ package com.softwareoverflow.hiit_trainer.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.switchMap
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.data.WorkoutDatabase
 import com.softwareoverflow.hiit_trainer.data.mapper.*
@@ -19,7 +19,7 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     private val exerciseTypeDao = database.exerciseTypeDao
 
     override fun getAllWorkouts(): LiveData<List<WorkoutDTO>> {
-        return Transformations.switchMap(workoutDao.getAllWorkouts()) {
+        return workoutDao.getAllWorkouts().switchMap {
             MutableLiveData(it.toDTO())
         }
     }
@@ -48,7 +48,7 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
     }
 
     override fun getAllExerciseTypes(): LiveData<List<ExerciseTypeDTO>> {
-        return Transformations.switchMap(exerciseTypeDao.getAllExerciseTypes()) {
+        return exerciseTypeDao.getAllExerciseTypes().switchMap {
             MutableLiveData(it.toExerciseTypeDTO())
         }
     }
@@ -59,7 +59,7 @@ class WorkoutRepositoryRoomDb(val context: Context) : IWorkoutRepository {
         }
 
         // TODO - fix the case where the number passed doesn't reflect a db record and causes an IllegalStateException
-        return Transformations.switchMap(exerciseTypeDao.getExerciseTypeById(exerciseTypeId)) {
+        return exerciseTypeDao.getExerciseTypeById(exerciseTypeId).switchMap {
             MutableLiveData(it.toDTO())
         }
     }

@@ -9,15 +9,19 @@ data class WorkoutLoaderDomainObject(
     val type: WorkoutLoaderDomainObjectType = WorkoutLoaderDomainObjectType.USER
 ) {
     companion object {
+
+
         fun getPlaceholderUnlocked(context: Context) =
             WorkoutLoaderDomainObject(
-                WorkoutDTO(name = context.getString(R.string.workout_slot_free)),
+                // The WorkoutDTO id is used as a key when loading workouts, hence the id in this
+                WorkoutDTO(id = -1L, name = context.getString(R.string.workout_slot_free)),
                 WorkoutLoaderDomainObjectType.PLACEHOLDER_UNLOCKED
             )
 
         fun getPlaceholderLocked(context: Context) =
             WorkoutLoaderDomainObject(
-                WorkoutDTO(name = context.getString(R.string.workout_slot_locked)),
+                // The WorkoutDTO id is used as a key when loading workouts, hence the id in this
+                WorkoutDTO(id = -2L, name = context.getString(R.string.workout_slot_locked)),
                 WorkoutLoaderDomainObjectType.PLACEHOLDER_LOCKED
             )
     }
