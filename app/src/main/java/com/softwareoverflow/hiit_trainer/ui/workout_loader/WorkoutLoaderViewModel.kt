@@ -1,21 +1,25 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_loader
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
-import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
+import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
+import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WorkoutLoaderViewModel(
-    private val billingRepo: BillingRepository,
+@HiltViewModel
+class WorkoutLoaderViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     private val workoutRepo: IWorkoutRepository,
-    private val placeholderUnlocked: WorkoutLoaderDomainObject,
-    private val placeholderLocked: WorkoutLoaderDomainObject,
-) :
-    ViewModel() {
+    private val billingViewModel: BillingViewModel
+) : ViewModel() {
 
     private val _workouts = workoutRepo.getAllWorkouts()
     private val _workoutsSorted = MediatorLiveData<List<WorkoutLoaderDomainObject>>()
@@ -24,19 +28,23 @@ class WorkoutLoaderViewModel(
 
 
     init {
+        val a = ""
         viewModelScope.launch {
             _workoutsSorted.addSource(_workouts) {
-                _workoutsSorted.value = getWorkoutsToDisplay()
+                _workoutsSorted.value = getWorkoutsToDisplay(context)
             }
         }
     }
 
-    private fun getWorkoutsToDisplay(): List<WorkoutLoaderDomainObject> {
+    private fun getWorkoutsToDisplay(context: Context): List<WorkoutLoaderDomainObject> {
         val workouts = _workouts.value ?: arrayListOf()
         val domainObjects = workouts.map { WorkoutLoaderDomainObject(it) }.toMutableList()
 
-        if ((billingRepo.proUpgradeLiveData.value?.entitled != true)) {
-            while (domainObjects.size < billingRepo.getMaxWorkoutSlots())
+        val placeholderUnlocked = WorkoutLoaderDomainObject.getPlaceholderUnlocked(context.applicationContext)
+        val placeholderLocked = WorkoutLoaderDomainObject.getPlaceholderLocked(context.applicationContext)
+
+        if ((!UpgradeManager.isUserUpgraded())) {
+            while (domainObjects.size < billingViewModel.getMaxWorkoutSlots())
                 domainObjects.add(placeholderUnlocked)
 
             domainObjects.add(placeholderLocked)

@@ -54,7 +54,7 @@ class WorkoutSetCreatorViewModel (
     }
 
     fun unableToDeleteExerciseTypeWarningShown() {
-        _unableToDeleteExerciseType.value = null
+        _unableToDeleteExerciseType.value = ""
     }
 
     private fun getExerciseTypesToDisplay(_exerciseTypes: List<ExerciseTypeDTO>): List<ExerciseTypeDTO> {

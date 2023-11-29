@@ -23,7 +23,7 @@ import com.softwareoverflow.hiit_trainer.ui.utils.compose.findActivity
 @Destination(style = DestinationStyle.Dialog::class)
 @Composable
 fun UpgradeScreen(viewModel: UpgradeViewModel = hiltViewModel(), navigator: DestinationsNavigator) {
-    val context = LocalContext.current.applicationContext
+    val context = LocalContext.current
 
     Content(onCancel = {
         navigator.popBackStack()

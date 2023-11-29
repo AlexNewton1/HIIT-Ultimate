@@ -3,6 +3,7 @@ package com.softwareoverflow.hiit_trainer.ui.settings
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -207,7 +208,7 @@ private fun SettingsCheckbox(
     onCheckChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier.clickable { onCheckChange(true) }, verticalAlignment = Alignment.CenterVertically) {
         CircleCheckbox(checked = isChecked, onCheckedChange = onCheckChange)
         Text(title, style = MaterialTheme.typography.subtitle1)
     }

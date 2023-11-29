@@ -22,12 +22,10 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
     val prepSetEnabled: StateFlow<Boolean> get() = _prepSetEnabled
 
 
-    private val _prepSetDuration = MutableStateFlow(
-        sharedPrefs.getString(
-            context.getString(R.string.key_preparation_set_time), "5"
-        )
-    )
-    val prepSetDuration: StateFlow<Int> get() = MutableStateFlow(_prepSetDuration.value?.toInt() ?: 5)
+    private val _prepSetDuration= MutableStateFlow(sharedPrefs.getString(
+        context.getString(R.string.key_preparation_set_time), "5"
+    )?.toInt() ?: 5)
+    val prepSetDuration: StateFlow<Int> get() = _prepSetDuration
 
 
     private val _finalSeconds = MutableStateFlow(
@@ -61,7 +59,7 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
     }
 
     fun onPrepDurationChange(value: Int) {
-        _prepSetDuration.value = value.toString()
+        _prepSetDuration.value = value
     }
 
     fun onFinalSecondsChange(value: Set<String>) {
@@ -75,6 +73,7 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
     fun onAnalyticsChange(enabled: Boolean) {
         _analytics.value = enabled
     }
+
 
     fun saveSettings(c: Context, onUpdateComplete: () -> Unit) {
         val context = c.applicationContext

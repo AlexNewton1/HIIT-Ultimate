@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.preference.PreferenceManager
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
 import com.softwareoverflow.hiit_trainer.ui.NavGraphs
 import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.theme.AppTheme
@@ -31,8 +32,10 @@ class MainActivity : ComponentActivity() {
     lateinit var adsManager: MobileAdsManager
 
     @Inject
-    lateinit var billingClient: BillingViewModel
+    lateinit var billingClient: BillingRepository
 
+    @Inject
+    lateinit var bvm: BillingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +77,8 @@ class MainActivity : ComponentActivity() {
 
         // Create the InAppReviewManager
         InAppReviewManager.createReviewManager(this)
+
+        //bvm.debugConsumePremium()
     }
 
     override fun onPause() {
@@ -84,7 +89,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (this::billingClient.isInitialized) billingClient.queryPurchases()
+        if (this::billingClient.isInitialized) billingClient.queryOneTimeProductPurchases()
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         if (prefs.getBoolean("firstRun", true)) {

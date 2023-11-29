@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -53,6 +52,7 @@ import com.softwareoverflow.hiit_trainer.ui.theme.colorRest
 import com.softwareoverflow.hiit_trainer.ui.theme.colorWork
 import com.softwareoverflow.hiit_trainer.ui.theme.spacing
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.AppScreen
+import com.softwareoverflow.hiit_trainer.ui.utils.compose.BottomAppRow
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.KeepScreenOn
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.TopAppRow
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.getDrawableId
@@ -85,7 +85,7 @@ fun WorkoutScreen(
             title = stringResource(id = R.string.nav_workout)
         )
     }, bottomAppRow = {
-        BottomAppBar() {
+        BottomAppRow {
             val soundIcon =
                 if (uiState.value.isSoundOn) Icons.Filled.VolumeUp else Icons.Filled.VolumeOff
             val pauseIcon =

@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -113,6 +114,8 @@ private fun WorkoutSetCreatorStep2Content(
         modifier
             .fillMaxSize()
             .padding(MaterialTheme.spacing.small)
+            .imePadding(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
 
         val iconColor = android.graphics.Color.parseColor(
@@ -124,14 +127,12 @@ private fun WorkoutSetCreatorStep2Content(
                 painterResource(
                     id = getDrawableId(
                         workoutSet.exerciseTypeDTO!!.iconName!!, LocalContext.current
-                    )
-                ),
-                contentDescription = null,
-                modifier = Modifier
+                    ),
+                ), contentDescription = null, modifier = Modifier
                     .size(MaterialTheme.spacing.extraExtraExtraLarge)
                     .padding(MaterialTheme.spacing.small)
                     .background(Color(iconColor), CircleShape)
-                    .padding(MaterialTheme.spacing.small)
+                    .padding(MaterialTheme.spacing.small), tint = MaterialTheme.colors.onPrimary
 
             )
             Text(
@@ -158,7 +159,7 @@ private fun WorkoutSetCreatorStep2Content(
                 name = stringResource(id = R.string.work_time),
                 modifier = Modifier.weight(1f),
                 onValueChange = { value, error ->
-                    workTime = value
+                    if (!error) workTime = value.toInt()
                     workTimeError = error
                 })
 
@@ -168,11 +169,10 @@ private fun WorkoutSetCreatorStep2Content(
                 name = stringResource(id = R.string.rest_time),
                 modifier = Modifier.weight(1f),
                 onValueChange = { value, error ->
-                    restTime = value
+                    if (!error) restTime = value.toInt()
                     restTimeError = error
                 })
         }
-
 
         Row(
             Modifier
@@ -188,7 +188,7 @@ private fun WorkoutSetCreatorStep2Content(
                 name = stringResource(id = R.string.num_reps),
                 modifier = Modifier.weight(1f),
                 onValueChange = { value, error ->
-                    numReps = value
+                    if (!error) numReps = value.toInt()
                     numRepsError = error
                 })
 
@@ -198,12 +198,10 @@ private fun WorkoutSetCreatorStep2Content(
                 name = stringResource(id = R.string.recovery_time),
                 modifier = Modifier.weight(1f),
                 onValueChange = { value, error ->
-                    recoverTime = value
+                    if (!error) recoverTime = value.toInt()
                     recoverTimeError = error
                 })
         }
-
-        Spacer(modifier = Modifier.weight(0.5f))
 
         val isError = workTimeError || restTimeError || numRepsError || recoverTimeError
         val bgColor = if (isError) Color.Gray else MaterialTheme.colors.secondary
@@ -211,7 +209,10 @@ private fun WorkoutSetCreatorStep2Content(
         FloatingActionButton(onClick = {
             if (!isError) onFinished(workTime, restTime, numReps, recoverTime)
         }, Modifier.align(Alignment.End), backgroundColor = bgColor, shape = CircleShape) {
-            Icon(Icons.Filled.Check, contentDescription = stringResource(id = R.string.content_desc_add_set_to_workout))
+            Icon(
+                Icons.Filled.Check,
+                contentDescription = stringResource(id = R.string.content_desc_add_set_to_workout)
+            )
         }
     }
 }
@@ -223,10 +224,10 @@ private fun IconInput(
     tint: Color,
     name: String,
     modifier: Modifier,
-    onValueChange: (Int, Boolean) -> Unit
+    onValueChange: (String, Boolean) -> Unit
 ) {
 
-    var input by remember { mutableStateOf(initialValue) }
+    var input by remember { mutableStateOf(initialValue.toString()) }
     var isError by remember { mutableStateOf(false) }
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -244,12 +245,12 @@ private fun IconInput(
             )
 
             BasicTextField(
-                value = input.toString(),
+                value = input,
                 onValueChange = {
                     if (it.length <= 3) {
                         try {
-                            input = it.toInt()
-                            isError = input <= 0
+                            input = it
+                            isError = input.toInt() <= 0
                         } catch (_: NumberFormatException) {
                             isError = true
                         }
@@ -264,16 +265,16 @@ private fun IconInput(
                     )
                     .padding(MaterialTheme.spacing.extraExtraSmall),
                 decorationBox = { innerTextField ->
-                    Column(Modifier.fillMaxWidth()) {
+                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                         innerTextField()
                         Divider(
-                            Modifier.fillMaxWidth(),
+                            Modifier.width(MaterialTheme.spacing.extraExtraLarge),
                             thickness = 1.dp,
                             color = if (isError) MaterialTheme.colors.error else MaterialTheme.colors.onSurface
                         )
                     }
                 },
-                textStyle = MaterialTheme.typography.h4
+                textStyle = MaterialTheme.typography.h4.copy(textAlign = TextAlign.Center),
             )
 
             Text(
@@ -299,6 +300,9 @@ private fun Preview() {
     )
 
     AppTheme {
-        WorkoutSetCreatorStep2Content(workoutSet = workoutSet, Modifier, onFinished = { _, _, _, _ -> })
+        WorkoutSetCreatorStep2Content(
+            workoutSet = workoutSet,
+            Modifier,
+            onFinished = { _, _, _, _ -> })
     }
 }

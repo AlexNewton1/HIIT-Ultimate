@@ -15,7 +15,7 @@ class WorkoutCompleteViewModel @Inject constructor(@ApplicationContext context: 
     private var advertShown = false
 
     val showUnsavedChangesWarning = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-        .getBoolean(context.applicationContext.getString(R.string.pref_unsaved_workout_warning), true)
+        .getBoolean(context.applicationContext.getString(R.string.pref_unsaved_changes_warning), true)
 
     fun shouldShowAdvert() : Boolean = !advertShown
 

@@ -74,6 +74,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.SnackbarManager
 import com.softwareoverflow.hiit_trainer.ui.destinations.ExerciseTypeCreatorScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.WorkoutSetCreatorStep2Destination
 import com.softwareoverflow.hiit_trainer.ui.theme.AppTheme
@@ -110,6 +111,13 @@ fun WorkoutSetCreatorStep1(
     ) else stringResource(
         id = R.string.nav_set_editor_step_1
     )
+
+    val snackbarMessage by viewModel.unableToDeleteExerciseType.observeAsState()
+    if(!snackbarMessage.isNullOrBlank()){
+        SnackbarManager.showMessage(snackbarMessage.toString())
+        viewModel.unableToDeleteExerciseTypeWarningShown()
+    }
+
 
     AppScreen(topAppRow = {
         Column(Modifier.fillMaxWidth()) {
@@ -233,7 +241,6 @@ private fun WorkoutSetCreatorStep1Content(
             Modifier.padding(MaterialTheme.spacing.small)
         )
     }
-
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_loader
 
-import android.app.Application
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,7 +52,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.softwareoverflow.hiit_trainer.R
@@ -79,11 +78,7 @@ import android.graphics.Color as GraphicsColor
 @Composable
 @Destination
 fun LoadWorkoutScreen(
-    navigator: DestinationsNavigator, viewModel: WorkoutLoaderViewModel = viewModel(
-        factory = WorkoutLoaderViewModelFactory(
-            (LocalContext.current.applicationContext as Application), LocalContext.current
-        )
-    )
+    navigator: DestinationsNavigator, viewModel: WorkoutLoaderViewModel = hiltViewModel()
 ) {
 
     val workouts = viewModel.workouts.observeAsState()
@@ -133,7 +128,7 @@ private fun LoadWorkoutScreenContent(
 ) {
     Column(modifier.fillMaxWidth()) {
         LazyColumn {
-            items(workouts, key = {it.dto.id!!}) { workout ->
+            items(workouts, key = { it.dto.id!! }) { workout ->
 
                 if (workout.type == WorkoutLoaderDomainObjectType.USER) {
 

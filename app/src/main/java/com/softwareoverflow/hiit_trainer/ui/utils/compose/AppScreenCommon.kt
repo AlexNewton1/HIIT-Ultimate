@@ -184,7 +184,7 @@ fun BottomAppRow(
     height: Dp? = null,
     content: @Composable RowScope.() -> Unit
 ) {
-    Surface(contentColor = MaterialTheme.colors.onPrimary) {
+    Surface(Modifier.background(backgroundColor), contentColor = MaterialTheme.colors.onPrimary) {
         Row(
             Modifier
                 .fillMaxWidth()

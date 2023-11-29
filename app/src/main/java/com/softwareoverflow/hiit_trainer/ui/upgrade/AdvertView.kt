@@ -58,6 +58,8 @@ fun AdvertView(modifier: Modifier = Modifier, onAdLoaded:() -> Unit) {
                                 context.getString(R.string.personalized_ads_enabled),
                                 false
                             )
+
+                            // TODO remove this with the new consent manager!
                             if (!personalizedAds) {
                                 val bundle = Bundle()
                                 bundle.putString("npa", "1")

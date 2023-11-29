@@ -17,7 +17,7 @@ class WorkoutCreatorViewModelFactory(val context: Context, val dto: WorkoutDTO) 
             val repo = WorkoutRepositoryFactory.getInstance(context)
 
             val showSaveWarning = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-                .getBoolean(context.applicationContext.getString(R.string.pref_unsaved_workout_warning), true)
+                .getBoolean(context.applicationContext.getString(R.string.pref_unsaved_changes_warning), true)
 
 
             return WorkoutCreatorViewModel(repo, dto, showSaveWarning) as T

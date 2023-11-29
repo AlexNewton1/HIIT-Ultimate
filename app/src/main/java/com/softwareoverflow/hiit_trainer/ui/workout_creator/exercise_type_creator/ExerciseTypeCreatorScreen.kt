@@ -190,7 +190,6 @@ private fun ExerciseTypeCreatorContent(
 
     onIconChange(etIcons[startIcon])
 
-
     var size by remember { mutableStateOf(IntSize.Zero) }
 
     Box(
@@ -206,7 +205,7 @@ private fun ExerciseTypeCreatorContent(
             items = colors,
             startPosition = startColor,
             onItemChange = {
-                etColors[it].toArgb()
+                onColorChange(etColors[it].toArgb())
             },
             Modifier.fillMaxWidth()
         ) { color, scale ->

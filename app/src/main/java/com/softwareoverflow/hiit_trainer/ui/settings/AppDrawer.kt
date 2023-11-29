@@ -92,7 +92,7 @@ fun AppDrawer(
 @Composable
 private fun Preview() {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    AppTheme {
+    AppTheme(darkTheme = true) {
         AppDrawer({})
     }
 }

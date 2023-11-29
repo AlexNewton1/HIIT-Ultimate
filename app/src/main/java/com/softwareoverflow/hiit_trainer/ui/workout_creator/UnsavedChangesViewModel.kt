@@ -7,10 +7,16 @@ import com.softwareoverflow.hiit_trainer.R
 
 class UnsavedChangesViewModel : ViewModel() {
 
-    fun setDisableWarningState(disableWarning: Boolean, context: Context){
-        PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-            .edit()
+    fun setDisableWarningState(disableWarning: Boolean, context: Context) {
+        PreferenceManager.getDefaultSharedPreferences(context.applicationContext).edit()
             .putBoolean(context.getString(R.string.pref_unsaved_changes_warning), !disableWarning)
             .apply()
+    }
+
+    companion object {
+        fun showWarning(context: Context): Boolean {
+            return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+                .getBoolean(context.getString(R.string.pref_unsaved_changes_warning), true)
+        }
     }
 }

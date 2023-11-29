@@ -7,6 +7,8 @@ import android.view.WindowManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -17,6 +19,8 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +32,12 @@ import com.softwareoverflow.hiit_trainer.ui.theme.colorRecover
 import com.softwareoverflow.hiit_trainer.ui.theme.colorRepeat
 import com.softwareoverflow.hiit_trainer.ui.theme.colorRest
 import com.softwareoverflow.hiit_trainer.ui.theme.colorWork
+
+@Composable
+fun keyboardAsState(): State<Boolean> {
+    val isImeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    return rememberUpdatedState(isImeVisible)
+}
 
 @Composable
 fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }

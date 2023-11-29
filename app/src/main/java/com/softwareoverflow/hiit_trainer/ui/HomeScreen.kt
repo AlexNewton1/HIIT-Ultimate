@@ -23,6 +23,8 @@ import androidx.compose.material.icons.filled.FolderCopy
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Upgrade
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -70,6 +72,8 @@ fun HomeScreen(navigator: DestinationsNavigator, resultRecipient: ResultRecipien
         }
     }
 
+    val userUpgraded by UpgradeManager.userUpgradedFlow.collectAsState()
+
     BackHandler(enabled = drawerState.isOpen) {
         toggleDrawer()
     }
@@ -101,7 +105,9 @@ fun HomeScreen(navigator: DestinationsNavigator, resultRecipient: ResultRecipien
         )
     }) { padding ->
             Column(
-                Modifier.fillMaxSize().padding(padding), horizontalAlignment = Alignment.CenterHorizontally
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding), horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Spacer(Modifier.size(MaterialTheme.spacing.extraExtraExtraLarge))
@@ -120,7 +126,7 @@ fun HomeScreen(navigator: DestinationsNavigator, resultRecipient: ResultRecipien
 
                 Spacer(Modifier.weight(1f))
 
-                if (!UpgradeManager.isUserUpgraded()) {
+                if (!userUpgraded) {
                     HomeScreenRow(
                         icon = Icons.Filled.Upgrade,
                         stringId = R.string.upgrade_to_pro,
@@ -155,7 +161,7 @@ fun HomeScreen(navigator: DestinationsNavigator, resultRecipient: ResultRecipien
 private fun HomeScreenRow(icon: ImageVector, @StringRes stringId: Int, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth(0.8f), horizontalArrangement = Arrangement.Center) {
         Button(onClick = onClick, Modifier.padding(vertical = MaterialTheme.spacing.medium)) {
-            Row(horizontalArrangement = Arrangement.SpaceAround) {
+            Row(horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically) {
                 Icon(icon, null)
                 Text(
                     stringResource(id = stringId),

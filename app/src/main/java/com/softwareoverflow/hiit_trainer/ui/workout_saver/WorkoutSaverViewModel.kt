@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class WorkoutSaverViewModel @Inject constructor(
-    private val billingViewModel: BillingViewModel,
     private val workoutRepo: IWorkoutRepository,
+    private val billingViewModel: BillingViewModel
 ) : ViewModel() {
     val savedWorkouts = workoutRepo.getAllWorkouts()
 
