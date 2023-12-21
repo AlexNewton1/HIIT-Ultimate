@@ -6,6 +6,7 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
 
 /**
  * Gets the duration of the workout, in seconds
@@ -57,7 +58,7 @@ fun WorkoutDTO.getFullWorkoutSets(context: Context) : List<WorkoutSetDTO> {
 
 fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
     val sp = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    val isEnabled = sp.getBoolean(context.getString(R.string.key_preparation_set_enabled), true)
+    val isEnabled = sp.getBoolean(SharedPreferencesManager.prepSetEnabled, true)
 
     if(isEnabled){
         return WorkoutSetDTO(
@@ -67,7 +68,7 @@ fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
                 "icon_heart_pulse",
                 "#FF000000"
             ),
-            sp.getString(context.getString(R.string.key_preparation_set_time), "5")!!.toInt(),
+            sp.getString(SharedPreferencesManager.prepSetTime, "5")!!.toInt(),
             0,
             1,
             0

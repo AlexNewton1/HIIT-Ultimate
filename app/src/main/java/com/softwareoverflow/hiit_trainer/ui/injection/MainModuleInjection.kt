@@ -1,6 +1,8 @@
 package com.softwareoverflow.hiit_trainer.ui.injection
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
 import com.softwareoverflow.hiit_trainer.repository.WorkoutRepositoryFactory
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
@@ -20,6 +22,11 @@ object MainModuleInjection {
     @Provides
     fun providesMobileAdsManager(@ApplicationContext context: Context): MobileAdsManager {
         return MobileAdsManager(context)
+    }
+
+    @Provides
+    fun providesSharedPrefs(@ApplicationContext context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
 
     @Provides

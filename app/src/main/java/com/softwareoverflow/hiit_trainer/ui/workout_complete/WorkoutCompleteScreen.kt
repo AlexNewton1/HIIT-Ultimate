@@ -3,13 +3,16 @@ package com.softwareoverflow.hiit_trainer.ui.workout_complete
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -17,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Upgrade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -35,15 +39,15 @@ import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.ui.destinations.HomeScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.UnsavedChangesWarningScreenDestination
+import com.softwareoverflow.hiit_trainer.ui.destinations.UpgradeScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.WorkoutSaverScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.navigation.NavigationResultActionBasic
 import com.softwareoverflow.hiit_trainer.ui.theme.AppTheme
 import com.softwareoverflow.hiit_trainer.ui.theme.spacing
-import com.softwareoverflow.hiit_trainer.ui.upgrade.MobileAdsManager
+import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.AppScreen
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.TopAppRow
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.findActivity
-import kotlinx.coroutines.delay
 
 @Destination
 @Composable
@@ -54,20 +58,11 @@ fun WorkoutCompleteScreen(
     unsavedChangesResult: ResultRecipient<UnsavedChangesWarningScreenDestination, NavigationResultActionBasic>
 ) {
 
-    val activity = LocalContext.current.findActivity()
-    LaunchedEffect(Unit){
-
-        delay(2000)
-
-        if(viewModel.shouldShowAdvert()) {
-            MobileAdsManager.showAdAfterWorkout(
-                activity,
-                onAdClosedCallback = {
-                    viewModel.setAdvertShown()
-                })
-        }
+    val context = LocalContext.current
+    val activity = context.findActivity()
+    LaunchedEffect(workout) {
+        viewModel.initialize(context, activity)
     }
-
 
     BackHandler(enabled = viewModel.showUnsavedChangesWarning) {
         navigator.navigate(UnsavedChangesWarningScreenDestination)
@@ -112,7 +107,9 @@ fun WorkoutCompleteScreen(
             )
         })
     }, bottomAppRow = null) { modifier ->
-        Content(modifier = modifier, onHomePress = {
+        Content(modifier = modifier, onUpgrade = {
+            navigator.navigate(UpgradeScreenDestination)
+        }, onHomePress = {
             if (viewModel.showUnsavedChangesWarning) navigator.navigate(
                 UnsavedChangesWarningScreenDestination
             )
@@ -123,7 +120,7 @@ fun WorkoutCompleteScreen(
 }
 
 @Composable
-private fun Content(modifier: Modifier, onHomePress: () -> Unit) {
+private fun Content(modifier: Modifier, onUpgrade: () -> Unit, onHomePress: () -> Unit) {
 
     Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
@@ -143,6 +140,27 @@ private fun Content(modifier: Modifier, onHomePress: () -> Unit) {
 
         Spacer(modifier = Modifier.weight(1f))
 
+        if (!UpgradeManager.isUserUpgraded()) {
+            Row(Modifier.fillMaxWidth(0.8f), horizontalArrangement = Arrangement.Center) {
+                Button(
+                    onClick = onUpgrade, Modifier.padding(vertical = MaterialTheme.spacing.medium)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Filled.Upgrade, null)
+                        Text(
+                            stringResource(id = R.string.upgrade_to_pro),
+                            Modifier.padding(horizontal = MaterialTheme.spacing.small)
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
         FloatingActionButton(onClick = { onHomePress() }, Modifier.align(Alignment.End)) {
             Icon(Icons.Filled.Home, contentDescription = Icons.Filled.Home.name)
         }
@@ -155,6 +173,6 @@ private fun Content(modifier: Modifier, onHomePress: () -> Unit) {
 @Composable
 private fun Preview() {
     AppTheme {
-        Content(modifier = Modifier, onHomePress = {})
+        Content(modifier = Modifier, onUpgrade = {}, onHomePress = {})
     }
 }

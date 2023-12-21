@@ -3,7 +3,7 @@ package com.softwareoverflow.hiit_trainer.ui.settings
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
-import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,21 +16,20 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
 
     private val _prepSetEnabled = MutableStateFlow(
         sharedPrefs.getBoolean(
-            context.getString(R.string.key_preparation_set_enabled), true
+            SharedPreferencesManager.prepSetEnabled, true
         )
     )
     val prepSetEnabled: StateFlow<Boolean> get() = _prepSetEnabled
 
-
     private val _prepSetDuration= MutableStateFlow(sharedPrefs.getString(
-        context.getString(R.string.key_preparation_set_time), "5"
+        SharedPreferencesManager.prepSetTime, "5"
     )?.toInt() ?: 5)
     val prepSetDuration: StateFlow<Int> get() = _prepSetDuration
 
 
     private val _finalSeconds = MutableStateFlow(
         sharedPrefs.getStringSet(
-            context.getString(R.string.key_final_seconds_vocal),
+            SharedPreferencesManager.finalSecondsVocal,
             setOf("5", "10", "15")
         )!!.toMutableSet()
     )
@@ -38,7 +37,7 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
 
     private val _personalAds = MutableStateFlow(
         sharedPrefs.getBoolean(
-            context.getString(R.string.key_personalized_ads_enabled),
+            SharedPreferencesManager.personalAds,
             true
         )
     )
@@ -47,7 +46,7 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
 
     private val _analytics = MutableStateFlow(
         sharedPrefs.getBoolean(
-            context.getString(R.string.key_analytics_enabled),
+            SharedPreferencesManager.analyticsEnabled,
             true
         )
     )
@@ -80,13 +79,13 @@ class SettingsViewModel @Inject constructor(@ApplicationContext context: Context
 
         sharedPrefs.edit()
             .putBoolean(
-                context.getString(R.string.key_preparation_set_enabled),
+                SharedPreferencesManager.prepSetEnabled,
                 prepSetEnabled.value
             )
-            .putString(context.getString(R.string.key_preparation_set_time), prepSetDuration.value.toString())
-            .putStringSet(context.getString(R.string.key_final_seconds_vocal), finalSeconds.value)
-            .putBoolean(context.getString(R.string.key_personalized_ads_enabled), personalAds.value)
-            .putBoolean(context.getString(R.string.key_analytics_enabled), analytics.value)
+            .putString(SharedPreferencesManager.prepSetTime, prepSetDuration.value.toString())
+            .putStringSet(SharedPreferencesManager.finalSecondsVocal, finalSeconds.value)
+            .putBoolean(SharedPreferencesManager.personalAds, personalAds.value)
+            .putBoolean(SharedPreferencesManager.analyticsEnabled, analytics.value)
             .apply()
 
         onUpdateComplete()

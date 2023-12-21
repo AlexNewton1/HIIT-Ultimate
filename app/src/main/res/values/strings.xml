@@ -114,12 +114,6 @@
         These services make your app experience better and allow us to keep improving this app.\nFull details are available in the\u0020</string>
     <string name="privacy_policy">privacy policy</string>
     <string name="user_consent_details_2">.\nWe care about your privacy and data security and you can manage your choices in the settings page at any time.</string>
-    <string name="key_user_consent_given">user_consent_given</string>
-    <string name="key_preparation_set_enabled">key_preparation_set_enabled</string>
-    <string name="key_preparation_set_time">key_preparation_set_time</string>
-    <string name="key_final_seconds_vocal">key_final_seconds_vocal</string>
-    <string name="key_personalized_ads_enabled">key_personalized_ads_enabled</string>
-    <string name="key_analytics_enabled">key_analytics_enabled</string>
     <string name="privacy">Privacy</string>
     <string name="analytics_enabled_summary">Send anonymized analytics to help us improve</string>
     <string name="continue_to_step_2">Continue to Step 2</string>

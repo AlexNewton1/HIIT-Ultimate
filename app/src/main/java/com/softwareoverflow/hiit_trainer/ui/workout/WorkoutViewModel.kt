@@ -3,19 +3,23 @@ package com.softwareoverflow.hiit_trainer.ui.workout
 import android.content.Context
 import android.text.format.DateUtils
 import androidx.lifecycle.ViewModel
+import androidx.preference.PreferenceManager
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 import com.softwareoverflow.hiit_trainer.ui.getFullWorkoutSets
 import com.softwareoverflow.hiit_trainer.ui.getWorkoutPrepSet
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
+import com.softwareoverflow.hiit_trainer.ui.workout.media.WorkoutMediaManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class WorkoutViewModel(
     context: Context,
-    private val workoutDto: WorkoutDTO,
-    private val workoutCompleteExerciseType: ExerciseTypeDTO
+    workoutDto: WorkoutDTO,
+    private val workoutCompleteExerciseType: ExerciseTypeDTO,
+    mediaManager: WorkoutMediaManager
 ) : IWorkoutObserver,
     ViewModel() {
 
@@ -59,11 +63,11 @@ class WorkoutViewModel(
                 currentRepValue = 1,
 
                 isPaused = false,
-                isSoundOn = true
+                isSoundOn = PreferenceManager.getDefaultSharedPreferences(context.applicationContext).getBoolean(SharedPreferencesManager.playWorkoutSounds, true)
             )
         )
 
-        timer = WorkoutTimer(context.applicationContext, duration, allSets, this)
+        timer = WorkoutTimer(context.applicationContext, duration, allSets, mediaManager,this)
         timer.start()
     }
 

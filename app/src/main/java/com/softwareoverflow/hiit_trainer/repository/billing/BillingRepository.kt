@@ -208,7 +208,7 @@ class BillingRepository(
                         billingClient.acknowledgePurchase(acknowledgePurchaseParams.build())
                     }
 
-                    Timber.i("Attemping acknowledge of purchase ${purchase.orderId}. Result ${ackPurchaseResult.responseCode} - ${ackPurchaseResult.debugMessage}")
+                    Timber.i("Attempting acknowledge of purchase ${purchase.orderId}. Result ${ackPurchaseResult.responseCode} - ${ackPurchaseResult.debugMessage}")
                 }
             }
         }

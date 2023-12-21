@@ -1,25 +1,73 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_complete
 
+import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
-import com.softwareoverflow.hiit_trainer.R
-import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
+import androidx.lifecycle.viewModelScope
+import com.softwareoverflow.hiit_trainer.ui.upgrade.MobileAdsManager
+import com.softwareoverflow.hiit_trainer.ui.utils.InAppReviewManager
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
+import com.softwareoverflow.hiit_trainer.ui.workout.media.WorkoutCompleteMediaManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkoutCompleteViewModel @Inject constructor(@ApplicationContext context: Context, private val repo: IWorkoutRepository) : ViewModel() {
+class WorkoutCompleteViewModel @Inject constructor(
+    private val workoutCompleteMediaManager: WorkoutCompleteMediaManager,
+    sharedPreferences: SharedPreferences
+) : ViewModel() {
 
-    private var advertShown = false
+    private var isInitialized = false
+    private var tryShowAdvert = true
 
-    val showUnsavedChangesWarning = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-        .getBoolean(context.applicationContext.getString(R.string.pref_unsaved_changes_warning), true)
+    val showUnsavedChangesWarning =
+        sharedPreferences
+            .getBoolean(
+                SharedPreferencesManager.unsavedChangesWarning,
+                true
+            )
 
-    fun shouldShowAdvert() : Boolean = !advertShown
+    fun initialize(context: Context, activity: Activity?) {
+        if (!isInitialized) {
+            isInitialized = true
 
-    fun setAdvertShown() {
-        advertShown = true
+            playWorkoutCompleteSound(context, activity)
+        }
+    }
+
+    private fun playWorkoutCompleteSound(context: Context, activity: Activity?) {
+        viewModelScope.launch {
+            workoutCompleteMediaManager.playWorkoutCompleteSound(onSoundPlayed = {
+                activity?.let {
+                    showAdvert(context, activity)
+                }
+            })
+        }
+    }
+
+    private fun showAdvert(context: Context, activity: Activity?) {
+        if (InAppReviewManager.willAskForReview) {
+            tryShowAdvert = false
+            activity?.let {
+                InAppReviewManager.askForReview(context, activity, onFailure = {
+                    tryShowAdvert = true // Try and show the advert if we failed to ask for a review
+                })
+            }
+        }
+
+        if (tryShowAdvert) {
+            MobileAdsManager.showAdAfterWorkout(activity, onAdClosedCallback = {
+                tryShowAdvert = false
+            })
+        }
+    }
+
+    override fun onCleared() {
+        viewModelScope.cancel()
+        workoutCompleteMediaManager.cancel()
+        super.onCleared()
     }
 }
