@@ -71,15 +71,16 @@ object InAppReviewManager {
      * Even in cases where the request flow is called, the API may not show the review dialog based on
      * Google's implementation details regarding individual quotas
      */
-    fun askForReview(context: Context, activity: Activity) {
+    fun askForReview(context: Context, activity: Activity,  onFailure: () -> Unit) {
         if (willAskForReview && reviewInfo != null) {
 
             // Update last ask time in case the user doesn't complete the review for any reason
             updateLastAskTime(context)
 
-            reviewManager.launchReviewFlow(activity, reviewInfo)
+            reviewManager.launchReviewFlow(activity, reviewInfo!!)
                 .addOnFailureListener {
                     Timber.w(it, "ReviewManager failed to complete review flow")
+                    onFailure()
                 }.addOnCompleteListener {
                     Timber.i("ReviewManager completed review flow")
                 }.addOnSuccessListener {

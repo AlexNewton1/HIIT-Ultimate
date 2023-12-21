@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<menu />
+
+<!--
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/navMenuSettings"
-        android:icon="@drawable/icon_cog"
+        android:icon="@drawable/et_icon_dumbbell"
         android:title="@string/settings"
         />
 
     <item android:id="@+id/navMenuFeedback"
-        android:icon="@drawable/icon_email"
+        android:icon="@drawable/et_icon_flash"
         android:title="@string/feedback" />
-</menu>
+</menu>-->

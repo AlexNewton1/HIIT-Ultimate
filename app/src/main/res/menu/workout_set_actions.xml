@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<menu />
+<!--
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:menuCategory="alternative" android:orderInCategory="0" >
@@ -29,4 +32,4 @@
         android:icon="@android:drawable/ic_menu_delete" />
     </group>
 
-</menu>
+</menu>-->

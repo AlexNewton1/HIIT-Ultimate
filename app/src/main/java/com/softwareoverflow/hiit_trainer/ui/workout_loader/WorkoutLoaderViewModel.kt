@@ -1,78 +1,53 @@
 package com.softwareoverflow.hiit_trainer.ui.workout_loader
 
 import android.content.Context
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.softwareoverflow.hiit_trainer.repository.IWorkoutRepository
-import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
-import com.softwareoverflow.hiit_trainer.ui.utils.SortOrder
+import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
+import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.view.list_adapter.workout.WorkoutLoaderDomainObject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WorkoutLoaderViewModel(
-    private val billingRepo: BillingRepository,
-    private val context: Context,
-    private val workoutRepo: IWorkoutRepository
-) :
-    ViewModel() {
-
-    val sortOrder = MutableLiveData(SortOrder.ASC)
-    private val _searchFilter = MutableLiveData("")
+@HiltViewModel
+class WorkoutLoaderViewModel @Inject constructor(
+    @ApplicationContext context: Context,
+    private val workoutRepo: IWorkoutRepository,
+    private val billingViewModel: BillingViewModel
+) : ViewModel() {
 
     private val _workouts = workoutRepo.getAllWorkouts()
     private val _workoutsSorted = MediatorLiveData<List<WorkoutLoaderDomainObject>>()
     val workouts: LiveData<List<WorkoutLoaderDomainObject>>
         get() = _workoutsSorted
 
-    private var initialized = false
-
-    private val _workoutsSortedChangeObserver = Observer<Any> {
-        if (initialized)
-            _workoutsSorted.value = getWorkoutsToDisplay()
-    }
 
     init {
-        _workoutsSorted.addSource(sortOrder, _workoutsSortedChangeObserver)
-        _workoutsSorted.addSource(_searchFilter, _workoutsSortedChangeObserver)
-
+        val a = ""
         viewModelScope.launch {
             _workoutsSorted.addSource(_workouts) {
-                initialized = true
-                _workoutsSorted.value = getWorkoutsToDisplay()
+                _workoutsSorted.value = getWorkoutsToDisplay(context)
             }
         }
     }
 
-    fun changeSortOrder() {
-        sortOrder.value =
-            if (sortOrder.value == SortOrder.ASC)
-                SortOrder.DESC
-            else SortOrder.ASC
-    }
-
-    fun setFilterText(filterText: String) {
-        _searchFilter.value = filterText
-    }
-
-    private fun getWorkoutsToDisplay(): List<WorkoutLoaderDomainObject> {
-        var workouts = _workouts.value ?: arrayListOf()
-
-        // Filter
-        val filter = _searchFilter.value
-        if (!filter.isNullOrBlank())
-            workouts = workouts.filter { it.name.contains(filter, ignoreCase = true) }
-
-        // Sort
-        workouts = workouts.sortedBy { it.name }
-        if (sortOrder.value == SortOrder.ASC)
-            workouts = workouts.reversed()
-
+    private fun getWorkoutsToDisplay(context: Context): List<WorkoutLoaderDomainObject> {
+        val workouts = _workouts.value ?: arrayListOf()
         val domainObjects = workouts.map { WorkoutLoaderDomainObject(it) }.toMutableList()
 
-        if ((billingRepo.proUpgradeLiveData.value?.entitled != true) && _searchFilter.value.isNullOrEmpty()) {
-            while (domainObjects.size < billingRepo.getMaxWorkoutSlots())
-                domainObjects.add(WorkoutLoaderDomainObject.getPlaceholderUnlocked(context))
+        val placeholderUnlocked = WorkoutLoaderDomainObject.getPlaceholderUnlocked(context.applicationContext)
+        val placeholderLocked = WorkoutLoaderDomainObject.getPlaceholderLocked(context.applicationContext)
 
-            domainObjects.add(WorkoutLoaderDomainObject.getPlaceholderLocked(context))
+        if ((!UpgradeManager.isUserUpgraded())) {
+            while (domainObjects.size < billingViewModel.getMaxWorkoutSlots())
+                domainObjects.add(placeholderUnlocked)
+
+            domainObjects.add(placeholderLocked)
         }
 
         return domainObjects

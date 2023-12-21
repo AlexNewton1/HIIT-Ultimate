@@ -4,19 +4,19 @@ import android.content.Context
 import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.workout.media.WorkoutMediaManager
 import timber.log.Timber
 
 class WorkoutTimer(
     context: Context,
     workoutDurationSeconds: Int,
     _workoutSets: List<WorkoutSetDTO>,
+    private val mediaManager: WorkoutMediaManager,
     private val observer: IWorkoutObserver
 ) {
 
     private lateinit var timer: CountDownTimer
     private var millisecondsRemaining: Long = workoutDurationSeconds * 1000L
-
-    private val _soundManager: WorkoutMediaManager = WorkoutMediaManager(context)
 
     private var isRunning = false
     private var isPaused: Boolean = false
@@ -50,15 +50,15 @@ class WorkoutTimer(
         Timber.d("Timer: WorkoutTimer: OnSkip: ${millisecondsRemaining / 1000}")
 
         if (millisecondsRemaining <= 0) {
-            _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
             observer.onFinish()
+            timer.cancel()
             return
         }
 
-        val currentSound = _soundManager.playSound
-        _soundManager.toggleSound(false) // Mute all noises when skipping through
+        val currentSound = mediaManager.playSound
+        mediaManager.toggleSound(false) // Mute all noises when skipping through
         startNextWorkoutSection()
-        _soundManager.toggleSound(currentSound)
+        mediaManager.toggleSound(currentSound)
 
         // Update any observers with the new values
         observer.onTimerTick(
@@ -96,7 +96,7 @@ class WorkoutTimer(
 
     /** Allows muting / un-muting **/
     fun toggleSound(playSound: Boolean) {
-        _soundManager.toggleSound(playSound)
+        mediaManager.toggleSound(playSound)
     }
 
     private fun createTimer(millis: Long) {
@@ -104,7 +104,6 @@ class WorkoutTimer(
 
         timer = object : CountDownTimer(millis, tickInterval) {
             override fun onFinish() {
-                _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_WORKOUT_COMPLETE)
                 timer.cancel()
                 observer.onFinish()
             }
@@ -119,13 +118,13 @@ class WorkoutTimer(
 
                 if (currentSection == WorkoutSection.WORK)
                     when (millisRemainingInSection / 1000) {
-                        15L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_15)
-                        10L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_10)
-                        5L -> _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_5)
+                        15L -> mediaManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_15)
+                        10L -> mediaManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_10)
+                        5L -> mediaManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_VOCAL_5)
                     }
 
                 if (millisRemainingInSection in 1..3000L)
-                    _soundManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
+                    mediaManager.playSound(WorkoutMediaManager.WorkoutSound.SOUND_321)
 
                 if (millisRemainingInSection <= 0 && millisUntilFinished > tickInterval)
                     startNextWorkoutSection()
@@ -175,7 +174,7 @@ class WorkoutTimer(
             }
         }
 
-        _soundManager.playSound(currentSection)
+        mediaManager.playSound(currentSection)
         observer.onWorkoutSectionChange(currentSection, currentSet, currentRep)
         observer.onTimerTick(
             millisecondsRemaining.toInt() / 1000,
@@ -189,13 +188,13 @@ class WorkoutTimer(
     }
 
     fun cancel() {
-        _soundManager.onDestroy()
+        mediaManager.onDestroy()
         timer.cancel()
     }
 
-    private fun getCurrentSetWorkTime() = currentSet.workTime!! * 1000L
-    private fun getCurrentSetRestTime() = currentSet.restTime!! * 1000L
-    private fun getCurrentSetRecoverTime() = currentSet.recoverTime!! * 1000L
+    private fun getCurrentSetWorkTime() = currentSet.workTime * 1000L
+    private fun getCurrentSetRestTime() = currentSet.restTime * 1000L
+    private fun getCurrentSetRecoverTime() = currentSet.recoverTime * 1000L
 }
 
 enum class WorkoutSection {

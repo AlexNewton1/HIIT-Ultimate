@@ -16,65 +16,85 @@
 package com.softwareoverflow.hiit_trainer.ui.upgrade
 
 import android.app.Activity
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import com.softwareoverflow.hiit_trainer.billing.ProUpgrade
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.ConsumeParams
+import com.softwareoverflow.hiit_trainer.BuildConfig
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
+import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository.Companion.PRO_UPGRADE
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
 
-/**
- * Notice just how small and simple this BillingViewModel is!!
- *
- * This beautiful simplicity is the result of keeping all the hard work buried inside the
- * [BillingRepository] and only inside the [BillingRepository]. The rest of your app
- * is now free from [BillingClient] tentacles!! And this [BillingViewModel] is the one and only
- * object the rest of your Android team need to know about billing.
- *
- */
-class BillingViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _proUpgradeLiveData: LiveData<ProUpgrade>
-    val userHasUpgraded :LiveData<Boolean>
-
-    private val viewModelScope = CoroutineScope(Job() + Dispatchers.Main)
-    private val repository: BillingRepository = BillingRepository.getInstance(application)
-
+@HiltViewModel
+open class BillingViewModel @Inject constructor(val repository: BillingRepository) : ViewModel() {
 
     init {
-        repository.startDataSourceConnections()
+        viewModelScope.launch {
 
-        _proUpgradeLiveData = repository.proUpgradeLiveData
-        userHasUpgraded = Transformations.map(_proUpgradeLiveData) {
-            it?.entitled ?: false
+            repository.oneTimeProductPurchases.collect{ list ->
+                if(list.any { it.products.contains(PRO_UPGRADE) })
+                    UpgradeManager.setUserUpgraded()
+            }
         }
     }
+
+    fun purchasePro(activity: Activity?) {
+
+        activity?.let {
+            // First, the ProductDetails of the product being purchased.
+            val productDetails =
+                repository.oneTimeProductWithProductDetails.value ?: run {
+                    Timber.e("Could not find ProductDetails to make purchase.")
+                    return
+                }
+
+            // Use [billingFlowParamsBuilder] to build the Params that describe the product to be
+            // purchased and the offer to purchase with.
+            val billingParams = BillingFlowParams.newBuilder().setProductDetailsParamsList(
+                listOf(
+                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                        .setProductDetails(productDetails)
+                        .build()
+                )
+            ).build()
+
+            repository.launchBillingFlow(it, billingParams)
+        }
+    }
+
+    fun getMaxWorkoutSlots(): Int = if(UpgradeManager.isUserUpgraded()) Int.MAX_VALUE else 3
 
     /**
-     * Query the users purchases. Done when the app is returned to (e.g. after navigating away to buy the product.
-     * This will enable immediate (hopefully) removal of adverts and addition of remaining workout slots
+     * ONLY to be used in debug. Will consume the pro version upgrade.
      */
-    fun queryPurchases() = repository.queryPurchasesAsync()
+    fun debugConsumePremium() {
+        if (BuildConfig.DEBUG) {
+            CoroutineScope(Dispatchers.Main).launch {
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.d("onCleared")
-        repository.endDataSourceConnections()
-        viewModelScope.coroutineContext.cancel()
-    }
+                repository.oneTimeProductPurchases.collect{ list ->
+                    list.firstOrNull { it.products.contains(PRO_UPGRADE) }?.let {
+                        val consumeParams =
+                            ConsumeParams.newBuilder()
+                                .setPurchaseToken(it.purchaseToken)
+                                .build()
 
-    fun purchasePro(activity: Activity) {
-        try {
-            repository.upgradeToPro(activity)
-        } catch (e: NoSuchElementException) {
-            Timber.w(e, "Unable to upgrade to pro.")
+                        withContext(Dispatchers.IO) {
+                            val consumeResult = repository.consumePurchase(consumeParams)
+
+                            Timber.d("CONSUMED PURCHASE: ${consumeResult?.billingResult?.debugMessage}")
+                        }
+                    }
+
+                    }
+            }
         }
     }
 
-    fun getMaxWorkoutSlots(): Int = repository.getMaxWorkoutSlots()
 }

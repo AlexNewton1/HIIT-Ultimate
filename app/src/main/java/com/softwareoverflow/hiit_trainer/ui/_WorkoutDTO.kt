@@ -1,12 +1,12 @@
 package com.softwareoverflow.hiit_trainer.ui
 
 import android.content.Context
-import android.text.format.DateUtils
 import androidx.preference.PreferenceManager
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.ExerciseTypeDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
 
 /**
  * Gets the duration of the workout, in seconds
@@ -17,11 +17,11 @@ fun WorkoutDTO.getDuration(): Int {
     for (i in 0 until workoutSets.size) {
         val workoutSet = workoutSets[i]
 
-        totalTime += (workoutSet.workTime!! + workoutSet.restTime!!) * workoutSet.numReps!!
-        totalTime -= workoutSet.restTime!! // There is no rest period at the end of a workout set
+        totalTime += (workoutSet.workTime + workoutSet.restTime) * workoutSet.numReps
+        totalTime -= workoutSet.restTime // There is no rest period at the end of a workout set
 
         if (i != workoutSets.size - 1)
-            totalTime += workoutSet.recoverTime!!
+            totalTime += workoutSet.recoverTime
     }
 
     totalTime += recoveryTime
@@ -31,7 +31,10 @@ fun WorkoutDTO.getDuration(): Int {
     return totalTime
 }
 
-fun WorkoutDTO.getFormattedDuration(): String = DateUtils.formatElapsedTime(this.getDuration().toLong())
+fun WorkoutDTO.getFormattedDuration(): String {
+    val duration = getDuration()
+    return String.format("%02d:%02d", duration / 60, duration % 60)
+}
 
 fun WorkoutDTO.getFullWorkoutSets(context: Context) : List<WorkoutSetDTO> {
     val updatedWorkoutSets = ArrayList(workoutSets)
@@ -55,7 +58,7 @@ fun WorkoutDTO.getFullWorkoutSets(context: Context) : List<WorkoutSetDTO> {
 
 fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
     val sp = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    val isEnabled = sp.getBoolean(context.getString(R.string.key_preparation_set_enabled), true)
+    val isEnabled = sp.getBoolean(SharedPreferencesManager.prepSetEnabled, true)
 
     if(isEnabled){
         return WorkoutSetDTO(
@@ -65,7 +68,7 @@ fun getWorkoutPrepSet(context: Context): WorkoutSetDTO? {
                 "icon_heart_pulse",
                 "#FF000000"
             ),
-            sp.getString(context.getString(R.string.key_preparation_set_time), "5")!!.toInt(),
+            sp.getString(SharedPreferencesManager.prepSetTime, "5")!!.toInt(),
             0,
             1,
             0

@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.UserProperty.ALLOW_AD_PERSONALIZATION_SIGNALS
-import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
 
 class UserConsentManager(context: Context) {
 
@@ -23,7 +23,7 @@ class UserConsentManager(context: Context) {
 
         fun userGaveConsent(context: Context) {
             consentEverGiven = true
-            prefs.edit().putBoolean(context.getString(R.string.key_user_consent_given), true)
+            prefs.edit().putBoolean(SharedPreferencesManager.consentGiven, true)
                 .apply()
 
             setPersonalizedAds(context, true)
@@ -36,7 +36,7 @@ class UserConsentManager(context: Context) {
                 .setUserProperty(ALLOW_AD_PERSONALIZATION_SIGNALS, boolean.toString())
 
             prefs.edit()
-                .putBoolean(context.getString(R.string.key_personalized_ads_enabled), boolean)
+                .putBoolean(SharedPreferencesManager.personalAds, boolean)
                 .apply()
         }
 
@@ -44,7 +44,7 @@ class UserConsentManager(context: Context) {
             analyticsEnabled = boolean
             FirebaseAnalytics.getInstance(context).setAnalyticsCollectionEnabled(boolean)
 
-            prefs.edit().putBoolean(context.getString(R.string.key_analytics_enabled), boolean)
+            prefs.edit().putBoolean(SharedPreferencesManager.analyticsEnabled, boolean)
                 .apply()
         }
 
@@ -54,10 +54,10 @@ class UserConsentManager(context: Context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
 
         consentEverGiven =
-            prefs.getBoolean(context.getString(R.string.key_user_consent_given), false)
+            prefs.getBoolean(SharedPreferencesManager.consentGiven, false)
         analyticsEnabled =
-            prefs.getBoolean(context.getString(R.string.key_analytics_enabled), false)
+            prefs.getBoolean(SharedPreferencesManager.analyticsEnabled, false)
         personalizedAdsEnabled =
-            prefs.getBoolean(context.getString(R.string.key_personalized_ads_enabled), false)
+            prefs.getBoolean(SharedPreferencesManager.personalAds, false)
     }
 }
