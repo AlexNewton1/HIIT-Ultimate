@@ -27,11 +27,7 @@ class MobileAdsManager(val context: Context) : OnInitializationCompleteListener 
 
     private var isInitialized = false
 
-    init {
-        initialize()
-    }
-
-    private fun initialize() {
+    fun initialize() {
         if (isInitialized) return
 
         if (!UpgradeManager.isUserUpgraded())

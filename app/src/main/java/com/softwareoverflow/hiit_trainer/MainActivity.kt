@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.softwareoverflow.hiit_trainer.repository.billing.BillingRepository
 import com.softwareoverflow.hiit_trainer.ui.NavGraphs
+import com.softwareoverflow.hiit_trainer.ui.consent.ConsentManagerGoogle
 import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.theme.AppTheme
 import com.softwareoverflow.hiit_trainer.ui.upgrade.BillingViewModel
@@ -40,7 +41,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        UserConsentManager(this)
+
+        // The Google SDK seems to load slowly, so start ASAP
+        val consentManager = ConsentManagerGoogle.getInstance(this)
+        consentManager.handleConsent(this) {
+            // We have consent - initialize the required logging and ads
+            UserConsentManager.userGaveConsent(this)
+            adsManager.initialize()
+        }
 
         setContent {
             AppTheme {

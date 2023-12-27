@@ -146,4 +146,6 @@
     <string name="workout_set_values_zero_warning">\'Work Time\', \'Rest Time\' &amp; \'# Cycles\' must be greater than 0.</string>
 
     <string name="settings_saved">Settings Updated</string>
+    <string name="manage_privacy_gdpr">Privacy Settings…</string>
+    <string name="unexpected_problem_try_again">Unexpected error - please try again later.</string>
 </resources>
