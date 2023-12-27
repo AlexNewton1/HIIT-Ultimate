@@ -142,4 +142,6 @@ dependencies {
     // Logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    implementation("com.google.android.ump:user-messaging-platform:2.1.0")
+
 }

@@ -42,11 +42,9 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.rememberAppState
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
-import com.softwareoverflow.hiit_trainer.ui.consent.UserConsentManager
 import com.softwareoverflow.hiit_trainer.ui.destinations.LoadWorkoutScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.SettingsScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.UpgradeScreenDestination
-import com.softwareoverflow.hiit_trainer.ui.destinations.UserConsentScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.destinations.WorkoutCreatorScreenDestination
 import com.softwareoverflow.hiit_trainer.ui.navigation.NavigationResultActionBasic
 import com.softwareoverflow.hiit_trainer.ui.settings.AppDrawer
@@ -137,10 +135,6 @@ fun HomeScreen(navigator: DestinationsNavigator, resultRecipient: ResultRecipien
 
                 Spacer(Modifier.size(MaterialTheme.spacing.extraExtraExtraLarge))
             }
-
-        if (!UserConsentManager.consentEverGiven) {
-            navigator.navigate(UserConsentScreenDestination)
-        }
     }
 
     val settingsUpdateMessage = stringResource(id = R.string.settings_saved)

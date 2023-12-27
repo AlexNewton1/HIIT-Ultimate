@@ -23,16 +23,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.UserMessagingPlatform
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.softwareoverflow.hiit_trainer.R
+import com.softwareoverflow.hiit_trainer.ui.SnackbarManager
+import com.softwareoverflow.hiit_trainer.ui.consent.ConsentManagerGoogle
 import com.softwareoverflow.hiit_trainer.ui.navigation.NavigationResultActionBasic
 import com.softwareoverflow.hiit_trainer.ui.theme.AppTheme
 import com.softwareoverflow.hiit_trainer.ui.theme.spacing
-import com.softwareoverflow.hiit_trainer.ui.upgrade.UpgradeManager
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.AppScreen
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.CircleCheckbox
 import com.softwareoverflow.hiit_trainer.ui.utils.compose.TopAppRow
+import com.softwareoverflow.hiit_trainer.ui.utils.compose.findActivity
 
 @Destination
 @Composable
@@ -44,10 +48,10 @@ fun SettingsScreen(
     val prepSetEnabled = viewModel.prepSetEnabled.collectAsState()
     val prepSetTime = viewModel.prepSetDuration.collectAsState()
     val finalSeconds = viewModel.finalSeconds.collectAsState()
-    val personalAds = viewModel.personalAds.collectAsState()
     val analytics = viewModel.analytics.collectAsState()
 
     val context = LocalContext.current
+    val consentManager = ConsentManagerGoogle.getInstance(context)
 
     BackHandler {
         viewModel.saveSettings(context) {
@@ -64,19 +68,39 @@ fun SettingsScreen(
         )
 
     }, bottomAppRow = null) { modifier ->
-        SettingsScreenContent(
-            modifier = modifier,
+
+        val consentInformation: ConsentInformation =
+            UserMessagingPlatform.getConsentInformation(LocalContext.current)
+
+        val isPrivacyOptionsRequired =
+            consentInformation.privacyOptionsRequirementStatus == ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+
+        SettingsScreenContent(modifier = modifier,
             prepSetEnabled.value,
             prepSetTime.value,
             finalSeconds.value.toMutableSet(),
-            personalAds.value,
             analytics.value,
+            requirePrivacyOptions = isPrivacyOptionsRequired,
             onPrepSetChange = viewModel::onPrepSetEnabledChange,
             onPrepDurationChange = viewModel::onPrepDurationChange,
             onFinalSecondsChange = viewModel::onFinalSecondsChange,
-            onPersonalAdsChange = viewModel::onPersonalAdsChange,
-            onAnalyticsChange = viewModel::onAnalyticsChange
-        )
+            onAnalyticsChange = viewModel::onAnalyticsChange,
+            openPrivacyOptions = {
+                val activity = context.findActivity()
+
+                var privacyOptionError = activity == null
+                activity?.let {
+                    consentManager.showPrivacyOptionsForm(activity) {
+                        it?.let {
+                            privacyOptionError = true
+                        }
+                    }
+                }
+
+                if (privacyOptionError) {
+                    SnackbarManager.showMessage(context.getString(R.string.unexpected_problem_try_again))
+                }
+            })
     }
 }
 
@@ -87,15 +111,14 @@ private fun SettingsScreenContent(
     prepSetEnabled: Boolean,
     prepDuration: Int,
     finalSeconds: MutableSet<String>,
-    personalAds: Boolean,
     analytics: Boolean,
+    requirePrivacyOptions: Boolean,
     onPrepSetChange: (Boolean) -> Unit,
     onPrepDurationChange: (Int) -> Unit,
     onFinalSecondsChange: (Set<String>) -> Unit,
-    onPersonalAdsChange: (Boolean) -> Unit,
-    onAnalyticsChange: (Boolean) -> Unit
+    onAnalyticsChange: (Boolean) -> Unit,
+    openPrivacyOptions: () -> Unit,
 ) {
-
     Column(modifier.fillMaxSize()) {
         SettingsHeader(title = R.string.preparation_set_enabled)
         SettingsSwitch(title = R.string.preparation_set_enabled,
@@ -115,8 +138,7 @@ private fun SettingsScreenContent(
                         isChecked = prepDuration == 3,
                         onCheckChange = { onPrepDurationChange(3) })
 
-                    SettingsCheckbox(
-                        title = "5s",
+                    SettingsCheckbox(title = "5s",
                         isChecked = prepDuration == 5,
                         onCheckChange = { onPrepDurationChange(5) })
 
@@ -139,8 +161,7 @@ private fun SettingsScreenContent(
                 onFinalSecondsChange(finalSeconds)
             })
 
-            SettingsCheckbox(
-                title = "10s",
+            SettingsCheckbox(title = "10s",
                 isChecked = finalSeconds.contains("10"),
                 onCheckChange = {
                     if (it) finalSeconds.add("10")
@@ -149,8 +170,7 @@ private fun SettingsScreenContent(
                     onFinalSecondsChange(finalSeconds)
                 })
 
-            SettingsCheckbox(
-                title = "15s",
+            SettingsCheckbox(title = "15s",
                 isChecked = finalSeconds.contains("15"),
                 onCheckChange = {
                     if (it) finalSeconds.add("15")
@@ -160,25 +180,26 @@ private fun SettingsScreenContent(
                 })
         }
 
-        val hasUpgraded = UpgradeManager.userUpgradedFlow.collectAsState()
-
         SettingsHeader(title = R.string.privacy)
-        if (!hasUpgraded.value) {
-            SettingsSwitch(title = R.string.personalized_ads_enabled,
-                subtitle = null,
-                isChecked = personalAds,
-                onCheckChange = {
-                    onPersonalAdsChange(it)
-                })
-        }
         SettingsSwitch(title = R.string.analytics_enabled,
             subtitle = R.string.analytics_enabled_summary,
             isChecked = analytics,
             onCheckChange = {
                 onAnalyticsChange(it)
             })
-    }
 
+        if (requirePrivacyOptions) {
+            val activity = LocalContext.current.findActivity()
+            val errorMessage = stringResource(id = R.string.unexpected_problem_try_again)
+            activity?.let {
+                Text(text = stringResource(id = R.string.manage_privacy_gdpr),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.clickable {
+                        openPrivacyOptions()
+                    })
+            }
+        }
+    }
 }
 
 @Composable
@@ -208,7 +229,9 @@ private fun SettingsCheckbox(
     onCheckChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier.clickable { onCheckChange(true) }, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier.clickable { onCheckChange(true) }, verticalAlignment = Alignment.CenterVertically
+    ) {
         CircleCheckbox(checked = isChecked, onCheckedChange = onCheckChange)
         Text(title, style = MaterialTheme.typography.subtitle1)
     }
@@ -233,7 +256,7 @@ private fun SettingsScreenPreview() {
             true,
             10,
             mutableSetOf("10", "15"),
-            false,
+            true,
             true,
             {},
             {},
