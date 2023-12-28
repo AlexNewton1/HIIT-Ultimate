@@ -9,37 +9,58 @@ import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutDTO
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
 import com.softwareoverflow.hiit_trainer.ui.getDuration
 import com.softwareoverflow.hiit_trainer.ui.getFullWorkoutSets
+import com.softwareoverflow.hiit_trainer.ui.getWorkoutCompleteExerciseType
 import com.softwareoverflow.hiit_trainer.ui.getWorkoutPrepSet
+import com.softwareoverflow.hiit_trainer.ui.history.write.IHistorySaver
 import com.softwareoverflow.hiit_trainer.ui.utils.SharedPreferencesManager
 import com.softwareoverflow.hiit_trainer.ui.workout.media.WorkoutMediaManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class WorkoutViewModel(
-    context: Context,
-    workoutDto: WorkoutDTO,
-    private val workoutCompleteExerciseType: ExerciseTypeDTO,
-    mediaManager: WorkoutMediaManager
-) : IWorkoutObserver,
-    ViewModel() {
+@HiltViewModel
+class WorkoutViewModel @Inject constructor(
+    @ApplicationContext context: Context,
+    private val mediaManager: WorkoutMediaManager,
+    private val historySaver: IHistorySaver
+) : IWorkoutObserver, ViewModel() {
 
-    private val _workout = MutableStateFlow(workoutDto)
+
+    private val workoutCompleteExerciseType =
+        getWorkoutCompleteExerciseType(context)
+
+    private val _workout = MutableStateFlow(WorkoutDTO())
 
     val workout: StateFlow<WorkoutDTO> get() = _workout
 
-    private var timer: WorkoutTimer
+    private lateinit var timer: WorkoutTimer
 
     private val _fullWorkoutSets by lazy {
-        _workout.value.getFullWorkoutSets(context.applicationContext)!!
+        _workout.value.getFullWorkoutSets(context)
     }
 
-    private var _uiState: MutableStateFlow<UiState>
+    // Start with a default UI state. Not a nice solution but it will do for now.
+    private lateinit var _uiState : MutableStateFlow<UiState>
     val uiState: StateFlow<UiState> get() = _uiState
 
     private val _isFinished = MutableStateFlow(false)
     val isWorkoutFinished: StateFlow<Boolean> get() = _isFinished
 
+
+    private var isInitialized = false
+
     init {
+
+    }
+
+    fun initialize(context: Context, workoutDto: WorkoutDTO) {
+        if (isInitialized) return
+
+        _workout.value = workoutDto
+
+
         var duration = workoutDto.getDuration()
         val allSets = workoutDto.getFullWorkoutSets(context.applicationContext)
 
@@ -56,22 +77,29 @@ class WorkoutViewModel(
         _uiState = MutableStateFlow(
             UiState(
                 currentWorkoutSet = allSets.first(),
-                upNextExerciseType = if (prepSet != null) allSets.get(1).exerciseTypeDTO!! else null,
+                upNextExerciseType = if (prepSet != null) allSets[1].exerciseTypeDTO!! else null,
                 currentSection = if (hasPrepSet) WorkoutSection.PREPARE else WorkoutSection.WORK,
                 sectionTimeRemainingValue = allSets.first().workTime,
                 workoutTimeRemainingValue = _workout.value.getDuration(),
                 currentRepValue = 1,
 
                 isPaused = false,
-                isSoundOn = PreferenceManager.getDefaultSharedPreferences(context.applicationContext).getBoolean(SharedPreferencesManager.playWorkoutSounds, true)
+                isSoundOn = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+                    .getBoolean(SharedPreferencesManager.playWorkoutSounds, true)
             )
         )
 
-        timer = WorkoutTimer(context.applicationContext, duration, allSets, mediaManager,this)
+        timer = WorkoutTimer(
+            context.applicationContext, duration, allSets, mediaManager, historySaver, this
+        )
         timer.start()
+
+
+        isInitialized = true
     }
 
-    fun cancel() {
+
+    private fun cancel() {
         timer.cancel()
     }
 
@@ -83,13 +111,13 @@ class WorkoutViewModel(
     data class UiState(
         val currentWorkoutSet: WorkoutSetDTO,
         val upNextExerciseType: ExerciseTypeDTO?,
-        val currentSection: WorkoutSection,
-        val sectionTimeRemainingValue: Int,
-        val workoutTimeRemainingValue: Int,
-        val currentRepValue: Int,
+        val currentSection: WorkoutSection = WorkoutSection.PREPARE,
+        val sectionTimeRemainingValue: Int = 0,
+        val workoutTimeRemainingValue: Int = 0,
+        val currentRepValue: Int = 0,
 
-        val isPaused: Boolean,
-        val isSoundOn: Boolean
+        val isPaused: Boolean = false,
+        val isSoundOn: Boolean = true
     ) {
         val currentExerciseType: ExerciseTypeDTO = currentWorkoutSet.exerciseTypeDTO!!
 
@@ -133,8 +161,8 @@ class WorkoutViewModel(
 
 
         val currentIndex = _fullWorkoutSets.indexOf(currentSet)
-        var nextExerciseType = if (currentIndex < _fullWorkoutSets.size - 1)
-            _fullWorkoutSets[currentIndex + 1].exerciseTypeDTO else null
+        var nextExerciseType =
+            if (currentIndex < _fullWorkoutSets.size - 1) _fullWorkoutSets[currentIndex + 1].exerciseTypeDTO else null
         var showNextExerciseType = false
 
         if ((currentSection == WorkoutSection.RECOVER || currentSection == WorkoutSection.PREPARE)) {
@@ -154,9 +182,7 @@ class WorkoutViewModel(
     }
 
     override fun onWorkoutSectionChange(
-        section: WorkoutSection,
-        currentSet: WorkoutSetDTO,
-        currentRep: Int
+        section: WorkoutSection, currentSet: WorkoutSetDTO, currentRep: Int
     ) {
 
         var sectionUiState = _uiState.value.currentSection
@@ -164,8 +190,7 @@ class WorkoutViewModel(
         var upNextExerciseTypeUiState = _uiState.value.upNextExerciseType
         var repUiState = _uiState.value.currentRepValue
 
-        if (sectionUiState != section)
-            sectionUiState = section
+        if (sectionUiState != section) sectionUiState = section
 
         if (workoutSetUiState != currentSet) {
             workoutSetUiState = currentSet
@@ -174,13 +199,10 @@ class WorkoutViewModel(
             upNextExerciseTypeUiState = null
         }
 
-        if (repUiState != currentRep)
-            repUiState = currentRep
+        if (repUiState != currentRep) repUiState = currentRep
 
         // Show the up next icon for prepare / recover
-        if ((section == WorkoutSection.PREPARE || section == WorkoutSection.RECOVER) &&
-            upNextExerciseTypeUiState == null
-        ) {
+        if ((section == WorkoutSection.PREPARE || section == WorkoutSection.RECOVER) && upNextExerciseTypeUiState == null) {
             val nextWorkoutSetIndex = _fullWorkoutSets.indexOf(workoutSetUiState) + 1
 
             if (nextWorkoutSetIndex != _fullWorkoutSets.size) {
@@ -194,11 +216,12 @@ class WorkoutViewModel(
             upNextExerciseType = upNextExerciseTypeUiState,
             currentRepValue = repUiState,
 
-        )
+            )
     }
 
     override fun onFinish() {
         _isFinished.value = true
+        cancel()
     }
 
 //endregion

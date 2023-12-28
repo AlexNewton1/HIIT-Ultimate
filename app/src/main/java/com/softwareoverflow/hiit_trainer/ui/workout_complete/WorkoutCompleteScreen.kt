@@ -64,8 +64,14 @@ fun WorkoutCompleteScreen(
         viewModel.initialize(context, activity)
     }
 
-    BackHandler(enabled = viewModel.showUnsavedChangesWarning) {
-        navigator.navigate(UnsavedChangesWarningScreenDestination)
+    BackHandler(enabled = true) {
+        if(viewModel.showUnsavedChangesWarning){
+            navigator.navigate(UnsavedChangesWarningScreenDestination)
+        }
+        else {
+            navigator.popBackStack(HomeScreenDestination, inclusive = false)
+            navigator.clearBackStack(HomeScreenDestination)
+        }
     }
 
     unsavedChangesResult.onNavResult { result ->
