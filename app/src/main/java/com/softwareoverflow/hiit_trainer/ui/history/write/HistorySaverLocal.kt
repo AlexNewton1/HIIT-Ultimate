@@ -35,10 +35,9 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
                 }
             }
         } catch (e: Exception) {
+            // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
-
-
     }
 
     private fun createDTO(section: WorkoutSection, name: String, date: LocalDate) {
@@ -53,6 +52,7 @@ class HistorySaverLocal @Inject constructor(private val historyWriter: IHistoryW
                 history = null
             }
         } catch(e: Exception) {
+            // Blanket catch all - we don't want any problems here to interfere with the main app
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
