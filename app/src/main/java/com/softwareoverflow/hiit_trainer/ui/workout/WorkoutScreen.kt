@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.softwareoverflow.hiit_trainer.R
@@ -62,12 +62,15 @@ import android.graphics.Color as GraphicsColor
 @Destination
 @Composable
 fun WorkoutScreen(
-    workout: WorkoutDTO, viewModel: WorkoutViewModel = viewModel(
-        factory = WorkoutViewModelFactory(
-            LocalContext.current, workout
-        )
-    ), navigator: DestinationsNavigator
+    workout: WorkoutDTO,
+    viewModel: WorkoutViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
+    val context = LocalContext.current
+
+    // This MUST be done first, so it can't go in a LaunchedEffect block
+    viewModel.initialize(context, workout)
+
 
     val isWorkoutFinished by viewModel.isWorkoutFinished.collectAsState()
     val uiState = viewModel.uiState.collectAsState()

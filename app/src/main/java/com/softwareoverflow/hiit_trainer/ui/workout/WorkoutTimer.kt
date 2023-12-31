@@ -4,17 +4,17 @@ import android.content.Context
 import android.os.CountDownTimer
 import com.softwareoverflow.hiit_trainer.R
 import com.softwareoverflow.hiit_trainer.repository.dto.WorkoutSetDTO
+import com.softwareoverflow.hiit_trainer.ui.history.write.IHistorySaver
 import com.softwareoverflow.hiit_trainer.ui.workout.media.WorkoutMediaManager
-import timber.log.Timber
 
 class WorkoutTimer(
     context: Context,
     workoutDurationSeconds: Int,
     _workoutSets: List<WorkoutSetDTO>,
     private val mediaManager: WorkoutMediaManager,
+    private val historySaver: IHistorySaver,
     private val observer: IWorkoutObserver
 ) {
-
     private lateinit var timer: CountDownTimer
     private var millisecondsRemaining: Long = workoutDurationSeconds * 1000L
 
@@ -47,11 +47,11 @@ class WorkoutTimer(
         millisecondsRemaining =
             ((millisecondsRemaining + 999) / 1000) * 1000 // Round up to the nearest second (in millis) to prevent the frequent polling of the timer getting out of sync
 
-        Timber.d("Timer: WorkoutTimer: OnSkip: ${millisecondsRemaining / 1000}")
-
         if (millisecondsRemaining <= 0) {
             observer.onFinish()
-            timer.cancel()
+
+            cancel()
+
             return
         }
 
@@ -104,16 +104,21 @@ class WorkoutTimer(
 
         timer = object : CountDownTimer(millis, tickInterval) {
             override fun onFinish() {
-                timer.cancel()
                 observer.onFinish()
+
+                cancel()
             }
 
             override fun onTick(millisUntilFinished: Long) {
-                Timber.d("Timer: Timer: ${millisecondsRemaining / 1000}")
-
                 observer.onTimerTick(
                     (millisecondsRemaining / 1000).toInt(),
                     (millisRemainingInSection / 1000).toInt()
+                )
+
+                historySaver.addHistory(
+                    (tickInterval / 1000).toInt(),
+                    currentSection,
+                    if (currentSection == WorkoutSection.WORK) currentSet.exerciseTypeDTO!!.name!! else currentSection.name
                 )
 
                 if (currentSection == WorkoutSection.WORK)
@@ -190,6 +195,8 @@ class WorkoutTimer(
     fun cancel() {
         mediaManager.onDestroy()
         timer.cancel()
+
+        historySaver.write()
     }
 
     private fun getCurrentSetWorkTime() = currentSet.workTime * 1000L

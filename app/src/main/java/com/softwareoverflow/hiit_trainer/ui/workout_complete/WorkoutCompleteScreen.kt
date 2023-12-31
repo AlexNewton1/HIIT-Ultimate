@@ -64,8 +64,13 @@ fun WorkoutCompleteScreen(
         viewModel.initialize(context, activity)
     }
 
-    BackHandler(enabled = viewModel.showUnsavedChangesWarning) {
-        navigator.navigate(UnsavedChangesWarningScreenDestination)
+    BackHandler(enabled = true) {
+        if (viewModel.showUnsavedChangesWarning) {
+            navigator.navigate(UnsavedChangesWarningScreenDestination)
+        } else {
+            navigator.popBackStack(HomeScreenDestination, inclusive = false)
+            navigator.clearBackStack(HomeScreenDestination)
+        }
     }
 
     unsavedChangesResult.onNavResult { result ->
@@ -74,9 +79,10 @@ fun WorkoutCompleteScreen(
             }
 
             is NavResult.Value -> {
-                if (result.value == NavigationResultActionBasic.ACTION_POSITIVE) navigator.popBackStack(
-                    HomeScreenDestination, false
-                )
+                if (result.value == NavigationResultActionBasic.ACTION_POSITIVE) {
+                    navigator.popBackStack(HomeScreenDestination, false)
+                    navigator.clearBackStack(HomeScreenDestination)
+                }
             }
         }
     }

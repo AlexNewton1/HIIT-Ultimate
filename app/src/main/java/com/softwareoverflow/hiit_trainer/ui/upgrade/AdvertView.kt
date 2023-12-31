@@ -1,6 +1,5 @@
 package com.softwareoverflow.hiit_trainer.ui.upgrade
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.preference.PreferenceManager
-import com.google.ads.mediation.admob.AdMobAdapter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -52,20 +49,7 @@ fun AdvertView(modifier: Modifier = Modifier, onAdLoaded:() -> Unit) {
                         setAdSize(AdSize.BANNER)
                         adUnitId = context.getString(R.string.ad_id_banner)
 
-                        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
                         val builder = AdRequest.Builder().apply {
-                            val personalizedAds = prefs.getBoolean(
-                                context.getString(R.string.personalized_ads_enabled),
-                                false
-                            )
-
-                            // TODO remove this with the new consent manager!
-                            if (!personalizedAds) {
-                                val bundle = Bundle()
-                                bundle.putString("npa", "1")
-                                addNetworkExtrasBundle(AdMobAdapter::class.java, bundle)
-                            }
-
                             adListener = object : AdListener() {
                                 override fun onAdFailedToLoad(p0: LoadAdError) {
                                     Timber.w("Failed to load banner advert. ${p0.message}")
